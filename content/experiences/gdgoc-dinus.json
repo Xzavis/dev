@@ -1,0 +1,27 @@
+{
+  "id": "gdgoc-dinus",
+  "companyName": "GDGOC Universitas Dian Nuswantoro",
+  "companyLogo": "/logos/gdgoc.webp",
+  "companyWebsite": "https://gdg.community.dev",
+  "positions": [
+    {
+      "id": "gdgoc-1",
+      "title": "Developer Community Member",
+      "employmentPeriod": {
+        "start": "11.2023",
+        "end": "11.2025"
+      },
+      "employmentType": "Community",
+      "icon": "users",
+      "description": "- Participated in collaborative machine learning discussions and project reviews within the developer community, contributing insights on model development, data preprocessing, and evaluation techniques across multiple projects.\n- Contributed to 10+ community discussions across 4 projects, sharing insights on development and analytics.",
+      "descriptionId": "- Berpartisipasi dalam diskusi machine learning kolaboratif dan review proyek di dalam komunitas developer, memberikan kontribusi wawasan mengenai pengembangan model, data preprocessing, dan teknik evaluasi di berbagai proyek.\n- Berkontribusi dalam 10+ diskusi komunitas di 4 proyek, berbagi wawasan seputar pengembangan dan analitik.",
+      "skills": [
+        "Community",
+        "Machine Learning",
+        "Project Reviews",
+        "Data Preprocessing",
+        "Evaluation"
+      ]
+    }
+  ]
+}

@@ -1,12 +1,12 @@
 import type { MetadataRoute } from "next"
 
 import { META_THEME_COLORS, SITE_INFO } from "@/config/site"
-import { USER } from "@/features/portfolio/data/user"
+import profile from "@/content/profile.json"
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: `${USER.displayName} - AI & Machine Learning Portfolio`,
-    short_name: USER.displayName,
+    name: `${profile.displayName} - AI & Machine Learning Portfolio`,
+    short_name: profile.displayName,
     description: SITE_INFO.description,
     start_url: "/",
     scope: "/",

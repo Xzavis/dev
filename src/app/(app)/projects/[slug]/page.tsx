@@ -2,16 +2,16 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 
 import { SITE_INFO } from "@/config/site"
-import { PROJECTS, PROJECTS_BY_ID } from "@/features/portfolio/data/projects"
-import { USER } from "@/features/portfolio/data/user"
 import { ProjectDetail } from "@/features/projects/components/project-detail"
+import { getProfile, getProjectById, getProjects } from "@/lib/content"
 
 type PageProps = {
   params: Promise<{ slug: string }>
 }
 
-export function generateStaticParams() {
-  return PROJECTS.map((project) => ({
+export async function generateStaticParams() {
+  const projects = await getProjects()
+  return projects.map((project) => ({
     slug: project.id,
   }))
 }
@@ -20,7 +20,10 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params
-  const project = PROJECTS_BY_ID[slug]
+  const [project, profile] = await Promise.all([
+    getProjectById(slug),
+    getProfile(),
+  ])
 
   if (!project) {
     return {}
@@ -39,14 +42,14 @@ export async function generateMetadata({
     title: project.title,
     description,
     keywords,
-    authors: [{ name: USER.displayName, url: SITE_INFO.url }],
-    creator: USER.displayName,
-    publisher: USER.displayName,
+    authors: [{ name: profile.displayName, url: SITE_INFO.url }],
+    creator: profile.displayName,
+    publisher: profile.displayName,
     alternates: {
       canonical: `/projects/${project.id}`,
     },
     openGraph: {
-      siteName: USER.displayName,
+      siteName: profile.displayName,
       url: `/projects/${project.id}`,
       type: "article",
       title: project.title,
@@ -62,7 +65,7 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: project.title,
       description,
-      creator: `@${USER.username}`,
+      creator: `@${profile.username}`,
       images: [project.image],
     },
   }
@@ -70,7 +73,7 @@ export async function generateMetadata({
 
 export default async function ProjectDetailPage({ params }: PageProps) {
   const { slug } = await params
-  const project = PROJECTS_BY_ID[slug]
+  const project = await getProjectById(slug)
 
   if (!project) {
     notFound()

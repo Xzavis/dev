@@ -1,10 +1,11 @@
 "use client"
 
 // ponytail: lightweight client auth gate with secure password/PIN verification
-import { LockIcon, KeyRoundIcon, ShieldAlertIcon } from "lucide-react"
+import { KeyRoundIcon, LockIcon, ShieldAlertIcon } from "lucide-react"
 import React, { createContext, useContext, useEffect, useState } from "react"
 
 import { Button } from "@/components/ui/button"
+
 import { verifyAdminAuthAction } from "../actions/content-actions"
 import { FormInput } from "./admin-form-elements"
 import { useToast } from "./admin-toast"
@@ -28,12 +29,14 @@ export function AdminAuthProvider({ children }: { children: React.ReactNode }) {
   const { error: toastError, success: toastSuccess } = useToast()
 
   useEffect(() => {
-    // Check saved session in session storage
-    const saved = sessionStorage.getItem("zickrian_admin_auth")
-    if (saved === "1") {
-      setIsAuthenticated(true)
-    }
-    setChecking(false)
+    const timer = setTimeout(() => {
+      const saved = sessionStorage.getItem("zickrian_admin_auth")
+      if (saved === "1") {
+        setIsAuthenticated(true)
+      }
+      setChecking(false)
+    }, 0)
+    return () => clearTimeout(timer)
   }, [])
 
   const handleLogin = async (e: React.FormEvent) => {

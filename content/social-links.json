@@ -1,0 +1,32 @@
+[
+  {
+    "icon": "github",
+    "title": "GitHub",
+    "href": "https://github.com/zickrian"
+  },
+  {
+    "icon": "linkedin",
+    "title": "LinkedIn",
+    "href": "https://linkedin.com/in/firdauskhotibulzickrian/"
+  },
+  {
+    "icon": "discord",
+    "title": "Discord",
+    "href": "https://discord.com/users/zickrian"
+  },
+  {
+    "icon": "medium",
+    "title": "Medium",
+    "href": "https://medium.com/@zickriann"
+  },
+  {
+    "icon": "email",
+    "title": "Email",
+    "href": "mailto:firdauskhotibulzickrian@gmail.com"
+  },
+  {
+    "icon": "huggingface",
+    "title": "Hugging Face",
+    "href": "https://huggingface.co/zickrian"
+  }
+]

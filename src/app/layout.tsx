@@ -6,7 +6,8 @@ import type { Person, ProfilePage, WebSite, WithContext } from "schema-dts"
 
 import { Providers } from "@/components/providers"
 import { META_THEME_COLORS, SITE_INFO } from "@/config/site"
-import { USER } from "@/features/portfolio/data/user"
+import profile from "@/content/profile.json"
+import settings from "@/content/settings.json"
 import { SITE_OG_IMAGE } from "@/lib/seo"
 import { decodeEmail } from "@/utils/string"
 
@@ -21,9 +22,9 @@ const SpeedInsights =
       )
     : null
 
-const fallbackProfileTitle = `${USER.displayName} | AI & Machine Learning Engineer`
-const profileTitle = USER.seoTitle ?? fallbackProfileTitle
-const profileDescription = USER.seoDescription ?? USER.bio
+const fallbackProfileTitle = `${profile.displayName} | AI & Machine Learning Engineer`
+const profileTitle = settings.seoTitle ?? fallbackProfileTitle
+const profileDescription = settings.seoDescription ?? profile.bio
 
 function absoluteUrl(pathOrUrl: string) {
   if (pathOrUrl.startsWith("http")) return pathOrUrl
@@ -45,28 +46,28 @@ function getWebSiteJsonLd(): WebSite {
 }
 
 function getProfilePageJsonLd(): WithContext<ProfilePage> {
-  const email = decodeEmail(USER.email)
+  const email = decodeEmail(profile.email)
   const person: Person = {
     "@type": "Person",
     "@id": `${SITE_INFO.url}/#person`,
-    name: USER.displayName,
-    alternateName: [USER.username],
+    name: profile.displayName,
+    alternateName: [profile.username],
     url: SITE_INFO.url,
-    image: absoluteUrl(USER.avatar),
-    jobTitle: USER.jobTitle,
+    image: absoluteUrl(profile.avatar),
+    jobTitle: profile.jobTitle,
     email: `mailto:${email}`,
-    telephone: USER.phone,
+    telephone: profile.phone,
     description: profileDescription,
-    knowsAbout: USER.keywords,
-    sameAs: USER.sameAs,
-    worksFor: USER.jobs.map((job) => ({
+    knowsAbout: settings.keywords,
+    sameAs: profile.sameAs,
+    worksFor: (profile.jobs ?? []).map((job) => ({
       "@type": "Organization",
       name: job.company,
       url: job.website,
     })),
     address: {
       "@type": "PostalAddress",
-      addressCountry: USER.address,
+      addressCountry: profile.address,
     },
     mainEntityOfPage: `${SITE_INFO.url}/#profile-page`,
   }
@@ -79,8 +80,8 @@ function getProfilePageJsonLd(): WithContext<ProfilePage> {
     name: profileTitle,
     headline: profileTitle,
     description: profileDescription,
-    dateCreated: USER.dateCreated,
-    dateModified: USER.dateModified,
+    dateCreated: profile.dateCreated,
+    dateModified: profile.dateModified,
     mainEntity: person,
   }
 }
@@ -116,24 +117,24 @@ const themeColorBootstrap = String.raw`
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_INFO.url),
   title: {
-    template: `%s | ${USER.displayName}`,
+    template: `%s | ${profile.displayName}`,
     default: profileTitle,
   },
   description: profileDescription,
-  keywords: USER.keywords,
+  keywords: settings.keywords,
   applicationName: SITE_INFO.name,
   referrer: "origin-when-cross-origin",
   manifest: "/manifest.webmanifest",
   authors: [
     {
-      name: USER.displayName,
+      name: profile.displayName,
       url: SITE_INFO.url,
     },
   ],
-  creator: USER.displayName,
-  publisher: USER.displayName,
+  creator: profile.displayName,
+  publisher: profile.displayName,
   openGraph: {
-    siteName: USER.displayName,
+    siteName: profile.displayName,
     url: "/",
     type: "website",
     locale: "en_US",
@@ -145,7 +146,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: profileTitle,
     description: profileDescription,
-    creator: `@${USER.username}`,
+    creator: `@${profile.username}`,
     images: [absoluteUrl(SITE_OG_IMAGE.url)],
   },
   alternates: {

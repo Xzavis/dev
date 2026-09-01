@@ -3,12 +3,20 @@
 import { BriefcaseBusiness, Globe2, MapPin } from "lucide-react"
 import Image from "next/image"
 
+import { IconRegistry } from "@/components/icon-registry"
+import profileData from "@/content/profile.json"
+import defaultSocialLinks from "@/content/social-links.json"
 import { VerifiedIcon } from "@/features/portfolio/components/verified-icon"
-import { SOCIAL_LINKS } from "@/features/portfolio/data/social-links"
-import { USER } from "@/features/portfolio/data/user"
+import type { Profile, SocialLink } from "@/lib/content/types"
 import { useTranslation } from "@/lib/i18n/use-translation"
 
-export function ProfileHeader() {
+export function ProfileHeader({
+  profile = profileData,
+  socialLinks = defaultSocialLinks,
+}: {
+  profile?: Profile
+  socialLinks?: SocialLink[]
+}) {
   const { l } = useTranslation()
 
   return (
@@ -31,8 +39,8 @@ export function ProfileHeader() {
       <div className="relative px-5 pb-5 sm:px-6 sm:pb-6">
         <div className="relative -mt-12 size-24 overflow-hidden rounded-full border-4 border-card bg-muted shadow-sm sm:-mt-14 sm:size-28">
           <Image
-            src={USER.avatar}
-            alt={`Portrait of ${USER.displayName}`}
+            src={profile.avatar}
+            alt={`Portrait of ${profile.displayName}`}
             fill
             sizes="(min-width: 640px) 104px, 88px"
             className="size-full object-cover object-[center_35%]"
@@ -41,7 +49,7 @@ export function ProfileHeader() {
 
         <div className="mt-3 min-w-0">
           <h1 className="flex items-center gap-1.5 text-xl font-bold tracking-tight text-foreground sm:text-2xl">
-            <span>{USER.displayName}</span>
+            <span>{profile.displayName}</span>
             <VerifiedIcon
               className="size-[0.9em] shrink-0 text-[#1d9bf0]"
               aria-label="Verified profile"
@@ -49,25 +57,25 @@ export function ProfileHeader() {
             />
           </h1>
           <p className="mt-0.5 text-sm text-muted-foreground">
-            @{USER.username}
+            @{profile.username}
           </p>
         </div>
 
         <p className="mt-4 max-w-2xl text-sm leading-relaxed text-foreground sm:text-base">
-          {l(USER.about, USER.aboutId)}
+          {l(profile.about, profile.aboutId)}
         </p>
 
         <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm text-muted-foreground">
           <span className="inline-flex items-center gap-1.5">
             <BriefcaseBusiness className="size-4" aria-hidden />
-            {USER.jobTitle}
+            {profile.jobTitle}
           </span>
           <span className="inline-flex items-center gap-1.5">
             <MapPin className="size-4" aria-hidden />
-            {USER.address}
+            {profile.address}
           </span>
           <a
-            href={USER.website}
+            href={profile.website}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 transition-colors hover:text-foreground"
@@ -80,7 +88,7 @@ export function ProfileHeader() {
         <div className="mt-5 border-t border-line pt-4">
           <h2 className="sr-only">Social links</h2>
           <ul className="flex flex-wrap gap-2">
-            {SOCIAL_LINKS.map((link) => (
+            {socialLinks.map((link) => (
               <li key={link.title}>
                 <a
                   href={link.href}
@@ -91,7 +99,11 @@ export function ProfileHeader() {
                   className="flex size-10 items-center justify-center rounded-lg border border-line bg-card text-muted-foreground transition-[background-color,color,border-color,transform] hover:-translate-y-0.5 hover:border-foreground/25 hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-card focus-visible:outline-none"
                 >
                   <span className="size-[18px] [&>svg]:size-full">
-                    {link.icon}
+                    {typeof link.icon === "string" ? (
+                      <IconRegistry name={link.icon} />
+                    ) : (
+                      link.icon
+                    )}
                   </span>
                   <span className="sr-only">{link.title}</span>
                 </a>

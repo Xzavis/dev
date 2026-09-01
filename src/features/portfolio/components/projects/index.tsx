@@ -5,13 +5,13 @@ import Link from "next/link"
 
 import { CollapsibleList } from "@/components/collapsible-list"
 import { SectionCallout } from "@/components/section-callout"
+import type { Project } from "@/lib/content/types"
 import { useTranslation } from "@/lib/i18n/use-translation"
 
-import { PROJECTS } from "../../data/projects"
 import { Panel, PanelHeader, PanelTitle, PanelTitleSup } from "../panel"
 import { ProjectItem } from "./project-item"
 
-export function Projects() {
+export function Projects({ projects = [] }: { projects?: Project[] } = {}) {
   const { t } = useTranslation()
 
   return (
@@ -24,7 +24,7 @@ export function Projects() {
         <div className="flex items-center justify-between gap-3">
           <PanelTitle>
             {t.projects.title}
-            <PanelTitleSup>({PROJECTS.length})</PanelTitleSup>
+            <PanelTitleSup>({projects.length})</PanelTitleSup>
           </PanelTitle>
 
           <Link
@@ -39,7 +39,7 @@ export function Projects() {
       </PanelHeader>
 
       <CollapsibleList
-        items={PROJECTS}
+        items={projects}
         max={4}
         renderItem={(item) => <ProjectItem project={item} />}
       />

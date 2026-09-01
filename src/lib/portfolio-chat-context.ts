@@ -1,11 +1,57 @@
-import { AWARDS } from "@/features/portfolio/data/awards"
-import { CERTIFICATIONS } from "@/features/portfolio/data/certifications"
-import { EXPERIENCES } from "@/features/portfolio/data/experiences"
-import { PROJECTS } from "@/features/portfolio/data/projects"
-import { PUBLICATIONS } from "@/features/portfolio/data/publications"
-import { SOCIAL_LINKS } from "@/features/portfolio/data/social-links"
-import { TECH_STACK } from "@/features/portfolio/data/tech-stack"
-import { USER } from "@/features/portfolio/data/user"
+import AWARDS from "@/content/awards.json"
+import CERTIFICATIONS from "@/content/certifications.json"
+import asahDicoding from "@/content/experiences/asah-dicoding-accenture.json"
+import blockvizo from "@/content/experiences/blockvizo.json"
+import custompedia from "@/content/experiences/custompedia.json"
+import dinusLab from "@/content/experiences/dinus-lab-assistant.json"
+import education from "@/content/experiences/education.json"
+import gdgocDinus from "@/content/experiences/gdgoc-dinus.json"
+import pijakIbm from "@/content/experiences/pijak-ibm.json"
+import USER from "@/content/profile.json"
+import baseRealms from "@/content/projects/base-realms.json"
+import brazilianEcommerce from "@/content/projects/brazilian-ecommerce-dashboard.json"
+import custora from "@/content/projects/custora.json"
+import diabetesClassification from "@/content/projects/diabetes-classification.json"
+import financialAssistant from "@/content/projects/financial-assistant-bot.json"
+import floodsegmen from "@/content/projects/floodsegmen.json"
+import imageclas from "@/content/projects/imageclas.json"
+import leadsup from "@/content/projects/leadsup.json"
+import lostandfound from "@/content/projects/lostandfound.json"
+import machineLearningSystem from "@/content/projects/machine-learning-system.json"
+import naratioai from "@/content/projects/naratioai.json"
+import polsekrembang from "@/content/projects/polsekrembang.json"
+import qmeal from "@/content/projects/qmeal.json"
+import PUBLICATIONS from "@/content/publications.json"
+import SETTINGS from "@/content/settings.json"
+import TECH_STACK from "@/content/skills.json"
+import SOCIAL_LINKS from "@/content/social-links.json"
+import type { Experience, Project } from "@/lib/content/types"
+
+const EXPERIENCES: Experience[] = [
+  custompedia,
+  pijakIbm,
+  dinusLab,
+  asahDicoding,
+  blockvizo,
+  gdgocDinus,
+  education,
+]
+
+const PROJECTS: Project[] = [
+  naratioai,
+  custora,
+  baseRealms,
+  leadsup,
+  qmeal,
+  polsekrembang,
+  brazilianEcommerce,
+  financialAssistant,
+  machineLearningSystem,
+  lostandfound,
+  floodsegmen,
+  diabetesClassification,
+  imageclas,
+]
 
 type GitHubContributionStatus = {
   available: boolean
@@ -547,7 +593,7 @@ function createProfileDocument(
       USER.jobTitle,
       USER.bio,
       ...USER.flipSentences,
-      ...USER.keywords,
+      ...SETTINGS.keywords,
     ],
     url: USER.website,
     priority: 18,
@@ -865,7 +911,7 @@ function createOtherDocuments(
         USER.phone ? `Phone: ${USER.phone}.` : undefined,
         `Website: ${USER.website}.`,
         `Social links: ${SOCIAL_LINKS.map((link) =>
-          [link.title, link.subtitle, link.href].filter(Boolean).join(" - ")
+          [link.title, "subtitle" in link ? (link as { subtitle?: string }).subtitle : undefined, link.href].filter(Boolean).join(" - ")
         ).join("; ")}.`,
       ]),
       keywords: [

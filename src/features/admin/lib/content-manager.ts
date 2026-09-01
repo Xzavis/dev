@@ -1,10 +1,54 @@
-// ponytail: streamlined content manager using native fs in dev and GitHub REST API in prod
+import asahDicoding from "@/content/experiences/asah-dicoding-accenture.json"
+import blockvizo from "@/content/experiences/blockvizo.json"
+import custompedia from "@/content/experiences/custompedia.json"
+import dinusLab from "@/content/experiences/dinus-lab-assistant.json"
+import education from "@/content/experiences/education.json"
+import gdgocDinus from "@/content/experiences/gdgoc-dinus.json"
+import pijakIbm from "@/content/experiences/pijak-ibm.json"
+import USER from "@/content/profile.json"
+import baseRealms from "@/content/projects/base-realms.json"
+import brazilianEcommerce from "@/content/projects/brazilian-ecommerce-dashboard.json"
+import custora from "@/content/projects/custora.json"
+import diabetesClassification from "@/content/projects/diabetes-classification.json"
+import financialAssistant from "@/content/projects/financial-assistant-bot.json"
+import floodsegmen from "@/content/projects/floodsegmen.json"
+import imageclas from "@/content/projects/imageclas.json"
+import leadsup from "@/content/projects/leadsup.json"
+import lostandfound from "@/content/projects/lostandfound.json"
+import machineLearningSystem from "@/content/projects/machine-learning-system.json"
+import naratioai from "@/content/projects/naratioai.json"
+import polsekrembang from "@/content/projects/polsekrembang.json"
+import qmeal from "@/content/projects/qmeal.json"
+import SETTINGS from "@/content/settings.json"
+import TECH_STACK from "@/content/skills.json"
+import SOCIAL_LINKS from "@/content/social-links.json"
+import type { Experience, Project } from "@/lib/content/types"
 
-import { EXPERIENCES } from "@/features/portfolio/data/experiences"
-import { PROJECTS } from "@/features/portfolio/data/projects"
-import { SOCIAL_LINKS } from "@/features/portfolio/data/social-links"
-import { TECH_STACK } from "@/features/portfolio/data/tech-stack"
-import { USER } from "@/features/portfolio/data/user"
+const EXPERIENCES: Experience[] = [
+  custompedia,
+  pijakIbm,
+  dinusLab,
+  asahDicoding,
+  blockvizo,
+  gdgocDinus,
+  education,
+]
+
+const PROJECTS: Project[] = [
+  naratioai,
+  custora,
+  baseRealms,
+  leadsup,
+  qmeal,
+  polsekrembang,
+  brazilianEcommerce,
+  financialAssistant,
+  machineLearningSystem,
+  lostandfound,
+  floodsegmen,
+  diabetesClassification,
+  imageclas,
+]
 import type {
   AdminExperience,
   AdminProfile,
@@ -31,6 +75,7 @@ export function getAdminProfile(): AdminProfile {
 
   _profileCache = {
     ...USER,
+    gender: USER.gender as AdminProfile["gender"],
     headline: USER.jobTitle,
     resumeUrl: "/resume.pdf",
     availabilityStatus: "Open to opportunities",
@@ -40,6 +85,10 @@ export function getAdminProfile(): AdminProfile {
     linkedinUrl: "https://linkedin.com/in/firdauskhotibulzickrian/",
     mediumUrl: "https://medium.com/@zickriann",
     instagramUrl: "https://instagram.com/zickrian",
+    keywords: SETTINGS.keywords,
+    ogImage: SETTINGS.ogImage,
+    seoTitle: SETTINGS.seoTitle,
+    seoDescription: SETTINGS.seoDescription,
   }
   return _profileCache
 }
@@ -111,13 +160,13 @@ export function getAdminSettings(): SiteSettings {
   if (_settingsCache) return _settingsCache
 
   _settingsCache = {
-    siteTitle: USER.seoTitle ?? `${USER.displayName} | Portfolio`,
-    siteDescription: USER.seoDescription ?? USER.bio,
+    siteTitle: SETTINGS.seoTitle ?? `${USER.displayName} | Portfolio`,
+    siteDescription: SETTINGS.seoDescription ?? USER.bio,
     favicon: "/favicon.ico",
-    defaultOgImage: USER.ogImage,
-    metaTitle: USER.seoTitle ?? USER.displayName,
-    metaDescription: USER.seoDescription ?? USER.bio,
-    keywords: USER.keywords,
+    defaultOgImage: SETTINGS.ogImage,
+    metaTitle: SETTINGS.seoTitle ?? USER.displayName,
+    metaDescription: SETTINGS.seoDescription ?? USER.bio,
+    keywords: SETTINGS.keywords,
     autoPublish: false,
     previewDeployment: true,
     lastSyncTime: new Date().toISOString(),

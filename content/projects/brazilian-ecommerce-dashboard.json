@@ -1,0 +1,77 @@
+{
+  "id": "brazilian-ecommerce-dashboard",
+  "title": "Olist Sales & Delivery Analytics Dashboard",
+  "category": "Data Analysis",
+  "categoryId": "Analisis Data",
+  "tagline": "An e-commerce analytics dashboard that combines order, customer, product, and delivery data to monitor sales performance, customer distribution, product trends, and logistics bottlenecks.",
+  "taglineId": "Dashboard analitik e-commerce yang menggabungkan data pesanan, pelanggan, produk, dan pengiriman untuk memantau performa penjualan, distribusi pelanggan, tren produk, dan hambatan logistik.",
+  "seoDescription": "I built an Olist analytics dashboard to explore sales, customer, product, and delivery performance from e-commerce data.",
+  "year": "2026",
+  "image": "/projects/ecomerce/ecomerce.webp",
+  "period": {
+    "start": "2026"
+  },
+  "link": "https://firdausdashboard.streamlit.app/",
+  "links": {
+    "live": "https://firdausdashboard.streamlit.app/",
+    "repo": "https://github.com/zickrian/Belajar-Fundamental-Analisis-Data"
+  },
+  "skills": [
+    "Streamlit",
+    "Pandas",
+    "NumPy",
+    "Seaborn",
+    "Matplotlib"
+  ],
+  "coverSkills": [
+    "Pandas",
+    "NumPy",
+    "Streamlit"
+  ],
+  "features": [
+    "Builds an analysis-ready dataset by combining multiple Olist tables into a single main data source.",
+    "Interactive date-range and state filters let users narrow the analysis to specific periods and regional segments.",
+    "Monthly order and revenue trend charts highlight demand shifts and peak sales periods.",
+    "Top product category revenue breakdown shows which categories contribute most to marketplace revenue.",
+    "Late-delivery analysis ranks states by delay rate with a minimum-order threshold.",
+    "Delivery-status review comparison shows how late shipments correlate with weaker customer ratings.",
+    "Customer distribution analysis surfaces states with the largest concentration of unique customers."
+  ],
+  "featuresId": [
+    "Membangun dataset siap analisis dengan menggabungkan beberapa tabel Olist menjadi satu sumber data utama.",
+    "Filter rentang tanggal dan negara bagian yang interaktif memungkinkan pengguna mempersempit analisis ke periode dan segmen regional tertentu.",
+    "Grafik tren pesanan dan pendapatan bulanan menyoroti pergeseran permintaan dan periode penjualan puncak.",
+    "Rincian pendapatan kategori produk teratas menunjukkan kategori mana yang paling berkontribusi pada pendapatan marketplace.",
+    "Analisis keterlambatan pengiriman merangking negara bagian berdasarkan tingkat keterlambatan dengan ambang batas minimum pesanan.",
+    "Perbandingan ulasan status pengiriman menunjukkan bagaimana keterlambatan pengiriman berkorelasi dengan rating pelanggan yang lebih rendah.",
+    "Analisis distribusi pelanggan menampilkan negara bagian dengan konsentrasi pelanggan unik terbesar."
+  ],
+  "impact": [
+    "Transforms raw transactional marketplace data into business-facing KPIs.",
+    "Makes the relationship between logistics performance and customer satisfaction visible.",
+    "Helps identify dominant product categories and high-concentration customer regions."
+  ],
+  "impactId": [
+    "Mengubah data transaksi marketplace mentah menjadi KPI yang berorientasi bisnis.",
+    "Membuat hubungan antara performa logistik dan kepuasan pelanggan menjadi terlihat.",
+    "Membantu mengidentifikasi kategori produk dominan dan wilayah dengan konsentrasi pelanggan tinggi."
+  ],
+  "collaboration": {
+    "ownership": "Individual project",
+    "ownershipId": "Proyek Individu",
+    "label": "Individual",
+    "team": "Solo project",
+    "role": "Data Analyst and Dashboard Developer",
+    "roleId": "Data Analyst dan Dashboard Developer",
+    "contributions": [
+      "Cleaned and combined Olist marketplace tables into an analysis-ready dataset.",
+      "Planned the dashboard KPIs around revenue, delivery delay, customer distribution, and review impact.",
+      "Implemented the Streamlit dashboard, filters, visualizations, and summary tables."
+    ],
+    "contributionsId": [
+      "Membersihkan dan menggabungkan tabel marketplace Olist menjadi dataset siap analisis.",
+      "Merencanakan KPI dashboard seputar pendapatan, keterlambatan pengiriman, distribusi pelanggan, dan dampak ulasan.",
+      "Mengimplementasikan dashboard Streamlit, filter, visualisasi, dan tabel ringkasan."
+    ]
+  }
+}

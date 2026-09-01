@@ -1,0 +1,82 @@
+{
+  "id": "lostandfound",
+  "title": "SITEMU Lost & Found Portal",
+  "category": "Campus Web Application",
+  "categoryId": "Aplikasi Web Kampus",
+  "tagline": "A campus lost-and-found portal that helps students report, search, and coordinate item returns through clear posts, location context, and direct communication.",
+  "taglineId": "Portal lost-and-found kampus yang membantu mahasiswa melaporkan, mencari, dan mengoordinasikan pengembalian barang melalui postingan yang jelas, konteks lokasi, dan komunikasi langsung.",
+  "seoDescription": "I built SITEMU as a campus lost-and-found portal for reporting, searching, mapping, and coordinating item returns.",
+  "year": "2025",
+  "image": "/projects/lostandfound.webp",
+  "period": {
+    "start": "2025"
+  },
+  "link": "https://sitemudinus.vercel.app/",
+  "links": {
+    "live": "https://sitemudinus.vercel.app/",
+    "repo": "https://github.com/zickrian/LostItem-Project"
+  },
+  "skills": [
+    "Next.js",
+    "Tailwind CSS",
+    "Supabase",
+    "PostgreSQL",
+    "Supabase Realtime",
+    "Geolocation API"
+  ],
+  "coverSkills": [
+    "Supabase",
+    "PostgreSQL",
+    "Realtime Chat"
+  ],
+  "features": [
+    "Lost and found item reporting with category, time, and item description.",
+    "Geolocation tagging through GPS or selected map points.",
+    "Map view with location pins for search context.",
+    "Post board with search and status filtering.",
+    "Per-post chat between reporter and finder.",
+    "Statistics dashboard for total reports, active reports, and resolved cases.",
+    "Udinus email-only login for campus relevance and security."
+  ],
+  "featuresId": [
+    "Pelaporan barang hilang dan ditemukan dengan kategori, waktu, dan deskripsi barang.",
+    "Tagging geolokasi melalui GPS atau titik peta yang dipilih.",
+    "Tampilan peta dengan pin lokasi untuk konteks pencarian.",
+    "Board postingan dengan pencarian dan filter status.",
+    "Chat per-postingan antara pelapor dan penemu.",
+    "Dashboard statistik untuk total laporan, laporan aktif, dan kasus terselesaikan.",
+    "Login khusus email Udinus untuk relevansi dan keamanan kampus."
+  ],
+  "impact": [
+    "Speeds up item recovery by moving reports online.",
+    "Accurate geolocation reduces confusion about where items were lost.",
+    "Direct chat improves verification and return coordination.",
+    "Campus email restriction keeps the platform relevant and safer."
+  ],
+  "impactId": [
+    "Mempercepat pengembalian barang dengan memindahkan laporan secara online.",
+    "Geolokasi yang akurat mengurangi kebingungan tentang lokasi barang hilang.",
+    "Chat langsung meningkatkan verifikasi dan koordinasi pengembalian.",
+    "Pembatasan email kampus menjaga platform tetap relevan dan lebih aman."
+  ],
+  "collaboration": {
+    "ownership": "Team project",
+    "ownershipId": "Proyek Tim",
+    "label": "Team",
+    "team": "SITEMU project team",
+    "role": "Team Lead and Full-stack Developer",
+    "roleId": "Team Lead dan Full-stack Developer",
+    "contributions": [
+      "Led feature planning and coordinated the project direction.",
+      "Handled frontend implementation for the reporting, board, and dashboard experience.",
+      "Handled backend work for authentication, item reports, geolocation, and related app flows."
+    ],
+    "contributionsId": [
+      "Memimpin perencanaan fitur dan mengoordinasikan arah proyek.",
+      "Menangani implementasi frontend untuk pengalaman pelaporan, board, dan dashboard.",
+      "Menangani pekerjaan backend untuk autentikasi, laporan barang, geolokasi, dan alur aplikasi terkait."
+    ]
+  },
+  "notes": "Access restricted: this website is only accessible using Udinus student email (@mhs.dinus.ac.id).",
+  "notesId": "Akses terbatas: situs ini hanya dapat diakses menggunakan email mahasiswa Udinus (@mhs.dinus.ac.id)."
+}

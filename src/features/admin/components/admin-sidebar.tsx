@@ -2,20 +2,21 @@
 
 // ponytail: streamlined admin sidebar reusing Lucide icons and active route highlighting
 import {
-  LayoutDashboardIcon,
-  UserIcon,
-  FolderGit2Icon,
   BriefcaseIcon,
   CpuIcon,
-  Share2Icon,
-  SettingsIcon,
   ExternalLinkIcon,
+  FolderGit2Icon,
+  LayoutDashboardIcon,
   LogOutIcon,
+  SettingsIcon,
+  Share2Icon,
+  UserIcon,
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
 import { cn } from "@/lib/utils"
+
 import { useAdminAuth } from "./admin-auth-guard"
 
 export const ADMIN_NAV_ITEMS = [

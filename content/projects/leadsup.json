@@ -1,0 +1,80 @@
+{
+  "id": "leadsup",
+  "title": "LeadsUp Banking Lead Scoring Dashboard",
+  "category": "AI-Powered Lead Scoring",
+  "categoryId": "Lead Scoring Berbasis AI",
+  "tagline": "A banking lead scoring dashboard that ranks prospects by subscription likelihood and turns prediction results into sales-ready prioritization insights.",
+  "taglineId": "Dashboard lead scoring perbankan yang merangking prospek berdasarkan kemungkinan berlangganan dan mengubah hasil prediksi menjadi insight prioritisasi yang siap digunakan tim sales.",
+  "seoDescription": "I built LeadsUp to rank banking prospects with predictive lead scoring and help sales teams prioritize follow-ups with data.",
+  "year": "2025",
+  "image": "/projects/leadsup.webp",
+  "period": {
+    "start": "2025"
+  },
+  "link": "https://a25-cs-075-predictive-lead-scoring.vercel.app/",
+  "links": {
+    "live": "https://a25-cs-075-predictive-lead-scoring.vercel.app/",
+    "repo": "https://github.com/zickrian/Predictive-Lead-Scoring-Portal-for-Banking"
+  },
+  "skills": [
+    "Python",
+    "React",
+    "Tailwind CSS",
+    "Express.js",
+    "Supabase",
+    "PostgreSQL"
+  ],
+  "coverSkills": [
+    "Python",
+    "REST API",
+    "Supabase"
+  ],
+  "features": [
+    "Auto-ranking leads: automatically sorts prospects by highest subscription probability for term deposits.",
+    "Transparent lead scoring: each prospect has a score/probability so sales can prioritize calls data-driven, not randomly.",
+    "Concise sales dashboard: KPI overview of total leads, contacted, pending follow-ups, conversion rate, and high-priority prospects.",
+    "Quick filter & segmentation: sort by status (contacted/pending), priority, and key attributes (age/job/campaign history).",
+    "Actionable lead detail view: displays key prospect information to help sales tailor their approach when reaching out.",
+    "Follow-up workflow: contact status updates + activity logging so every prospect's progress is tracked and never missed."
+  ],
+  "featuresId": [
+    "Auto-ranking leads: otomatis mengurutkan prospek berdasarkan probabilitas berlangganan deposito berjangka tertinggi.",
+    "Lead scoring transparan: setiap prospek punya skor/probabilitas sehingga sales bisa memprioritaskan panggilan berbasis data, bukan acak.",
+    "Dashboard sales yang ringkas: overview KPI total lead, yang sudah dihubungi, follow-up tertunda, conversion rate, dan prospek prioritas tinggi.",
+    "Filter & segmentasi cepat: urutkan berdasarkan status (sudah dihubungi/tertunda), prioritas, dan atribut kunci (usia/pekerjaan/riwayat kampanye).",
+    "Tampilan detail lead yang actionable: menampilkan informasi kunci prospek untuk membantu sales menyesuaikan pendekatan saat menghubungi.",
+    "Alur kerja follow-up: update status kontak + pencatatan aktivitas sehingga progres setiap prospek terpantau dan tidak terlewat."
+  ],
+  "impact": [
+    "Helps sales save time by focusing on the most promising prospects based on model predictions, rather than calling randomly.",
+    "Increases campaign conversion rates by directing follow-up priority to prospects with the highest probability.",
+    "Provides an easy-to-use MVP for daily sales workflow: ranking > contact > update status > monitor results."
+  ],
+  "impactId": [
+    "Membantu sales menghemat waktu dengan fokus pada prospek paling menjanjikan berdasarkan prediksi model, bukan menghubungi secara acak.",
+    "Meningkatkan conversion rate kampanye dengan mengarahkan prioritas follow-up ke prospek dengan probabilitas tertinggi.",
+    "Menyediakan MVP yang mudah digunakan untuk alur kerja sales harian: ranking > hubungi > update status > pantau hasil."
+  ],
+  "collaboration": {
+    "ownership": "Team project",
+    "ownershipId": "Proyek Tim",
+    "label": "Team",
+    "team": "ASAH capstone team",
+    "role": "Project Leader, ML Trainer, and Backend Integrator",
+    "roleId": "Pemimpin Proyek, Pelatih ML, dan Integrator Backend",
+    "contributions": [
+      "Led the project direction and kept the team aligned around one product workflow.",
+      "Provided UI guidance so every page followed the same interface direction.",
+      "Trained the machine learning model for lead scoring.",
+      "Built a REST API for the deployed machine learning model and integrated the prediction service into the backend logic."
+    ],
+    "contributionsId": [
+      "Memimpin arah proyek dan menjaga tim tetap selaras pada satu alur kerja produk.",
+      "Memberikan arahan UI agar setiap halaman mengikuti arah antarmuka yang sama.",
+      "Melatih model machine learning untuk lead scoring.",
+      "Membangun REST API untuk model machine learning yang di-deploy dan mengintegrasikan layanan prediksi ke dalam logika backend."
+    ]
+  },
+  "notes": "Demo Credentials:\nAdmin Role: Email (admin@gmail.com), Password (123456)\nSales Role: Email (sales@gmail.com), Password (123456)",
+  "notesId": "Kredensial Demo:\nPeran Admin: Email (admin@gmail.com), Password (123456)\nPeran Sales: Email (sales@gmail.com), Password (123456)"
+}

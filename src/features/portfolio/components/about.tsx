@@ -4,12 +4,13 @@ import { DynamicGreeting } from "@/components/dynamic-greeting"
 import { Markdown } from "@/components/markdown"
 import { SectionCallout } from "@/components/section-callout"
 import { Prose } from "@/components/ui/typography"
-import { USER } from "@/features/portfolio/data/user"
+import profileData from "@/content/profile.json"
+import type { Profile } from "@/lib/content/types"
 import { useTranslation } from "@/lib/i18n/use-translation"
 
 import { Panel, PanelContent, PanelHeader, PanelTitle } from "./panel"
 
-export function About() {
+export function About({ profile = profileData }: { profile?: Profile } = {}) {
   const { t, l } = useTranslation()
 
   return (
@@ -34,7 +35,7 @@ export function About() {
 
       <PanelContent>
         <Prose className="text-justify">
-          <Markdown>{l(USER.about, USER.aboutId)}</Markdown>
+          <Markdown>{l(profile.about, profile.aboutId)}</Markdown>
         </Prose>
       </PanelContent>
     </Panel>

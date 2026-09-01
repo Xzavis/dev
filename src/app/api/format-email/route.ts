@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 
-import { USER } from "@/features/portfolio/data/user"
+import profile from "@/content/profile.json"
 import { acquireAiRequest } from "@/lib/chat-rate-limit"
 import {
   createGroqChatCompletion,
@@ -29,24 +29,37 @@ export async function POST(req: Request) {
     try {
       body = await req.json()
     } catch {
-      return NextResponse.json({ error: "Invalid request." }, { status: 400 })
+      return NextResponse.json(
+        { error: "Invalid JSON body." },
+        { status: 400 }
+      )
+    }
+
+    if (!body || typeof body !== "object") {
+      return NextResponse.json(
+        { error: "Payload must be a JSON object." },
+        { status: 400 }
+      )
     }
 
     const raw = body as Record<string, unknown>
     const payload: FormatPayload = {
       senderName: sanitize(raw.senderName, 100),
       senderEmail: sanitize(raw.senderEmail, 254),
-      rawMessage: sanitize(raw.rawMessage, 3000),
+      rawMessage: sanitize(raw.rawMessage, 5000),
     }
 
-    if (!payload.senderName || !payload.senderEmail || !payload.rawMessage) {
-      return NextResponse.json({ error: "Missing fields." }, { status: 400 })
+    if (!payload.rawMessage) {
+      return NextResponse.json(
+        { error: "Message is required." },
+        { status: 400 }
+      )
     }
 
-    const rateLimit = acquireAiRequest(req)
+    const rateLimit = await acquireAiRequest(req)
     if (!rateLimit.allowed) {
       return NextResponse.json(
-        { error: "Too many AI requests. Please try again shortly." },
+        { error: "Too many requests. Please try again shortly." },
         {
           status: 429,
           headers: { "Retry-After": String(rateLimit.retryAfterSeconds) },
@@ -55,7 +68,7 @@ export async function POST(req: Request) {
     }
     releaseRequest = rateLimit.release
 
-    const systemPrompt = `You are an email formatter assistant for ${USER.displayName}'s portfolio site.
+    const systemPrompt = `You are an email formatter assistant for ${profile.displayName}'s portfolio site.
 Your task: Given a raw message from a visitor, produce a polished, clear email.
 
 Rules:

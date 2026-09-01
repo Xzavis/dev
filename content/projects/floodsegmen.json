@@ -1,0 +1,77 @@
+{
+  "id": "floodsegmen",
+  "title": "Flood Area Segmentation System",
+  "category": "Computer Vision",
+  "categoryId": "Computer Vision",
+  "tagline": "A flood mapping system that detects affected areas from imagery, compares analysis results, and turns visual inputs into faster, more scalable disaster assessment support.",
+  "taglineId": "Sistem pemetaan banjir yang mendeteksi area terdampak dari citra, membandingkan hasil analisis, dan mengubah input visual menjadi dukungan penilaian bencana yang lebih cepat dan skalabel.",
+  "seoDescription": "I built a flood segmentation system that uses computer vision to map affected areas and compare model outputs for faster assessment.",
+  "year": "2025",
+  "image": "/projects/floodsegmen.webp",
+  "period": {
+    "start": "2025"
+  },
+  "link": "https://flood-segmentation-app.vercel.app/",
+  "links": {
+    "live": "https://flood-segmentation-app.vercel.app/",
+    "repo": "https://github.com/zickrian/FloodSegmentationAPP"
+  },
+  "skills": [
+    "Python",
+    "FastAPI",
+    "PyTorch",
+    "U-Net",
+    "U-Net++",
+    "OpenCV",
+    "Microsoft Azure"
+  ],
+  "coverSkills": [
+    "PyTorch",
+    "U-Net++",
+    "Microsoft Azure"
+  ],
+  "features": [
+    "Automatic flood segmentation from uploaded images to generate clear flood masks.",
+    "Two models in one system: U-Net and U-Net++ for side-by-side comparison.",
+    "Analysis statistics: flood area, flood pixel count, total pixels, and model difference summary.",
+    "Compare mode showing original image, model masks, and disagreement map.",
+    "Model agreement score to measure prediction consistency.",
+    "Python backend inference pipeline deployed to Microsoft Azure."
+  ],
+  "featuresId": [
+    "Segmentasi banjir otomatis dari gambar yang diunggah untuk menghasilkan mask banjir yang jelas.",
+    "Dua model dalam satu sistem: U-Net dan U-Net++ untuk perbandingan berdampingan.",
+    "Statistik analisis: area banjir, jumlah piksel banjir, total piksel, dan ringkasan perbedaan model.",
+    "Mode Compare yang menampilkan gambar asli, mask model, dan peta perbedaan (disagreement map).",
+    "Skor kesepakatan model untuk mengukur konsistensi prediksi.",
+    "Pipeline inferensi backend Python yang di-deploy ke Microsoft Azure."
+  ],
+  "impact": [
+    "Enables rapid identification of flood-affected areas from imagery.",
+    "Provides quantitative estimates that support reporting and monitoring.",
+    "Facilitates segmentation model evaluation through direct model comparison."
+  ],
+  "impactId": [
+    "Memungkinkan identifikasi cepat area terdampak banjir dari citra.",
+    "Menyediakan estimasi kuantitatif yang mendukung pelaporan dan monitoring.",
+    "Memudahkan evaluasi model segmentasi melalui perbandingan model secara langsung."
+  ],
+  "collaboration": {
+    "ownership": "Individual project",
+    "ownershipId": "Proyek Individu",
+    "label": "Individual",
+    "team": "Solo project",
+    "role": "Computer Vision and Cloud Deployment Developer",
+    "roleId": "Computer Vision dan Cloud Deployment Developer",
+    "contributions": [
+      "Trained the flood segmentation models and prepared the inference workflow.",
+      "Built the backend pipeline for image upload, mask generation, and comparison output.",
+      "Deployed the inference system on Microsoft Azure for online access."
+    ],
+    "contributionsId": [
+      "Melatih model segmentasi banjir dan menyiapkan alur kerja inferensi.",
+      "Membangun pipeline backend untuk upload gambar, pembuatan mask, dan output perbandingan.",
+      "Men-deploy sistem inferensi di Microsoft Azure untuk akses online."
+    ]
+  }
+}

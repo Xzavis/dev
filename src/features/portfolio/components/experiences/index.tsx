@@ -3,13 +3,13 @@
 import React from "react"
 
 import { SectionCallout } from "@/components/section-callout"
+import type { Experience } from "@/lib/content/types"
 import { useTranslation } from "@/lib/i18n/use-translation"
 
-import { EXPERIENCES } from "../../data/experiences"
 import { Panel, PanelHeader, PanelTitle, PanelTitleSup } from "../panel"
 import { ExperienceItem } from "./experience-item"
 
-export function Experiences() {
+export function Experiences({ experiences = [] }: { experiences?: Experience[] } = {}) {
   const { t } = useTranslation()
 
   return (
@@ -19,12 +19,12 @@ export function Experiences() {
       <PanelHeader>
         <PanelTitle>
           {t.experiences.title}
-          <PanelTitleSup>({EXPERIENCES.length})</PanelTitleSup>
+          <PanelTitleSup>({experiences.length})</PanelTitleSup>
         </PanelTitle>
       </PanelHeader>
 
       <div>
-        {EXPERIENCES.map((experience) => (
+        {experiences.map((experience) => (
           <ExperienceItem key={experience.id} experience={experience} />
         ))}
       </div>

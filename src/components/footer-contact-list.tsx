@@ -3,15 +3,17 @@
 import { ArrowUpRightIcon } from "lucide-react"
 import Image from "next/image"
 
+import { IconRegistry } from "@/components/icon-registry"
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card"
+import profile from "@/content/profile.json"
+import settings from "@/content/settings.json"
+import defaultSocialLinks from "@/content/social-links.json"
 import type { GitHubSocialCard } from "@/features/portfolio/data/github-social"
-import { SOCIAL_LINKS } from "@/features/portfolio/data/social-links"
-import { USER } from "@/features/portfolio/data/user"
-import type { SocialLink } from "@/features/portfolio/types/social-links"
+import type { SocialLink } from "@/lib/content/types"
 
 /**
  * The footer's CONTACT column, after cali.so's social cards.
@@ -36,12 +38,14 @@ const ROWS = 7
 
 export function FooterContactList({
   github,
+  links = defaultSocialLinks,
 }: {
   github: GitHubSocialCard | null
+  links?: SocialLink[]
 }) {
   return (
     <ul>
-      {SOCIAL_LINKS.map((link) => (
+      {links.map((link) => (
         <li key={link.href}>
           <SocialCard
             link={link}
@@ -194,17 +198,17 @@ function Kicker({ children }: { children: React.ReactNode }) {
  * Its blue survives only as a 2px spine at 55% - enough to place the platform,
  * not enough to become the loudest thing in a monochrome footer.
  */
-function LinkedInCard({ icon }: { icon: React.ReactNode }) {
-  const job = USER.jobs[0]
+function LinkedInCard({ icon }: { icon: string | React.ReactNode }) {
+  const job = profile.jobs?.[0]
 
   return (
     <div className="flex gap-3 border-l-2 border-(--brand) pl-3 [--brand:color-mix(in_oklab,#0a66c2_55%,transparent)] animate-card-content">
       <div className="flex min-w-0 flex-1 flex-col gap-1.5">
         <Kicker>Profile</Kicker>
         <span className="text-sm font-medium text-foreground">
-          {USER.displayName}
+          {profile.displayName}
         </span>
-        <span className="text-xs text-muted-foreground">{USER.jobTitle}</span>
+        <span className="text-xs text-muted-foreground">{profile.jobTitle}</span>
         {job && (
           <span className="border-t border-line pt-1.5 text-xs text-foreground">
             {job.title}
@@ -212,7 +216,7 @@ function LinkedInCard({ icon }: { icon: React.ReactNode }) {
           </span>
         )}
         <span className="font-mono text-[0.6875rem] text-muted-foreground">
-          {USER.address}
+          {profile.address}
         </span>
       </div>
       <Glyph icon={icon} className="self-start" />
@@ -230,7 +234,7 @@ function DiscordCard({
   icon,
 }: {
   handle: string
-  icon: React.ReactNode
+  icon: string | React.ReactNode
 }) {
   return (
     <div className="-m-2.5 animate-card-content">
@@ -239,7 +243,7 @@ function DiscordCard({
         <div className="-mt-5 mb-2 flex items-end justify-between">
           <span className="relative animate-stamp-pop">
             <Image
-              src={USER.avatar}
+              src={profile.avatar}
               alt=""
               width={44}
               height={44}
@@ -254,7 +258,7 @@ function DiscordCard({
           <Glyph icon={icon} />
         </div>
         <p className="text-sm font-medium text-foreground">
-          {USER.displayName}
+          {profile.displayName}
         </p>
         <p className="font-mono text-xs text-muted-foreground">{handle}</p>
       </div>
@@ -268,7 +272,7 @@ function MediumCard({
   icon,
 }: {
   handle: string
-  icon: React.ReactNode
+  icon: string | React.ReactNode
 }) {
   return (
     <div className="flex flex-col gap-2 animate-card-content">
@@ -277,7 +281,7 @@ function MediumCard({
         <Glyph icon={icon} />
       </div>
       <p className="text-sm/relaxed text-pretty text-foreground italic">
-        “{USER.seoDescription}”
+        “{settings.seoDescription}”
       </p>
       <span className="font-mono text-[0.6875rem] tracking-[0.02em] text-muted-foreground">
         {handle}
@@ -295,7 +299,7 @@ function HuggingFaceCard({
   icon,
 }: {
   handle: string
-  icon: React.ReactNode
+  icon: string | React.ReactNode
 }) {
   return (
     <div className="-m-2.5 overflow-hidden animate-card-content">
@@ -307,7 +311,7 @@ function HuggingFaceCard({
       </div>
       <div className="flex flex-col gap-1 px-3 py-2.5">
         <Kicker>Models · Datasets · Spaces</Kicker>
-        <span className="text-sm text-foreground">{USER.displayName}</span>
+        <span className="text-sm text-foreground">{profile.displayName}</span>
       </div>
     </div>
   )
@@ -319,13 +323,13 @@ function PlainCard({
   icon,
 }: {
   handle: string
-  icon: React.ReactNode
+  icon: string | React.ReactNode
 }) {
   return (
     <div className="flex items-center justify-between gap-3 animate-card-content">
       <div className="flex min-w-0 flex-col">
         <span className="text-sm font-medium text-foreground">
-          {USER.displayName}
+          {profile.displayName}
         </span>
         <span className="font-mono text-xs text-muted-foreground">
           {handle}
@@ -340,7 +344,7 @@ function Glyph({
   icon,
   className,
 }: {
-  icon: React.ReactNode
+  icon: string | React.ReactNode
   className?: string
 }) {
   return (
@@ -348,7 +352,7 @@ function Glyph({
       aria-hidden
       className={`shrink-0 text-muted-foreground [&_svg]:size-5 ${className ?? ""}`}
     >
-      {icon}
+      {typeof icon === "string" ? <IconRegistry name={icon} /> : icon}
     </span>
   )
 }
@@ -361,15 +365,15 @@ function EnvelopeCard({ address }: { address: string }) {
 
       <span className="envelope-return">
         <span>FROM</span>
-        {USER.displayName.toUpperCase()}
+        {profile.displayName.toUpperCase()}
         <br />
-        {USER.address.toUpperCase()}
+        {profile.address.toUpperCase()}
       </span>
 
       <span className="envelope-stamps">
         <span className="envelope-stamp envelope-stamp-portrait animate-stamp-pop">
-          <Image src={USER.avatar} alt="" width={32} height={32} />
-          <span>{USER.username.toUpperCase()} · 26</span>
+          <Image src={profile.avatar} alt="" width={32} height={32} />
+          <span>{profile.username.toUpperCase()} · 26</span>
         </span>
         <span className="envelope-stamp envelope-stamp-mark animate-stamp-pop">
           <span className="envelope-star">

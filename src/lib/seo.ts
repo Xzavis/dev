@@ -1,14 +1,14 @@
 import type { Metadata } from "next"
 
 import { SITE_INFO } from "@/config/site"
-import { USER } from "@/features/portfolio/data/user"
+import profile from "@/content/profile.json"
 
 export const SITE_OG_IMAGE = {
   url: SITE_INFO.ogImage,
   width: 1920,
   height: 958,
   type: "image/png",
-  alt: `${USER.displayName} portfolio - ${USER.jobTitle}`,
+  alt: `${profile.displayName} portfolio - ${profile.jobTitle}`,
 } as const
 
 type PageMetadataOptions = {
@@ -28,14 +28,14 @@ export function createPageMetadata({
     title,
     description,
     keywords,
-    authors: [{ name: USER.displayName, url: SITE_INFO.url }],
-    creator: USER.displayName,
-    publisher: USER.displayName,
+    authors: [{ name: profile.displayName, url: SITE_INFO.url }],
+    creator: profile.displayName,
+    publisher: profile.displayName,
     alternates: {
       canonical: path,
     },
     openGraph: {
-      siteName: USER.displayName,
+      siteName: profile.displayName,
       url: path,
       type: "website",
       title,
@@ -46,7 +46,7 @@ export function createPageMetadata({
       card: "summary_large_image",
       title,
       description,
-      creator: `@${USER.username}`,
+      creator: `@${profile.username}`,
       images: [SITE_OG_IMAGE.url],
     },
   }

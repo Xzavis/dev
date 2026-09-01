@@ -7,8 +7,8 @@ import {
   VenusIcon,
 } from "lucide-react"
 
-import { USER } from "@/features/portfolio/data/user"
-import type { User } from "@/features/portfolio/types/user"
+import profileData from "@/content/profile.json"
+import type { Profile } from "@/lib/content/types"
 import { urlToName } from "@/utils/url"
 
 import { Panel, PanelContent } from "../panel"
@@ -22,13 +22,13 @@ import {
 } from "./intro-item"
 import { JobItem } from "./job-item"
 
-export function Overview() {
+export function Overview({ profile = profileData }: { profile?: Profile } = {}) {
   return (
     <Panel id="overview" className="after:content-none">
       <h2 className="sr-only">Overview</h2>
 
       <PanelContent className="space-y-2.5">
-        {USER.jobs.map((job, index) => (
+        {(profile.jobs ?? []).map((job, index) => (
           <JobItem
             key={index}
             title={job.title}
@@ -46,37 +46,37 @@ export function Overview() {
             </IntroItemIcon>
             <IntroItemContent>
               <IntroItemLink
-                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(USER.address)}`}
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(profile.address)}`}
                 rel="noopener noreferrer nofollow"
-                aria-label={`Location: ${USER.address}`}
+                aria-label={`Location: ${profile.address}`}
               >
-                {USER.address}
+                {profile.address}
               </IntroItemLink>
             </IntroItemContent>
           </IntroItem>
 
           {/* Right column */}
-          <CurrentLocalTimeItem timeZone={USER.timeZone} />
+          <CurrentLocalTimeItem timeZone={profile.timeZone} />
 
           {/* Left column */}
-          {USER.phone && (
+          {profile.phone && (
             <IntroItem>
               <IntroItemIcon>
                 <PhoneIcon />
               </IntroItemIcon>
               <IntroItemContent>
                 <IntroItemLink
-                  href={`tel:${USER.phone.replace(/[\s-]/g, "")}`}
-                  aria-label={`Phone: ${USER.phone}`}
+                  href={`tel:${profile.phone.replace(/[\s-]/g, "")}`}
+                  aria-label={`Phone: ${profile.phone}`}
                 >
-                  {USER.phone}
+                  {profile.phone}
                 </IntroItemLink>
               </IntroItemContent>
             </IntroItem>
           )}
 
           {/* Right column */}
-          <EmailItem email={USER.email} />
+          <EmailItem email={profile.email} />
 
           {/* Left column */}
           <IntroItem>
@@ -85,19 +85,19 @@ export function Overview() {
             </IntroItemIcon>
             <IntroItemContent>
               <IntroItemLink
-                href={USER.website}
-                aria-label={`Personal website: ${urlToName(USER.website)}`}
+                href={profile.website}
+                aria-label={`Personal website: ${urlToName(profile.website)}`}
               >
-                {urlToName(USER.website)}
+                {urlToName(profile.website)}
               </IntroItemLink>
             </IntroItemContent>
           </IntroItem>
 
           {/* Right column */}
           <IntroItem>
-            <IntroItemIcon>{getGenderIcon(USER.gender)}</IntroItemIcon>
-            <IntroItemContent aria-label={`Pronouns: ${USER.pronouns}`}>
-              {USER.pronouns}
+            <IntroItemIcon>{getGenderIcon(profile.gender)}</IntroItemIcon>
+            <IntroItemContent aria-label={`Pronouns: ${profile.pronouns}`}>
+              {profile.pronouns}
             </IntroItemContent>
           </IntroItem>
         </div>
@@ -106,7 +106,7 @@ export function Overview() {
   )
 }
 
-function getGenderIcon(gender: User["gender"]) {
+function getGenderIcon(gender?: string) {
   switch (gender) {
     case "male":
       return <MarsIcon />
@@ -114,5 +114,7 @@ function getGenderIcon(gender: User["gender"]) {
       return <VenusIcon />
     case "non-binary":
       return <NonBinaryIcon />
+    default:
+      return <MarsIcon />
   }
 }

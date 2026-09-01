@@ -1,7 +1,7 @@
 "use client"
 
 // ponytail: lightweight, dependency-free toast system adhering to portfolio style
-import { CheckCircle2Icon, AlertCircleIcon, InfoIcon, XIcon } from "lucide-react"
+import { AlertCircleIcon, CheckCircle2Icon, InfoIcon, XIcon } from "lucide-react"
 import React, { createContext, useCallback, useContext, useState } from "react"
 
 import { cn } from "@/lib/utils"

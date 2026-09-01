@@ -1,0 +1,77 @@
+{
+  "id": "financial-assistant-bot",
+  "title": "Financial Assistant Bot",
+  "category": "AI / Fintech",
+  "categoryId": "AI / Fintech",
+  "tagline": "A personal finance assistant that records expenses and income from chat or receipt inputs, organizes transactions automatically, and helps users understand spending patterns.",
+  "taglineId": "Asisten keuangan pribadi yang mencatat pengeluaran dan pemasukan dari input chat atau struk belanja, mengorganisir transaksi secara otomatis, dan membantu pengguna memahami pola pengeluaran.",
+  "seoDescription": "I built a finance assistant bot that logs transactions from chat or receipts and turns spending data into useful insights.",
+  "year": "2026",
+  "image": "/projects/financial-assistant-bot.webp",
+  "period": {
+    "start": "2026"
+  },
+  "link": "https://t.me/zickrian_bot",
+  "links": {
+    "live": "https://t.me/zickrian_bot",
+    "repo": ""
+  },
+  "skills": [
+    "Python",
+    "Supabase",
+    "PostgreSQL",
+    "pgvector",
+    "Sentence Transformers",
+    "Docker",
+    "Render"
+  ],
+  "coverSkills": [
+    "RAG",
+    "Embedding",
+    "pgvector"
+  ],
+  "features": [
+    "Natural language input (text/voice) for instant transaction logging without complicated manual forms.",
+    "Advanced RAG Engine that learns user spending patterns for automatic category classification.",
+    "Double-entry Ledger system (Bank Core) to ensure balance accuracy and real-time budget tracking.",
+    "OCR integration to scan shopping receipts and automatically convert them into transaction data.",
+    "Smart clarification mechanism using interactive buttons when input is ambiguous or incomplete.",
+    "Periodic financial reports (daily/weekly/monthly) plus AI-based insights for savings recommendations."
+  ],
+  "featuresId": [
+    "Input bahasa natural (teks/suara) untuk pencatatan transaksi instan tanpa form manual yang rumit.",
+    "RAG Engine tingkat lanjut yang mempelajari pola pengeluaran pengguna untuk klasifikasi kategori otomatis.",
+    "Sistem Ledger double-entry (Bank Core) untuk memastikan akurasi saldo dan pelacakan budget real-time.",
+    "Integrasi OCR untuk memindai struk belanja dan otomatis mengubahnya menjadi data transaksi.",
+    "Mekanisme klarifikasi cerdas menggunakan tombol interaktif saat input ambigu atau tidak lengkap.",
+    "Laporan keuangan berkala (harian/mingguan/bulanan) plus insight berbasis AI untuk rekomendasi tabungan."
+  ],
+  "impact": [
+    "Transforms boring manual financial record-keeping into natural and efficient conversations.",
+    "Provides full visibility into users' financial health through instant access in their everyday chat app.",
+    "Helps users make better financial decisions through accurate spending data analysis."
+  ],
+  "impactId": [
+    "Mengubah pencatatan keuangan manual yang membosankan menjadi percakapan yang natural dan efisien.",
+    "Memberikan visibilitas penuh atas kesehatan finansial pengguna melalui akses instan di aplikasi chat sehari-hari.",
+    "Membantu pengguna membuat keputusan finansial yang lebih baik melalui analisis data pengeluaran yang akurat."
+  ],
+  "collaboration": {
+    "ownership": "Individual project",
+    "ownershipId": "Proyek Individu",
+    "label": "Individual",
+    "team": "Solo project",
+    "role": "Fullstack Developer",
+    "roleId": "Fullstack Developer",
+    "contributions": [
+      "Designed the bot architecture and backend transaction logic.",
+      "Built the RAG, OCR, and database integration flow.",
+      "Prepared the Docker and Render deployment path for the Telegram bot."
+    ],
+    "contributionsId": [
+      "Merancang arsitektur bot dan logika transaksi backend.",
+      "Membangun alur integrasi RAG, OCR, dan database.",
+      "Menyiapkan jalur deployment Docker dan Render untuk bot Telegram."
+    ]
+  }
+}

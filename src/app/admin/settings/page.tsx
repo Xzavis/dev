@@ -2,13 +2,13 @@
 
 // ponytail: compact settings panel covering Site, SEO, Publishing and Git Sync without token leaks
 import {
-  SettingsIcon,
-  GlobeIcon,
-  SearchIcon,
-  GitBranchIcon,
-  ShieldCheckIcon,
-  SaveIcon,
   CheckCircle2Icon,
+  GitBranchIcon,
+  GlobeIcon,
+  SaveIcon,
+  SearchIcon,
+  SettingsIcon,
+  ShieldCheckIcon,
   SparklesIcon,
 } from "lucide-react"
 import React, { useEffect, useState } from "react"
@@ -34,7 +34,7 @@ export default function AdminSettingsPage() {
     })
   }, [])
 
-  const handleChange = (field: keyof SiteSettings, value: any) => {
+  const handleChange = <K extends keyof SiteSettings>(field: K, value: SiteSettings[K]) => {
     if (!settings) return
     setSettings({ ...settings, [field]: value })
   }

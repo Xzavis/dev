@@ -1,0 +1,92 @@
+{
+  "id": "naratioai",
+  "title": "Narratio AI - Business Narrative Deck Generator",
+  "category": "AI / Machine Learning",
+  "categoryId": "AI / Machine Learning",
+  "tagline": "A machine learning powered platform that converts raw data, web insights, and conversations into structured business narratives and consulting-style presentation decks.",
+  "taglineId": "Platform berbasis machine learning yang mengubah data mentah, wawasan web, dan percakapan menjadi narasi bisnis terstruktur dan deck presentasi bergaya konsultasi.",
+  "seoDescription": "I built Narratio AI to turn raw business context, web research, and sentiment signals into structured AI-generated presentation decks.",
+  "year": "2026",
+  "image": "/projects/naratioai/4.webp",
+  "period": {
+    "start": "2026"
+  },
+  "link": "https://narrativoai-sable.vercel.app/",
+  "links": {
+    "live": "https://narrativoai-sable.vercel.app/",
+    "repo": ""
+  },
+  "skills": [
+    "Next.js",
+    "TypeScript",
+    "Python",
+    "PostgreSQL",
+    "TensorFlow",
+    "Keras",
+    "BiLSTM",
+    "Sentence Transformers"
+  ],
+  "coverSkills": [
+    "AI Agent",
+    "Web Search Research",
+    "BiLSTM"
+  ],
+  "features": [
+    "Natural language input for turning user context, raw data, and conversations into structured slide narratives.",
+    "AI agent workflow that performs web search research across public sources such as news, market reports, and websites for business context.",
+    "BiLSTM sentiment analysis to classify multilingual text into positive, negative, or neutral signals.",
+    "Embedding-based semantic layer to improve context matching between research findings, business signals, and slide content.",
+    "LLM-powered slide generation to produce polished consulting-style narratives, charts, and recommendations.",
+    "End-to-end workflow from research and analysis to modular presentation-ready deck components."
+  ],
+  "featuresId": [
+    "Input bahasa natural untuk mengubah konteks pengguna, data mentah, dan percakapan menjadi narasi slide terstruktur.",
+    "Alur kerja AI agent yang melakukan riset pencarian web di sumber publik seperti berita, laporan pasar, dan situs untuk konteks bisnis.",
+    "Analisis sentimen BiLSTM untuk mengklasifikasikan teks multibahasa menjadi sinyal positif, negatif, atau netral.",
+    "Lapisan semantik berbasis embedding untuk meningkatkan pencocokan konteks antara temuan riset, sinyal bisnis, dan konten slide.",
+    "Pembuatan slide berbasis LLM untuk menghasilkan narasi, grafik, dan rekomendasi bergaya konsultasi yang rapi.",
+    "Alur kerja end-to-end dari riset dan analisis hingga komponen deck presentasi modular yang siap pakai."
+  ],
+  "impact": [
+    "Reduces manual research and slide-writing work by turning unstructured information into ready-to-use business narratives.",
+    "Helps teams understand market trends, risks, and opportunities through sentiment signals and AI reasoning.",
+    "Supports data-driven consulting decisions by combining web insights, machine learning sentiment analysis, and LLM recommendations.",
+    "Makes multilingual business intelligence more accessible by processing sentiment across multiple languages."
+  ],
+  "impactId": [
+    "Mengurangi pekerjaan riset manual dan penulisan slide dengan mengubah informasi tidak terstruktur menjadi narasi bisnis siap pakai.",
+    "Membantu tim memahami tren pasar, risiko, dan peluang melalui sinyal sentimen dan penalaran AI.",
+    "Mendukung keputusan konsultasi berbasis data dengan menggabungkan wawasan web, analisis sentimen machine learning, dan rekomendasi LLM.",
+    "Membuat business intelligence multibahasa lebih mudah diakses dengan memproses sentimen di berbagai bahasa."
+  ],
+  "collaboration": {
+    "ownership": "Team project",
+    "ownershipId": "Proyek Tim",
+    "label": "Team",
+    "team": "Narratio AI project team",
+    "role": "Sentiment Analysis Model Trainer and AI Architect Builder",
+    "roleId": "Pelatih Model Analisis Sentimen dan Pembangun Arsitektur AI",
+    "contributions": [
+      "Trained the multilingual sentiment analysis model so the system can understand positive, negative, and neutral signals across multiple languages.",
+      "Added an embedding model layer to improve semantic understanding for research context, business signals, and narrative generation.",
+      "Designed the AI architecture that connects web scraping, web research, sentiment analysis, embeddings, and LLM-based slide generation.",
+      "Planned the web search and research workflow so the platform can collect relevant information from public websites, market reports, and news sources.",
+      "Helped transform raw web insights and conversation context into structured signals for business narrative and consulting-style deck generation."
+    ],
+    "contributionsId": [
+      "Melatih model analisis sentimen multibahasa sehingga sistem dapat memahami sinyal positif, negatif, dan netral di berbagai bahasa.",
+      "Menambahkan lapisan model embedding untuk meningkatkan pemahaman semantik pada konteks riset, sinyal bisnis, dan pembuatan narasi.",
+      "Merancang arsitektur AI yang menghubungkan web scraping, riset web, analisis sentimen, embedding, dan pembuatan slide berbasis LLM.",
+      "Merencanakan alur pencarian dan riset web sehingga platform dapat mengumpulkan informasi relevan dari situs publik, laporan pasar, dan sumber berita.",
+      "Membantu mengubah wawasan web mentah dan konteks percakapan menjadi sinyal terstruktur untuk narasi bisnis dan pembuatan deck bergaya konsultasi."
+    ]
+  },
+  "badge": "Ongoing - 2026 Team Project",
+  "badgeId": "Berjalan - Proyek Tim 2026",
+  "gallery": [
+    "/projects/naratioai/1.webp",
+    "/projects/naratioai/2.webp",
+    "/projects/naratioai/3.webp",
+    "/projects/naratioai/4.webp"
+  ]
+}

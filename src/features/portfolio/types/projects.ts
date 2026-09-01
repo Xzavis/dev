@@ -34,7 +34,7 @@ export type Project = {
   taglineId?: string
   /** Short search/social snippet. Falls back to tagline when omitted. */
   seoDescription?: string
-  year: "2025" | "2026"
+  year: string
   /** Local image URL under /public used in cards and case-study hero. */
   image: string
   /** Optional monochrome icon/logo URL under /public shown beside the project in the portfolio list. Rendered in black & white. */

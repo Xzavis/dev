@@ -1,14 +1,21 @@
 "use client"
 
+import defaultSkills from "@/content/skills.json"
+import type { TechStack as TechStackType } from "@/lib/content/types"
 import { useTranslation } from "@/lib/i18n/use-translation"
 
-import { STACK_CATEGORIES, TECH_STACK } from "../data/tech-stack"
-import type { TechStack as TechStackType } from "../types/tech-stack"
 import { Panel, PanelHeader, PanelTitle } from "./panel"
 
-export function TechStack() {
+export const STACK_CATEGORIES = [
+  "AI / ML",
+  "Frontend",
+  "Backend",
+  "DevOps / Cloud",
+]
+
+export function TechStack({ skills = defaultSkills }: { skills?: TechStackType[] } = {}) {
   const { t } = useTranslation()
-  const grouped = groupByCategory(TECH_STACK)
+  const grouped = groupByCategory(skills)
 
   return (
     <Panel id="stack">

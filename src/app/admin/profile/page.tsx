@@ -2,14 +2,14 @@
 
 // ponytail: singleton profile editor with instant preview and validation
 import {
-  SaveIcon,
-  RotateCcwIcon,
+  BriefcaseIcon,
   EyeIcon,
-  UserIcon,
   ImageIcon,
   Link2Icon,
   MapPinIcon,
-  BriefcaseIcon,
+  RotateCcwIcon,
+  SaveIcon,
+  UserIcon,
 } from "lucide-react"
 import Image from "next/image"
 import React, { useEffect, useState } from "react"
@@ -40,7 +40,7 @@ export default function AdminProfilePage() {
     })
   }, [])
 
-  const handleChange = (field: keyof AdminProfile, value: any) => {
+  const handleChange = <K extends keyof AdminProfile>(field: K, value: AdminProfile[K]) => {
     if (!profile) return
     setProfile({ ...profile, [field]: value })
     if (errors[field]) {

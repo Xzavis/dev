@@ -1,0 +1,94 @@
+{
+  "id": "machine-learning-system",
+  "title": "End-to-End Machine Learning Pipeline",
+  "category": "MLOps / Machine Learning",
+  "categoryId": "MLOps / Machine Learning",
+  "tagline": "A production-style MLOps pipeline that covers dataset experimentation, automated preprocessing, MLflow model training, CI retraining, Docker packaging, and observability with Prometheus and Grafana.",
+  "taglineId": "Pipeline MLOps bergaya produksi yang mencakup eksperimentasi dataset, preprocessing otomatis, pelatihan model MLflow, CI retraining, packaging Docker, dan observability dengan Prometheus dan Grafana.",
+  "seoDescription": "I built an end-to-end MLOps pipeline with preprocessing automation, MLflow training, CI retraining, Docker, and monitoring.",
+  "year": "2025",
+  "image": "/projects/machine-learning-system/experiment-notebook.webp",
+  "period": {
+    "start": "2025"
+  },
+  "link": "https://github.com/Zickrian-MLOps",
+  "links": {
+    "live": "",
+    "repo": "https://github.com/Zickrian-MLOps"
+  },
+  "skills": [
+    "Python",
+    "scikit-learn",
+    "MLflow",
+    "DagsHub",
+    "GitHub Actions",
+    "Docker",
+    "Prometheus",
+    "Grafana"
+  ],
+  "coverSkills": [
+    "MLflow",
+    "GitHub Actions",
+    "Grafana"
+  ],
+  "features": [
+    "Completed the experimentation stage using the MSML experiment template, including dataset loading, exploratory data analysis, and manual preprocessing before automation.",
+    "Converted the notebook preprocessing flow into an automated Python preprocessing script that returns training-ready data and can be triggered through GitHub Actions.",
+    "Built the modelling stage with MLflow Tracking, hyperparameter tuning, manual metric logging, and additional artifacts stored through an online DagsHub tracking setup.",
+    "Created an MLflow Project based CI workflow that retrains the model automatically when the GitHub Actions trigger runs.",
+    "Extended the CI workflow to preserve model artifacts and build Docker images for Docker Hub using the MLflow Docker build flow.",
+    "Prepared local model serving and connected observability through Prometheus exporter metrics, Prometheus configuration, and Grafana dashboards.",
+    "Implemented advanced Grafana monitoring coverage with multiple system/model metrics and alerting rules for production-style model observation."
+  ],
+  "featuresId": [
+    "Menyelesaikan tahap eksperimentasi menggunakan template eksperimen MSML, meliputi loading dataset, exploratory data analysis, dan preprocessing manual sebelum otomatisasi.",
+    "Mengubah alur preprocessing notebook menjadi skrip preprocessing Python otomatis yang mengembalikan data siap latih dan dapat dipicu melalui GitHub Actions.",
+    "Membangun tahap modelling dengan MLflow Tracking, hyperparameter tuning, pencatatan metrik manual, dan artifact tambahan yang disimpan melalui setup tracking online DagsHub.",
+    "Membuat alur kerja CI berbasis MLflow Project yang melatih ulang model secara otomatis saat trigger GitHub Actions berjalan.",
+    "Memperluas alur kerja CI untuk menyimpan artifact model dan membangun image Docker untuk Docker Hub menggunakan alur build Docker MLflow.",
+    "Menyiapkan model serving lokal dan menghubungkan observability melalui metrik Prometheus exporter, konfigurasi Prometheus, dan dashboard Grafana.",
+    "Mengimplementasikan cakupan monitoring Grafana tingkat lanjut dengan berbagai metrik sistem/model dan aturan alerting untuk observasi model bergaya produksi."
+  ],
+  "impact": [
+    "Demonstrates an end-to-end MLOps workflow rather than only a standalone notebook or model training script.",
+    "Makes preprocessing and retraining repeatable through automation, reducing manual steps and improving project reproducibility.",
+    "Connects model development with CI, artifact management, containerization, monitoring, and alerting so the system is closer to real deployment practice.",
+    "Shows how model development can be operationalized with repeatable pipelines, tracked experiments, deployable artifacts, and observability."
+  ],
+  "impactId": [
+    "Menunjukkan alur kerja MLOps end-to-end, bukan sekadar notebook atau skrip pelatihan model yang berdiri sendiri.",
+    "Membuat preprocessing dan retraining dapat diulang melalui otomatisasi, mengurangi langkah manual dan meningkatkan reproduktifitas proyek.",
+    "Menghubungkan pengembangan model dengan CI, manajemen artifact, containerization, monitoring, dan alerting sehingga sistem lebih mendekati praktik deployment nyata.",
+    "Menunjukkan bagaimana pengembangan model dapat dioperasionalkan dengan pipeline yang dapat diulang, eksperimen yang tercatat, artifact yang siap deploy, dan observability."
+  ],
+  "collaboration": {
+    "ownership": "Individual project",
+    "ownershipId": "Proyek Individu",
+    "label": "Individual",
+    "team": "Solo production-style project",
+    "role": "Machine Learning Engineer",
+    "roleId": "Machine Learning Engineer",
+    "contributions": [
+      "Designed the full machine learning lifecycle from experimentation, automated preprocessing, model training, CI retraining, deployment preparation, and monitoring.",
+      "Built a production-style MLOps structure across experiment, modelling, MLflow project, and monitoring deliverables.",
+      "Prepared operational evidence and supporting files for MLflow, DagsHub, GitHub Actions, Docker, Prometheus, and Grafana workflows."
+    ],
+    "contributionsId": [
+      "Merancang siklus hidup machine learning lengkap mulai dari eksperimentasi, preprocessing otomatis, pelatihan model, CI retraining, persiapan deployment, hingga monitoring.",
+      "Membangun struktur MLOps bergaya produksi mencakup eksperimen, modelling, proyek MLflow, dan deliverable monitoring.",
+      "Menyiapkan bukti operasional dan file pendukung untuk alur kerja MLflow, DagsHub, GitHub Actions, Docker, Prometheus, dan Grafana."
+    ]
+  },
+  "badge": "Production-Style MLOps Pipeline",
+  "badgeId": "Pipeline MLOps Bergaya Produksi",
+  "notes": "Private production-style MLOps project covering automated preprocessing, MLflow + DagsHub tracking with tuning and artifacts, CI retraining with Docker image build, and Prometheus/Grafana monitoring with alerting.",
+  "notesId": "Proyek MLOps privat bergaya produksi yang mencakup preprocessing otomatis, tracking MLflow + DagsHub dengan tuning dan artifact, CI retraining dengan build image Docker, serta monitoring Prometheus/Grafana dengan alerting.",
+  "gallery": [
+    "/projects/machine-learning-system/experiment-notebook.webp",
+    "/projects/machine-learning-system/preprocessing-automation.webp",
+    "/projects/machine-learning-system/mlflow-training-dashboard.webp",
+    "/projects/machine-learning-system/mlflow-model-artifacts.webp",
+    "/projects/machine-learning-system/ci-retraining-workflow.webp",
+    "/projects/machine-learning-system/monitoring-observability-dashboard.webp"
+  ]
+}

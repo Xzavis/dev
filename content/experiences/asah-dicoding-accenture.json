@@ -1,0 +1,26 @@
+{
+  "id": "asah-dicoding-accenture",
+  "companyName": "Asah by Dicoding & Accenture",
+  "companyLogo": "/logos/asah.webp",
+  "companyWebsite": "https://dicoding.com",
+  "positions": [
+    {
+      "id": "asah-1",
+      "title": "Machine Learning",
+      "employmentPeriod": {
+        "start": "08.2025",
+        "end": "01.2026"
+      },
+      "employmentType": "Cohort",
+      "icon": "network",
+      "description": "- Selected among 2,000 participants nationwide for a highly selective program led by Dicoding in partnership with Accenture, aimed at accelerating digital talent development.\n- Led a cross-functional team of 5 engineers to develop a machine learning-powered banking sales prediction portal that prioritizes high-conversion leads.\n- Designed a predictive lead-scoring workflow to rank prospects by subscription probability, helping sales teams focus on high-value opportunities.\n- Translated analytical results into product features, improving lead prioritization and reducing manual analysis efforts.",
+      "descriptionId": "- Terpilih di antara 2.000 peserta secara nasional untuk program yang sangat selektif yang diselenggarakan oleh Dicoding bekerja sama dengan Accenture, bertujuan mempercepat pengembangan talenta digital.\n- Memimpin tim lintas fungsi beranggotakan 5 engineer untuk mengembangkan portal prediksi penjualan perbankan berbasis machine learning yang memprioritaskan leads dengan konversi tinggi.\n- Merancang alur kerja predictive lead-scoring untuk mengurutkan prospek berdasarkan probabilitas berlangganan, membantu tim sales fokus pada peluang bernilai tinggi.\n- Menerjemahkan hasil analitik menjadi fitur produk, meningkatkan prioritas leads dan mengurangi upaya analisis manual.",
+      "skills": [
+        "Machine Learning",
+        "Predictive Modeling",
+        "Team Leadership",
+        "Communication"
+      ]
+    }
+  ]
+}

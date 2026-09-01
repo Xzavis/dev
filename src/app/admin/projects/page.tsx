@@ -2,15 +2,15 @@
 
 // ponytail: projects list view with fast client-side filtering, mobile card stack and delete dialog
 import {
+  ArrowUpDownIcon,
+  EditIcon,
+  ExternalLinkIcon,
+  FilterIcon,
+  MoreVerticalIcon,
   PlusIcon,
   SearchIcon,
-  FilterIcon,
-  EditIcon,
-  Trash2Icon,
   StarIcon,
-  ExternalLinkIcon,
-  MoreVerticalIcon,
-  ArrowUpDownIcon,
+  Trash2Icon,
 } from "lucide-react"
 import Link from "next/link"
 import React, { useEffect, useMemo, useState } from "react"

@@ -1,0 +1,79 @@
+{
+  "id": "polsekrembang",
+  "title": "Polsek Rembang RAG Public Service Assistant",
+  "category": "Virtual Assistant",
+  "categoryId": "Asisten Virtual",
+  "tagline": "A public service assistant that answers citizen questions from official SOP documents, helping users understand SKCK, lost report, permit, and police service procedures faster.",
+  "taglineId": "Asisten layanan publik yang menjawab pertanyaan warga dari dokumen SOP resmi, membantu pengguna memahami prosedur SKCK, laporan kehilangan, izin, dan layanan kepolisian lebih cepat.",
+  "seoDescription": "I built a RAG public service assistant that answers police service questions from official SOP documents with clear guidance.",
+  "year": "2025",
+  "image": "/projects/polsekrembang.webp",
+  "period": {
+    "start": "2025"
+  },
+  "link": "https://polsekrembang.vercel.app/",
+  "links": {
+    "live": "https://polsekrembang.vercel.app/",
+    "repo": "https://github.com/zickrian/police-ai-guide"
+  },
+  "skills": [
+    "Next.js 16",
+    "React 19",
+    "TypeScript",
+    "Tailwind CSS 4",
+    "Gemini API",
+    "Google GenAI",
+    "LangChain",
+    "YOLOv8",
+    "shadcn/ui"
+  ],
+  "coverSkills": [
+    "Gemini API",
+    "RAG",
+    "LangChain"
+  ],
+  "features": [
+    "Interactive chat for Q&A about police services with a friendly yet professional and informative tone.",
+    "LangChain-based RAG over SOP documents: answers are derived from administrative service documents such as station profile, service hours, SKCK, lost item reports, event permits, detainee visits, and related public-service procedures.",
+    "Response guardrails: assistant only answers topics relevant to police services, and politely declines off-topic questions.",
+    "Consistent answer format (plain text): no markdown, no unusual symbols - easily readable on any device.",
+    "Quick actions to speed up user flow: e.g., police service buttons, incident reports, and contact an officer.",
+    "Download transcript: users can download chat history as evidence/conversation summary."
+  ],
+  "featuresId": [
+    "Chat interaktif untuk tanya-jawab seputar layanan kepolisian dengan nada ramah namun tetap profesional dan informatif.",
+    "RAG berbasis LangChain atas dokumen SOP: jawaban diturunkan dari dokumen layanan administratif seperti profil kantor, jam layanan, SKCK, laporan barang hilang, izin acara, kunjungan tahanan, dan prosedur layanan publik terkait.",
+    "Guardrail respons: asisten hanya menjawab topik yang relevan dengan layanan kepolisian, dan menolak dengan sopan pertanyaan di luar topik.",
+    "Format jawaban konsisten (plain text): tanpa markdown, tanpa simbol tidak biasa - mudah dibaca di perangkat apa pun.",
+    "Quick action untuk mempercepat alur pengguna: misalnya tombol layanan kepolisian, laporan insiden, dan hubungi petugas.",
+    "Unduh transkrip: pengguna dapat mengunduh riwayat chat sebagai bukti/ringkasan percakapan."
+  ],
+  "impact": [
+    "Speeds up access to service information: citizens no longer need to search for procedures and requirements as answers are instantly available via chat.",
+    "Reduces repetitive questions to officers for administrative matters (SKCK, lost items, permits), allowing officers to focus on field services.",
+    "Enhances citizen experience with clear, consistent, and human-like responses - bringing public services closer through AI technology."
+  ],
+  "impactId": [
+    "Mempercepat akses informasi layanan: warga tidak perlu lagi mencari prosedur dan persyaratan karena jawaban langsung tersedia via chat.",
+    "Mengurangi pertanyaan berulang ke petugas untuk urusan administratif (SKCK, barang hilang, izin), sehingga petugas bisa fokus pada layanan lapangan.",
+    "Meningkatkan pengalaman warga dengan respons yang jelas, konsisten, dan manusiawi - mendekatkan layanan publik lewat teknologi AI."
+  ],
+  "collaboration": {
+    "ownership": "Individual project",
+    "ownershipId": "Proyek Individu",
+    "label": "Individual",
+    "team": "Solo project",
+    "role": "Fullstack Developer",
+    "roleId": "Fullstack Developer",
+    "contributions": [
+      "Planned the LangChain-based RAG assistant flow and police-service knowledge base.",
+      "Designed prompt guardrails so the assistant stays focused on Polsek Rembang services.",
+      "Built the chat UI, API flow, and deployment-ready implementation."
+    ],
+    "contributionsId": [
+      "Merencanakan alur asisten RAG berbasis LangChain dan basis pengetahuan layanan kepolisian.",
+      "Merancang guardrail prompt agar asisten tetap fokus pada layanan Polsek Rembang.",
+      "Membangun UI chat, alur API, dan implementasi siap deployment."
+    ]
+  }
+}

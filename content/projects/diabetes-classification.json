@@ -1,0 +1,74 @@
+{
+  "id": "diabetes-classification",
+  "title": "Diabetes Risk Prediction App",
+  "category": "AI / Machine Learning",
+  "categoryId": "AI / Machine Learning",
+  "tagline": "A health screening app that estimates diabetes risk from patient indicators and presents quick, easy-to-understand results for early decision support.",
+  "taglineId": "Aplikasi skrining kesehatan yang memperkirakan risiko diabetes dari indikator pasien dan menyajikan hasil yang cepat dan mudah dipahami untuk dukungan keputusan dini.",
+  "seoDescription": "I built a diabetes risk prediction app that turns patient indicators into quick machine learning screening results.",
+  "year": "2025",
+  "image": "/projects/diabetes-classification.webp",
+  "period": {
+    "start": "2025"
+  },
+  "link": "https://diabetes-classification.streamlit.app/",
+  "links": {
+    "live": "https://diabetes-classification.streamlit.app/",
+    "repo": "https://github.com/zickrian/Projek-Klasifikasi-Diabetes"
+  },
+  "skills": [
+    "Python",
+    "Pandas",
+    "NumPy",
+    "scikit-learn",
+    "Streamlit",
+    "Random Forest"
+  ],
+  "coverSkills": [
+    "Scikit-learn",
+    "Random Forest",
+    "Streamlit"
+  ],
+  "features": [
+    "Patient data input form for instant diabetes risk prediction.",
+    "Preprocessing pipeline for missing values, scaling, and feature selection.",
+    "Multi-algorithm training and evaluation with Logistic Regression, Random Forest, and SVM.",
+    "Clear prediction output with easy-to-understand feedback messages.",
+    "Separated training, evaluation, and inference structure for maintainability."
+  ],
+  "featuresId": [
+    "Form input data pasien untuk prediksi risiko diabetes secara instan.",
+    "Pipeline preprocessing untuk missing value, scaling, dan seleksi fitur.",
+    "Pelatihan dan evaluasi multi-algoritma dengan Logistic Regression, Random Forest, dan SVM.",
+    "Output prediksi yang jelas dengan pesan feedback yang mudah dipahami.",
+    "Struktur pelatihan, evaluasi, dan inferensi yang terpisah untuk kemudahan pemeliharaan."
+  ],
+  "impact": [
+    "Helps identify diabetes risk early from patient health data.",
+    "Supports decision-making with fast initial screening predictions.",
+    "Represents an end-to-end ML workflow from training to deployment."
+  ],
+  "impactId": [
+    "Membantu mengidentifikasi risiko diabetes lebih awal dari data kesehatan pasien.",
+    "Mendukung pengambilan keputusan dengan prediksi skrining awal yang cepat.",
+    "Merepresentasikan alur kerja ML end-to-end dari pelatihan hingga deployment."
+  ],
+  "collaboration": {
+    "ownership": "Individual project",
+    "ownershipId": "Proyek Individu",
+    "label": "Individual",
+    "team": "Solo project",
+    "role": "End-to-end ML Developer",
+    "roleId": "End-to-end ML Developer",
+    "contributions": [
+      "Handled the full machine learning workflow from preprocessing to model evaluation.",
+      "Built the Streamlit inference app for patient-data input and prediction output.",
+      "Prepared the project structure so training, evaluation, and deployment flow stay maintainable."
+    ],
+    "contributionsId": [
+      "Menangani alur kerja machine learning lengkap mulai dari preprocessing hingga evaluasi model.",
+      "Membangun aplikasi inferensi Streamlit untuk input data pasien dan output prediksi.",
+      "Menyiapkan struktur proyek agar alur pelatihan, evaluasi, dan deployment tetap mudah dikelola."
+    ]
+  }
+}

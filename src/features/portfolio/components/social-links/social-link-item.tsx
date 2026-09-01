@@ -5,6 +5,7 @@ import { ArrowUpRightIcon } from "lucide-react"
 import { useChat } from "@/components/chat-provider"
 import { preloadChatPanel } from "@/components/chat-widget"
 import { Magnetic } from "@/components/core/magnetic"
+import { IconRegistry } from "@/components/icon-registry"
 import { UTM_PARAMS } from "@/config/site"
 import type { SocialLink } from "@/features/portfolio/types/social-links"
 import { cn } from "@/lib/utils"
@@ -90,7 +91,7 @@ export function SocialLinkItem({
           )}
           aria-hidden
         >
-          {icon}
+          {typeof icon === "string" ? <IconRegistry name={icon} /> : icon}
         </span>
       </Magnetic>
 

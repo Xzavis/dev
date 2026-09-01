@@ -8,46 +8,69 @@ import { GitHubContributions } from "@/features/portfolio/components/github-cont
 import { Projects } from "@/features/portfolio/components/projects"
 import { Publications } from "@/features/portfolio/components/publications"
 import { TechStack } from "@/features/portfolio/components/tech-stack"
-import { USER } from "@/features/portfolio/data/user"
+import {
+  getAwards,
+  getCertifications,
+  getExperiences,
+  getProfile,
+  getProjects,
+  getPublications,
+  getSettings,
+  getSkills,
+} from "@/lib/content"
 
-export const metadata: Metadata = {
-  title: {
-    absolute: USER.seoTitle ?? USER.displayName,
-  },
-  description: USER.seoDescription,
-  keywords: USER.keywords,
-  authors: [{ name: USER.displayName, url: USER.website }],
-  creator: USER.displayName,
-  publisher: USER.displayName,
-  alternates: {
-    canonical: "/",
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  const [profile, settings] = await Promise.all([getProfile(), getSettings()])
+
+  return {
+    title: {
+      absolute: settings.seoTitle ?? profile.displayName,
+    },
+    description: settings.seoDescription ?? profile.bio,
+    keywords: settings.keywords,
+    authors: [{ name: profile.displayName, url: profile.website }],
+    creator: profile.displayName,
+    publisher: profile.displayName,
+    alternates: {
+      canonical: "/",
+    },
+  }
 }
 
-export default function Page() {
+export default async function Page() {
+  const [experiences, projects, skills, awards, publications, certifications] =
+    await Promise.all([
+      getExperiences(),
+      getProjects(),
+      getSkills(),
+      getAwards(),
+      getPublications(),
+      getCertifications(),
+    ])
+
   return (
     <>
       <SectionSeparator />
 
-      <Experiences />
+      <Experiences experiences={experiences} />
       <SectionSeparator />
 
-      <Projects />
+      <Projects projects={projects} />
       <SectionSeparator />
 
-      <TechStack />
+      <TechStack skills={skills} />
       <SectionSeparator />
 
       <GitHubContributions />
       <SectionSeparator />
 
-      <Awards />
+      <Awards awards={awards} />
       <SectionSeparator />
 
-      <Publications />
+      <Publications publications={publications} />
       <SectionSeparator />
 
-      <Certifications />
+      <Certifications certifications={certifications} />
       <SectionSeparator />
     </>
   )

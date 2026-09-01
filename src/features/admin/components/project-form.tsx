@@ -2,18 +2,18 @@
 
 // ponytail: progressive disclosure project editor with tabbed sections, live preview and delete confirmation
 import {
+  ArchiveIcon,
+  BookOpenIcon,
+  CodeIcon,
+  EyeIcon,
+  ImageIcon,
+  LayersIcon,
+  PlusIcon,
   SaveIcon,
   SendIcon,
-  ArchiveIcon,
-  Trash2Icon,
-  EyeIcon,
-  PlusIcon,
-  XIcon,
   SparklesIcon,
-  LayersIcon,
-  ImageIcon,
-  CodeIcon,
-  BookOpenIcon,
+  Trash2Icon,
+  XIcon,
 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -21,12 +21,13 @@ import React, { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Tag } from "@/components/ui/tag"
+
 import { deleteProjectAction, saveProjectAction } from "../actions/content-actions"
+import type { AdminProject, ContentStatus } from "../types/admin"
 import { AdminAlertDialog, AdminDialog } from "./admin-dialog"
 import { FormField, FormInput, FormSelect, FormSwitch, FormTextarea } from "./admin-form-elements"
 import { AdminHeader } from "./admin-header"
 import { useToast } from "./admin-toast"
-import type { AdminProject, ContentStatus } from "../types/admin"
 
 export interface ProjectFormProps {
   initialData?: AdminProject | null
@@ -89,7 +90,7 @@ export function ProjectForm({ initialData, isNew = false }: ProjectFormProps) {
   const [newFeature, setNewFeature] = useState("")
   const [newImpact, setNewImpact] = useState("")
 
-  const handleChange = (field: keyof AdminProject, value: any) => {
+  const handleChange = <K extends keyof AdminProject>(field: K, value: AdminProject[K]) => {
     setProject((prev) => ({ ...prev, [field]: value }))
     if (errors[field]) {
       setErrors((prev) => {

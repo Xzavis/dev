@@ -1,4 +1,5 @@
-import { USER } from "@/features/portfolio/data/user"
+import profile from "@/content/profile.json"
+import settings from "@/content/settings.json"
 import type { NavItem } from "@/types/nav"
 
 const DEFAULT_SITE_URL = "https://www.zickrian.dev"
@@ -11,11 +12,11 @@ function normalizeSiteUrl(value?: string) {
 }
 
 export const SITE_INFO = {
-  name: USER.displayName,
+  name: profile.displayName,
   url: normalizeSiteUrl(process.env.APP_URL),
-  ogImage: USER.ogImage,
-  description: USER.seoDescription ?? USER.bio,
-  keywords: USER.keywords,
+  ogImage: settings.ogImage,
+  description: settings.seoDescription ?? profile.bio,
+  keywords: settings.keywords,
 }
 
 export const META_THEME_COLORS = {

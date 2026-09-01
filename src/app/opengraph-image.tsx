@@ -1,10 +1,10 @@
 import { ImageResponse } from "next/og"
 
-import { USER } from "@/features/portfolio/data/user"
+import profile from "@/content/profile.json"
 
 import { PROFILE_IMAGE_DATA_URI } from "./seo-logo-loader"
 
-export const alt = `${USER.displayName} - AI & Machine Learning Engineer`
+export const alt = `${profile.displayName} - AI & Machine Learning Engineer`
 export const size = {
   width: 1200,
   height: 630,
@@ -45,9 +45,9 @@ export default async function OpengraphImage() {
               lineHeight: 1.1,
             }}
           >
-            {USER.displayName}
+            {profile.displayName}
           </div>
-          <div style={{ fontSize: 32, color: "#a1a1aa" }}>{USER.jobTitle}</div>
+          <div style={{ fontSize: 32, color: "#a1a1aa" }}>{profile.jobTitle}</div>
         </div>
 
         <div

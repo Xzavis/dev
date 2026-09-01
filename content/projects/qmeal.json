@@ -1,0 +1,84 @@
+{
+  "id": "qmeal",
+  "title": "SmartCanteen AI Menu Recommendation System",
+  "category": "Multi-Vendor Ordering Platform",
+  "categoryId": "Platform Pemesanan Multi-Vendor",
+  "tagline": "An AI-powered canteen recommendation system that uses content-based filtering to match menu items with user budget, category, and meal preferences, helping users find relevant food faster and reducing ordering friction.",
+  "taglineId": "Sistem rekomendasi kantin berbasis AI yang menggunakan content-based filtering untuk mencocokkan item menu dengan budget, kategori, dan preferensi makan pengguna, membantu pengguna menemukan makanan relevan lebih cepat dan mengurangi friksi pemesanan.",
+  "seoDescription": "I built SmartCanteen to combine online canteen ordering with AI menu recommendations, payments, ratings, and order history.",
+  "year": "2025",
+  "image": "/projects/qmeal.webp",
+  "videoEmbed": {
+    "src": "https://player.cloudinary.com/embed/?cloud_name=dujp9ydkx&public_id=Untitled_design_q4zzxl",
+    "title": "SmartCanteen AI Menu Recommendation System demo video"
+  },
+  "period": {
+    "start": "2025"
+  },
+  "link": "https://qmeal-one.vercel.app/",
+  "links": {
+    "live": "https://qmeal-one.vercel.app/",
+    "repo": "https://github.com/zickrian/user-canteen"
+  },
+  "skills": [
+    "Next.js",
+    "Tailwind CSS",
+    "Supabase",
+    "PostgreSQL",
+    "NextAuth",
+    "Midtrans"
+  ],
+  "coverSkills": [
+    "PostgreSQL",
+    "Chatbot",
+    "Midtrans"
+  ],
+  "features": [
+    "Multi-stall checkout: users can select menu items from multiple vendors in a single order flow (no app-switching needed).",
+    "Queue-free ordering: online ordering system reduces wait times and makes buying food more efficient during peak hours.",
+    "AI Assistant (chatbot) for recommendations: helps choose menu items based on budget, preferences (snacks/drinks/full meals), and value bundles.",
+    "Smart cart: automatically groups items per stall/vendor and shows a clear total summary before checkout.",
+    "Flexible payments: supports QRIS/cashless via Midtrans, plus a CASH option for on-site payment (per canteen policy).",
+    "Order history: users can view purchase history, order status, and total transactions for expense tracking.",
+    "Store rating & review: displays vendor ratings so users can choose the most trustworthy and quality-consistent stalls.",
+    "Search & category discovery: menu/vendor search + categories (breakfast/lunch/snacks) for faster exploration."
+  ],
+  "featuresId": [
+    "Checkout multi-stall: pengguna dapat memilih item menu dari beberapa vendor dalam satu alur pemesanan (tanpa perlu ganti aplikasi).",
+    "Pemesanan tanpa antre: sistem pemesanan online mengurangi waktu tunggu dan membuat pembelian makanan lebih efisien saat jam sibuk.",
+    "AI Assistant (chatbot) untuk rekomendasi: membantu memilih item menu berdasarkan budget, preferensi (cemilan/minuman/makanan berat), dan paket hemat.",
+    "Smart cart: otomatis mengelompokkan item per stall/vendor dan menampilkan ringkasan total yang jelas sebelum checkout.",
+    "Pembayaran fleksibel: mendukung QRIS/cashless via Midtrans, plus opsi CASH untuk pembayaran di tempat (sesuai kebijakan kantin).",
+    "Riwayat pesanan: pengguna dapat melihat riwayat pembelian, status pesanan, dan total transaksi untuk pelacakan pengeluaran.",
+    "Rating & ulasan toko: menampilkan rating vendor sehingga pengguna dapat memilih stall paling terpercaya dan konsisten kualitasnya.",
+    "Pencarian & eksplorasi kategori: pencarian menu/vendor + kategori (sarapan/makan siang/cemilan) untuk eksplorasi lebih cepat."
+  ],
+  "impact": [
+    "Reduces wasted time during breaks as users can pre-order without standing in long queues.",
+    "Improves canteen shopping experience with a smooth ordering flow, fast payments, and budget-relevant menu recommendations.",
+    "Provides vendor quality insights through ratings and purchase history, making user decisions more confident and data-driven."
+  ],
+  "impactId": [
+    "Mengurangi waktu terbuang saat jam istirahat karena pengguna bisa pre-order tanpa mengantre lama.",
+    "Meningkatkan pengalaman belanja kantin dengan alur pemesanan yang lancar, pembayaran cepat, dan rekomendasi menu sesuai budget.",
+    "Memberikan insight kualitas vendor melalui rating dan riwayat pembelian, membuat keputusan pengguna lebih percaya diri dan berbasis data."
+  ],
+  "collaboration": {
+    "ownership": "Individual project",
+    "ownershipId": "Proyek Individu",
+    "label": "Individual",
+    "team": "Solo project",
+    "role": "Full-stack Product Developer",
+    "roleId": "Full-stack Product Developer",
+    "contributions": [
+      "Planned the product flow, feature scope, and ordering experience.",
+      "Built the frontend and backend for multi-vendor ordering and cart workflows.",
+      "Integrated payment/order flows and delivered the deployment-ready platform."
+    ],
+    "contributionsId": [
+      "Merencanakan alur produk, cakupan fitur, dan pengalaman pemesanan.",
+      "Membangun frontend dan backend untuk alur kerja pemesanan multi-vendor dan keranjang belanja.",
+      "Mengintegrasikan alur pembayaran/pemesanan dan menghadirkan platform siap deployment."
+    ]
+  }
+}

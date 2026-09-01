@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server"
 
-import { USER } from "@/features/portfolio/data/user"
+import profile from "@/content/profile.json"
 import { getResendClient } from "@/lib/resend"
 
 export const runtime = "nodejs"
 
-const OWNER_EMAIL = Buffer.from(USER.email, "base64").toString("utf-8")
+const OWNER_EMAIL = Buffer.from(profile.email, "base64").toString("utf-8")
 const MAX_NAME_LENGTH = 100
 const MAX_EMAIL_LENGTH = 254
 const MAX_SUBJECT_LENGTH = 200
@@ -214,7 +214,7 @@ function buildOwnerHtml(payload: ContactPayload) {
 
     <a href="mailto:${senderEmail}?subject=Re: ${encodeURIComponent(subject)}" class="reply-btn">Reply</a>
 
-    <div class="footer">Sent via ${USER.website}</div>
+    <div class="footer">Sent via ${profile.website}</div>
   </div>
 </body>
 </html>`
@@ -229,7 +229,7 @@ function buildSenderHtml(payload: ContactPayload) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
   <meta name="supported-color-schemes" content="light dark">
-  <title>Message Received – ${USER.displayName}</title>
+  <title>Message Received – ${profile.displayName}</title>
   <style>
     :root { color-scheme: light dark; }
 
@@ -316,7 +316,7 @@ function buildSenderHtml(payload: ContactPayload) {
   <u></u>
   <div class="wrapper">
     <h1 class="greeting-title">Hi ${senderName}, message received! ✅</h1>
-    <p class="greeting-sub">Thank you for contacting <strong>${USER.displayName}</strong>. Your email has been successfully sent. I will review and reply to you as soon as possible.</p>
+    <p class="greeting-sub">Thank you for contacting <strong>${profile.displayName}</strong>. Your email has been successfully sent. I will review and reply to you as soon as possible.</p>
 
     <span class="section-label">Your Message</span>
     <div class="recap-box">
@@ -326,7 +326,7 @@ function buildSenderHtml(payload: ContactPayload) {
 
     <p class="connect-label">You can also reach me here:</p>
     <div>
-      <a href="${USER.website}" class="icon-link" title="Portfolio">
+      <a href="${profile.website}" class="icon-link" title="Portfolio">
         <img src="https://img.icons8.com/ios-filled/100/71717a/domain.png" alt="Portfolio" width="24" height="24" />
       </a>
       <a href="https://wa.me/6285155487647" class="icon-link" title="WhatsApp">
@@ -337,7 +337,7 @@ function buildSenderHtml(payload: ContactPayload) {
       </a>
     </div>
 
-    <div class="footer">This is an automated response from <a href="${USER.website}">${USER.website}</a></div>
+    <div class="footer">This is an automated response from <a href="${profile.website}">${profile.website}</a></div>
   </div>
 </body>
 </html>`
@@ -410,16 +410,16 @@ export async function POST(req: Request) {
     // Send both emails concurrently
     const [ownerResult, senderResult] = await Promise.allSettled([
       resend.emails.send({
-        from: `${USER.displayName} Portfolio <hello@zickrian.dev>`,
+        from: `${profile.displayName} Portfolio <hello@zickrian.dev>`,
         to: [OWNER_EMAIL],
         replyTo: senderEmail,
         subject: `[Contact] ${subject} - from ${senderName}`,
         html: buildOwnerHtml(payload),
       }),
       resend.emails.send({
-        from: `${USER.displayName} <hello@zickrian.dev>`,
+        from: `${profile.displayName} <hello@zickrian.dev>`,
         to: [senderEmail],
-        subject: `Message received! – ${USER.displayName}`,
+        subject: `Message received! – ${profile.displayName}`,
         html: buildSenderHtml(payload),
       }),
     ])

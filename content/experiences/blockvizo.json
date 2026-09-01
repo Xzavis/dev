@@ -1,0 +1,26 @@
+{
+  "id": "blockvizo",
+  "companyName": "Blockvizo Research",
+  "companyLogo": "/logos/blockvizo.svg",
+  "positions": [
+    {
+      "id": "blockvizo-1",
+      "title": "Research and Data Analyst",
+      "employmentPeriod": {
+        "start": "06.2024",
+        "end": "07.2025"
+      },
+      "employmentType": "Part-time",
+      "icon": "bar-chart-3",
+      "description": "- Analyzed 50,000+ blockchain transaction records to identify behavioral patterns and predictive signals related to user activity, generating over Rp50 million in profit on crypto games by utilizing these insights.\n- Developed machine learning models using Python and Scikit-learn, including Random Forest and Logistic Regression, achieving up to 85% prediction accuracy.\n- Built analytical dashboards and visual reports to communicate key findings and support data-driven decision-making.",
+      "descriptionId": "- Menganalisis 50.000+ catatan transaksi blockchain untuk mengidentifikasi pola perilaku dan sinyal prediktif terkait aktivitas pengguna, menghasilkan lebih dari Rp50 juta profit pada crypto games dengan memanfaatkan wawasan tersebut.\n- Mengembangkan model machine learning menggunakan Python dan Scikit-learn, termasuk Random Forest dan Logistic Regression, mencapai akurasi prediksi hingga 85%.\n- Membangun dashboard analitik dan laporan visual untuk mengomunikasikan temuan utama dan mendukung pengambilan keputusan berbasis data.",
+      "skills": [
+        "Data Analysis",
+        "Python",
+        "Machine Learning",
+        "Dashboards",
+        "Blockchain Analytics"
+      ]
+    }
+  ]
+}

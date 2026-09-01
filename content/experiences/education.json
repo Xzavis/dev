@@ -1,0 +1,42 @@
+{
+  "id": "education",
+  "companyName": "Education",
+  "positions": [
+    {
+      "id": "edu-udinus",
+      "title": "Universitas Dian Nuswantoro",
+      "employmentPeriod": {
+        "start": "2023",
+        "end": "2027"
+      },
+      "icon": "graduation-cap",
+      "description": "- Developed strong teamwork skills through collaborative academic projects and group assignments across multiple semesters.\n- Demonstrated leadership by frequently taking on team lead roles in group projects, coordinating tasks, and ensuring timely delivery.\n- Practiced effective time management by balancing coursework, organizational activities, and personal development simultaneously.\n- Strengthened communication skills through presentations, team discussions, and cross-functional collaboration with peers from diverse backgrounds.",
+      "descriptionId": "- Mengembangkan kemampuan kerja tim yang kuat melalui proyek akademik kolaboratif dan tugas kelompok di berbagai semester.\n- Menunjukkan jiwa kepemimpinan dengan sering mengambil peran sebagai ketua tim dalam proyek kelompok, mengoordinasikan tugas, dan memastikan penyelesaian tepat waktu.\n- Melatih manajemen waktu yang efektif dengan menyeimbangkan perkuliahan, kegiatan organisasi, dan pengembangan diri secara bersamaan.\n- Memperkuat kemampuan komunikasi melalui presentasi, diskusi tim, dan kolaborasi lintas fungsi dengan rekan-rekan dari latar belakang yang beragam.",
+      "skills": [
+        "Teamwork",
+        "Leadership",
+        "Time Management",
+        "Communication",
+        "Problem Solving"
+      ]
+    },
+    {
+      "id": "edu-sma3",
+      "title": "SMA 3 Rembang",
+      "employmentPeriod": {
+        "start": "2020",
+        "end": "2023"
+      },
+      "icon": "school",
+      "description": "- Actively participated in various seminars and workshops to broaden knowledge and stay updated with current trends.\n- Developed strong communication skills through active engagement in class discussions, presentations, and extracurricular activities.\n- Built teamwork and problem-solving abilities by collaborating with peers on group projects and academic challenges.\n- Frequently provided advice and support to friends facing personal or academic problems, strengthening interpersonal and empathy skills.",
+      "descriptionId": "- Aktif berpartisipasi dalam berbagai seminar dan workshop untuk memperluas wawasan dan mengikuti perkembangan tren terkini.\n- Mengembangkan kemampuan komunikasi yang kuat melalui keterlibatan aktif dalam diskusi kelas, presentasi, dan kegiatan ekstrakurikuler.\n- Membangun kemampuan kerja tim dan pemecahan masalah dengan berkolaborasi bersama teman-teman dalam proyek kelompok dan tantangan akademik.\n- Sering memberikan saran dan dukungan kepada teman-teman yang menghadapi masalah pribadi atau akademik, memperkuat kemampuan interpersonal dan empati.",
+      "skills": [
+        "Communication",
+        "Teamwork",
+        "Problem Solving",
+        "Public Speaking",
+        "Interpersonal Skills"
+      ]
+    }
+  ]
+}

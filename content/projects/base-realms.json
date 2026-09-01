@@ -1,0 +1,92 @@
+{
+  "id": "base-realms",
+  "title": "Base Realms",
+  "category": "Blockchain / Web3 Gaming",
+  "categoryId": "Blockchain / Gaming Web3",
+  "tagline": "A 16-bit RPG battle game that lets players mint characters, battle for seasonal rewards, and enter crypto through familiar QR payments without needing DeFi knowledge.",
+  "taglineId": "Game battle RPG 16-bit yang memungkinkan pemain mint karakter, bertarung untuk hadiah musiman, dan masuk ke dunia crypto lewat pembayaran QR yang familiar tanpa perlu paham DeFi.",
+  "seoDescription": "I helped build Base Realms, a 16-bit onchain RPG that makes Web3 gaming more approachable through familiar payments and gameplay.",
+  "year": "2025",
+  "image": "/projects/base-realms.webp",
+  "period": {
+    "start": "2025"
+  },
+  "link": "https://baserealms.app/",
+  "links": {
+    "live": "https://baserealms.app/",
+    "repo": ""
+  },
+  "skills": [
+    "Solidity",
+    "Next.js",
+    "TypeScript",
+    "Base",
+    "ERC-721",
+    "ERC-1155"
+  ],
+  "coverSkills": [
+    "Solidity",
+    "ERC-721",
+    "Base"
+  ],
+  "features": [
+    "16-bit RPG-style onchain battle game with platformer-inspired gameplay.",
+    "QRIS payment integration: scan & pay with Indonesian QRIS - making crypto accessible to everyone.",
+    "Fair randomness through commit-reveal mechanics for verifiable battle outcomes.",
+    "ERC-721 + ERC-1155 token standards: unique characters and mintable/burnable game items.",
+    "Social onboarding: share battle progress on Farcaster & Base App for community engagement.",
+    "Multi-currency support: battle with ETH, USDC, or IDRX depending on player preference."
+  ],
+  "featuresId": [
+    "Game battle onchain bergaya RPG 16-bit dengan gameplay terinspirasi platformer.",
+    "Integrasi pembayaran QRIS: scan & bayar dengan QRIS Indonesia - membuat crypto mudah diakses semua orang.",
+    "Randomness yang fair melalui mekanisme commit-reveal untuk hasil pertarungan yang dapat diverifikasi.",
+    "Standar token ERC-721 + ERC-1155: karakter unik dan item game yang bisa di-mint/burn.",
+    "Onboarding sosial: bagikan progres pertarungan di Farcaster & Base App untuk engagement komunitas.",
+    "Dukungan multi-mata uang: bertarung dengan ETH, USDC, atau IDRX sesuai preferensi pemain."
+  ],
+  "impact": [
+    "Top 5 Finalist in the Base Track at Coinbase Hackathon Indonesia 2025.",
+    "Bridges the gap between crypto and non-crypto users through familiar Indonesian payment methods (QRIS).",
+    "Separates minting from gambling - fees go to liquidity pools, not random payout schemes.",
+    "Demonstrates transparent onchain reward distribution - automatic, auditable, and permissionless."
+  ],
+  "impactId": [
+    "Top 5 Finalist di Base Track pada Coinbase Hackathon Indonesia 2025.",
+    "Menjembatani kesenjangan antara pengguna crypto dan non-crypto melalui metode pembayaran Indonesia yang familiar (QRIS).",
+    "Memisahkan minting dari gambling - biaya masuk ke liquidity pool, bukan skema payout acak.",
+    "Menunjukkan distribusi reward onchain yang transparan - otomatis, dapat diaudit, dan permissionless."
+  ],
+  "collaboration": {
+    "ownership": "Team project",
+    "ownershipId": "Proyek Tim",
+    "label": "Team",
+    "team": "Terra Bit: Firdaus Khotibul Zickrian and Gagah Athallah Fatha",
+    "role": "Fullstack, Solidity Integration, and Base App Deployment",
+    "roleId": "Fullstack, Integrasi Solidity, dan Deployment Base App",
+    "contributions": [
+      "Built frontend and backend parts of the onchain game experience.",
+      "Planned the architecture and feature flow for the hackathon build.",
+      "Helped integrate the application flow with Solidity smart contracts.",
+      "Deployed and prepared the project experience for Base App access."
+    ],
+    "contributionsId": [
+      "Membangun bagian frontend dan backend dari pengalaman game onchain.",
+      "Merencanakan arsitektur dan alur fitur untuk build hackathon.",
+      "Membantu mengintegrasikan alur aplikasi dengan smart contract Solidity.",
+      "Men-deploy dan menyiapkan pengalaman proyek untuk akses Base App."
+    ]
+  },
+  "badge": "🏆 Top 5 Finalist - Coinbase Hackathon Indonesia 2025",
+  "badgeId": "🏆 Top 5 Finalist - Coinbase Hackathon Indonesia 2025",
+  "notes": "Achievement: Top 5 Finalist - Base Track, Coinbase Hackathon Indonesia 2025. Team: Terra Bit (Firdaus Khotibul Zickrian & Gagah Athallah Fatha).",
+  "notesId": "Pencapaian: Top 5 Finalist - Base Track, Coinbase Hackathon Indonesia 2025. Tim: Terra Bit (Firdaus Khotibul Zickrian & Gagah Athallah Fatha).",
+  "gallery": [
+    "/projects/base-realms/base-realms-3.webp",
+    "/projects/base-realms/base-realms-2.webp",
+    "/projects/base-realms/base-realms-5.webp",
+    "/projects/base-realms/base-realms-6.webp",
+    "/projects/base-realms/base-realms-4.webp",
+    "/projects/base-realms/base-realms-1.webp"
+  ]
+}

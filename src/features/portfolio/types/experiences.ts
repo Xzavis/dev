@@ -16,8 +16,8 @@ export type ExperiencePosition = {
   description?: string
   /** Indonesian translation of `description`; supports Markdown */
   descriptionId?: string
-  /** UI icon to represent the role type. */
-  icon?: React.ReactElement
+  /** UI icon identifier to represent the role type (resolved via IconRegistry). */
+  icon?: string
   skills?: string[]
   /** Whether the position is expanded by default in the UI. */
   isExpanded?: boolean

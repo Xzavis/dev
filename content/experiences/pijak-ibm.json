@@ -1,0 +1,28 @@
+{
+  "id": "pijak-ibm",
+  "companyName": "Pijak by Dicoding & IBM",
+  "companyLogo": "/logos/pijak.webp",
+  "companyWebsite": "https://pijak.dicoding.com",
+  "positions": [
+    {
+      "id": "pijak-ibm-1",
+      "title": "AI Engineer Cohort",
+      "employmentPeriod": {
+        "start": "01.2026",
+        "end": "07.2026"
+      },
+      "employmentType": "Cohort",
+      "icon": "astroid",
+      "description": "- Selected as one of ~600+ participants in a national AI upskilling program by Pijak in collaboration with IBM SkillsBuild, focused on Machine Learning, Deep Learning, and MLOps.\n- Graduated with **Distinction**, ranking in the **top 10% out of 600+ participants** nationwide.\n- Awarded **Best Capstone Project** as part of team PJK-GM015 - selected as **1 of only 5 winning teams out of 120+ capstone teams**.\n- Led a 5-member AI team to build **Custora: Customer Intelligence for Retention Decisions**, an end-to-end AI system featuring churn prediction, sentiment analysis, analytics dashboard, and LLM-based retention recommendations.",
+      "descriptionId": "- Terpilih sebagai salah satu dari ~600+ peserta dalam program peningkatan kompetensi AI nasional oleh Pijak bekerja sama dengan IBM SkillsBuild, yang berfokus pada Machine Learning, Deep Learning, dan MLOps.\n- Lulus dengan predikat **Distinction**, menempati **10% teratas dari 600+ peserta** secara nasional.\n- Meraih penghargaan **Best Capstone Project** sebagai bagian dari tim PJK-GM015 - terpilih sebagai **1 dari hanya 5 tim pemenang dari 120+ tim capstone**.\n- Memimpin tim AI beranggotakan 5 orang untuk membangun **Custora: Customer Intelligence for Retention Decisions**, sebuah sistem AI end-to-end yang menghadirkan prediksi churn, analisis sentimen, dashboard analitik, dan rekomendasi retensi berbasis LLM.",
+      "skills": [
+        "Artificial Intelligence",
+        "Machine Learning",
+        "Deep Learning",
+        "MLOps",
+        "Team Leadership"
+      ]
+    }
+  ],
+  "isCurrentEmployer": false
+}

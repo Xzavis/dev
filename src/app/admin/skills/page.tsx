@@ -2,14 +2,14 @@
 
 // ponytail: compact skills management with inline addition, category filtering and level badges
 import {
-  CpuIcon,
-  PlusIcon,
-  Trash2Icon,
-  EditIcon,
-  StarIcon,
-  ArrowUpIcon,
   ArrowDownIcon,
+  ArrowUpIcon,
+  CpuIcon,
+  EditIcon,
+  PlusIcon,
   SaveIcon,
+  StarIcon,
+  Trash2Icon,
 } from "lucide-react"
 import React, { useEffect, useMemo, useState } from "react"
 

@@ -1,14 +1,14 @@
 import type { MetadataRoute } from "next"
 
 import { SITE_INFO } from "@/config/site"
-import { PROJECTS } from "@/features/portfolio/data/projects"
-import { USER } from "@/features/portfolio/data/user"
+import { getProfile, getProjects } from "@/lib/content"
 
 export const revalidate = false
 export const dynamic = "force-static"
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const lastModified = new Date(USER.dateModified).toISOString()
+  const [profile, projectsData] = await Promise.all([getProfile(), getProjects()])
+  const lastModified = new Date(profile.dateModified).toISOString()
 
   const routes = [
     { route: "", priority: 1 },
@@ -22,7 +22,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority,
   }))
 
-  const projects = PROJECTS.map((project) => ({
+  const projects = projectsData.map((project) => ({
     url: `${SITE_INFO.url}/projects/${project.id}`,
     lastModified,
     changeFrequency: "monthly" as const,

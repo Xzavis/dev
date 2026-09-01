@@ -1,7 +1,6 @@
 "use client"
 
 import { differenceInMonths, parse } from "date-fns"
-import { BriefcaseBusinessIcon } from "lucide-react"
 
 import {
   Collapsible,
@@ -11,6 +10,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/base/ui/collapsible"
+import { IconRegistry } from "@/components/icon-registry"
 import { Markdown } from "@/components/markdown"
 import { Separator } from "@/components/ui/separator"
 import { Tag } from "@/components/ui/tag"
@@ -69,7 +69,7 @@ export function ExperiencePositionItem({
               "[&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
             )}
           >
-            {position.icon ?? <BriefcaseBusinessIcon />}
+            <IconRegistry name={position.icon} />
           </div>
 
           <span className="flex-1 font-medium text-balance">

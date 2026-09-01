@@ -2,8 +2,8 @@ import { FooterIndexList, FooterLabel } from "@/components/footer-chrome"
 import { FooterClock } from "@/components/footer-clock"
 import { FooterContactList } from "@/components/footer-contact-list"
 import { MAIN_NAV } from "@/config/site"
+import profile from "@/content/profile.json"
 import { getGitHubSocialCard } from "@/features/portfolio/data/github-social"
-import { USER } from "@/features/portfolio/data/user"
 import { brailleText } from "@/lib/braille"
 
 /**
@@ -36,16 +36,16 @@ export async function SiteFooter() {
           <div className="col-span-2 flex flex-col justify-between gap-6 sm:order-first sm:col-span-1">
             <div>
               <p className="font-handwritten tracking-tight">
-                © {year} {USER.displayName}
+                © {year} {profile.displayName}
               </p>
               {/* The handle echoed in braille - a printer's mark on the sheet. */}
               <p className="footer-braille" aria-hidden>
-                {brailleText(USER.username)}
+                {brailleText(profile.username)}
               </p>
             </div>
 
             <div className="flex flex-col gap-2.5">
-              <FooterClock timeZone={USER.timeZone} place={USER.address} />
+              <FooterClock timeZone={profile.timeZone} place={profile.address} />
 
               {/* Location stamp: the colophon's place line, a decorative twin of
                   the clock. Coordinates are deliberately absent - the data set
@@ -57,8 +57,8 @@ export async function SiteFooter() {
                   <path d="M1 10h18M1.9 6h16.2M1.9 14h16.2" />
                 </svg>
                 <span className="footer-stamp-lines">
-                  <span>{USER.timeZone}</span>
-                  <span>{USER.address}</span>
+                  <span>{profile.timeZone}</span>
+                  <span>{profile.address}</span>
                 </span>
               </div>
             </div>
