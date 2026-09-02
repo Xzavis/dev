@@ -76,7 +76,7 @@ export async function getDashboardMetrics(): Promise<DashboardMetrics> {
     LocalContentRepository.getAdminExperiences(),
     LocalContentRepository.getAdminSkills(),
   ])
-  const drafts = projects.filter((p) => p.status === "draft").length
+  const drafts = projects.filter((p: { status?: string }) => p.status === "draft").length
 
   const recent = _recentChanges.length > 0 ? _recentChanges : [
     {

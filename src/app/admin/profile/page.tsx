@@ -10,6 +10,7 @@ import {
   SaveIcon,
   UserIcon,
 } from "lucide-react"
+import Link from "next/link"
 import React, { useEffect, useState } from "react"
 
 import { Button } from "@/components/ui/button"
@@ -21,6 +22,7 @@ import { useToast } from "@/features/admin/components/admin-toast"
 import type { AdminProfile } from "@/features/admin/types/admin"
 import { ProfileHeader } from "@/features/portfolio/components/profile-header"
 import type { Profile } from "@/lib/content/types"
+import { validateImageUrl } from "@/lib/media/image-url"
 
 export default function AdminProfilePage() {
   const [profile, setProfile] = useState<AdminProfile | null>(null)
@@ -65,6 +67,21 @@ export default function AdminProfilePage() {
     if (!profile?.username?.trim()) errs.username = "Username / Handle is required."
     if (!profile?.jobTitle?.trim()) errs.jobTitle = "Role / Headline is required."
     if (!profile?.bio?.trim()) errs.bio = "Short Bio is required."
+
+    if (profile?.avatar?.trim()) {
+      const avatarCheck = validateImageUrl(profile.avatar)
+      if (!avatarCheck.isValid) {
+        errs.avatar = avatarCheck.error || "Invalid avatar path or URL."
+      }
+    }
+
+    if (profile?.banner?.trim()) {
+      const bannerCheck = validateImageUrl(profile.banner)
+      if (!bannerCheck.isValid) {
+        errs.banner = bannerCheck.error || "Invalid cover banner path or URL."
+      }
+    }
+
     setErrors(errs)
     return Object.keys(errs).length === 0
   }
@@ -141,11 +158,16 @@ export default function AdminProfilePage() {
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <FormField label="Avatar Path / URL" description="Local path in /public or absolute URL">
+                  <FormField
+                    label="Avatar Path / URL"
+                    description="Use a local public path such as /image/profile.webp or a direct HTTPS image URL."
+                    error={errors.avatar}
+                  >
                     <FormInput
                       value={profile.avatar}
                       onChange={(e) => handleChange("avatar", e.target.value)}
                       placeholder="/image/profile.webp"
+                      error={errors.avatar}
                     />
                   </FormField>
                 </div>
@@ -168,11 +190,16 @@ export default function AdminProfilePage() {
                     }}
                   />
                 </div>
-                <FormField label="Banner Path / URL" description="Displays at top of profile header">
+                <FormField
+                  label="Banner Path / URL"
+                  description="Use a local public path such as /banner.webp or a direct HTTPS image URL."
+                  error={errors.banner}
+                >
                   <FormInput
                     value={profile.banner ?? "/banner.webp"}
                     onChange={(e) => handleChange("banner", e.target.value)}
-                    placeholder="/banner.webp or https://example.com/banner.jpg"
+                    placeholder="/banner.webp"
+                    error={errors.banner}
                   />
                 </FormField>
               </div>
@@ -290,44 +317,25 @@ export default function AdminProfilePage() {
         </div>
 
         {/* Social Links & Web */}
-        <div className="rounded-xl border border-border/80 bg-card p-5 dark:border-line space-y-4">
-          <h2 className="text-sm font-semibold text-foreground flex items-center gap-1.5">
-            <Link2Icon className="size-4 text-primary" /> Connected Links & URLs
-          </h2>
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <FormField label="GitHub Profile URL">
-              <FormInput
-                value={profile.githubUrl ?? "https://github.com/zickrian"}
-                onChange={(e) => handleChange("githubUrl", e.target.value)}
-                placeholder="https://github.com/zickrian"
-              />
-            </FormField>
-
-            <FormField label="LinkedIn Profile URL">
-              <FormInput
-                value={profile.linkedinUrl ?? "https://linkedin.com/in/firdauskhotibulzickrian/"}
-                onChange={(e) => handleChange("linkedinUrl", e.target.value)}
-                placeholder="https://linkedin.com/in/firdauskhotibulzickrian/"
-              />
-            </FormField>
-
-            <FormField label="Medium Profile URL">
-              <FormInput
-                value={profile.mediumUrl ?? "https://medium.com/@zickriann"}
-                onChange={(e) => handleChange("mediumUrl", e.target.value)}
-                placeholder="https://medium.com/@zickriann"
-              />
-            </FormField>
-
-            <FormField label="Instagram Profile URL">
-              <FormInput
-                value={profile.instagramUrl ?? "https://instagram.com/zickrian"}
-                onChange={(e) => handleChange("instagramUrl", e.target.value)}
-                placeholder="https://instagram.com/zickrian"
-              />
-            </FormField>
+        <div className="rounded-xl border border-border/80 bg-card p-5 dark:border-line space-y-3">
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-semibold text-foreground flex items-center gap-1.5">
+              <Link2Icon className="size-4 text-primary" /> Social Links & External Profiles
+            </h2>
+            <Link
+              href="/admin/social-links"
+              className="inline-flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+            >
+              Manage Social Links &rarr;
+            </Link>
           </div>
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            Public social buttons (GitHub, LinkedIn, Discord, Medium, Hugging Face, etc.) are managed canonically in the{" "}
+            <Link href="/admin/social-links" className="text-foreground underline underline-offset-2">
+              Social Links manager
+            </Link>{" "}
+            to ensure ordering, visibility toggles, and icon registry synchronization are always preserved.
+          </p>
         </div>
 
         {/* Form Actions */}

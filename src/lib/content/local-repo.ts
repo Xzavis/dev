@@ -12,6 +12,7 @@ import type {
   AdminSocialLink,
   SiteSettings as AdminSiteSettings,
 } from "@/features/admin/types/admin"
+import { validateImageUrl } from "@/lib/media/image-url"
 
 import type {
   Award,
@@ -98,14 +99,14 @@ function normalizeSlug(input: string): string {
 
 function mapSkillCategory(cats: string[] | string | undefined): AdminSkill["category"] {
   const primary = Array.isArray(cats) ? cats[0] || "" : cats || ""
-  if (primary.includes("AI") || primary.includes("ML") || primary.includes("Machine Learning")) return "AI / ML"
-  if (primary.includes("DevOps") || primary.includes("Cloud")) return "DevOps / Cloud"
-  if (primary.includes("Design") || primary.includes("UI")) return "Design / UI"
-  if (primary.includes("Test")) return "Testing"
-  if (primary.includes("Data")) return "Database"
-  if (primary.includes("Backend")) return "Backend"
-  if (primary.includes("Frontend")) return "Frontend"
-  return "Tools"
+  if (primary.includes("AI") || primary.includes("ML") || primary.includes("Machine")) return "AI / ML"
+  if (primary.includes("Frontend") || primary.includes("Web") || primary.includes("UI")) return "Frontend"
+  if (primary.includes("Backend") || primary.includes("Server") || primary.includes("API")) return "Backend"
+  if (primary.includes("Database") || primary.includes("Data") || primary.includes("SQL")) return "Database"
+  if (primary.includes("DevOps") || primary.includes("Cloud") || primary.includes("Infra")) return "DevOps / Cloud"
+  if (primary.includes("Test") || primary.includes("QA")) return "Testing"
+  if (primary.includes("Design") || primary.includes("Figma")) return "Design / UI"
+  return "AI / ML"
 }
 
 function mapAdminCategoryToPublic(cat: AdminSkill["category"]): string {
@@ -113,22 +114,20 @@ function mapAdminCategoryToPublic(cat: AdminSkill["category"]): string {
 }
 
 // LocalContentRepository: Single source of truth for reading and writing content JSON files directly on disk.
-export const LocalContentRepository = {
-  // ─── Profile ───────────────────────────────────────────────────────────────
+export const localRepo = {
+  // ─── Profile & Site Settings ────────────────────────────────────────────────
 
   async getProfile(): Promise<Profile> {
     return readJsonFile<Profile>(path.join(CONTENT_DIR, "profile.json"))
   },
 
   async getAdminProfile(): Promise<AdminProfile> {
-    const [profile, settings] = await Promise.all([
-      this.getProfile(),
-      this.getSettings(),
-    ])
+    const profile = await this.getProfile()
+    const settings = await this.getSettings()
 
     return {
       ...profile,
-      dateCreated: profile.dateCreated || "2024-01-01",
+      dateCreated: profile.dateCreated || "2023-11-01T00:00:00Z",
       sameAs: profile.sameAs || [],
       gender: (profile.gender as AdminProfile["gender"]) || "male",
       headline: profile.jobTitle,
@@ -151,14 +150,35 @@ export const LocalContentRepository = {
     const current = await this.getProfile()
     const settings = await this.getSettings()
 
+    // Validate avatar if provided
+    const targetAvatar = profile.avatar ?? current.avatar
+    if (targetAvatar) {
+      const avatarCheck = validateImageUrl(targetAvatar)
+      if (!avatarCheck.isValid) {
+        throw new Error(`Avatar image error: ${avatarCheck.error}`)
+      }
+    }
+
+    // Validate banner if provided
+    const targetBanner = profile.banner ?? current.banner
+    if (targetBanner) {
+      const bannerCheck = validateImageUrl(targetBanner)
+      if (!bannerCheck.isValid) {
+        throw new Error(`Cover banner image error: ${bannerCheck.error}`)
+      }
+    }
+
+    // Lossless merge preserving all canonical fields
     const updatedProfile: Profile = {
+      ...current,
+      ...profile,
       displayName: profile.displayName ?? current.displayName,
       firstName: profile.firstName ?? current.firstName,
       lastName: profile.lastName ?? current.lastName,
-      username: profile.username ?? current.username,
+      username: profile.username ? profile.username.replace(/^@/, "").trim() : current.username,
       gender: profile.gender ?? current.gender,
       pronouns: profile.pronouns ?? current.pronouns,
-      bio: profile.shortBio ?? profile.bio ?? current.bio,
+      bio: profile.bio ?? profile.shortBio ?? current.bio,
       bioId: profile.bioId ?? current.bioId,
       flipSentences: profile.flipSentences ?? current.flipSentences,
       flipSentencesId: profile.flipSentencesId ?? current.flipSentencesId,
@@ -166,14 +186,15 @@ export const LocalContentRepository = {
       phone: profile.phone ?? current.phone,
       email: profile.email ?? current.email,
       website: profile.website ?? current.website,
-      jobTitle: profile.headline ?? profile.jobTitle ?? current.jobTitle,
+      jobTitle: profile.jobTitle ?? profile.headline ?? current.jobTitle,
       jobs: profile.jobs ?? current.jobs,
-      about: profile.longBio ?? profile.about ?? current.about,
+      about: profile.about ?? profile.longBio ?? current.about,
       aboutId: profile.aboutId ?? current.aboutId,
-      avatar: profile.avatar ?? current.avatar,
+      avatar: targetAvatar,
+      banner: targetBanner,
       sameAs: profile.sameAs ?? current.sameAs ?? [],
       timeZone: profile.timeZone ?? current.timeZone,
-      dateCreated: profile.dateCreated ?? current.dateCreated ?? "2024-01-01",
+      dateCreated: current.dateCreated || profile.dateCreated || "2023-11-01T00:00:00Z",
       dateModified: new Date().toISOString(),
     }
 
@@ -199,67 +220,75 @@ export const LocalContentRepository = {
   },
 
   async getAdminSettings(): Promise<AdminSiteSettings> {
-    const [settings, profile] = await Promise.all([
-      this.getSettings(),
-      this.getProfile(),
-    ])
-
+    const settings = await this.getSettings()
     return {
-      siteTitle: settings.seoTitle ?? `${profile.displayName} | Portfolio`,
-      siteDescription: settings.seoDescription ?? profile.bio,
-      favicon: "/favicon.ico",
-      defaultOgImage: settings.ogImage,
-      metaTitle: settings.seoTitle ?? profile.displayName,
-      metaDescription: settings.seoDescription ?? profile.bio,
+      siteTitle: settings.seoTitle,
+      siteDescription: settings.seoDescription,
+      favicon: settings.favicon || "/favicon.ico",
+      ogImage: settings.ogImage || "/og.png",
+      metaTitle: settings.seoTitle,
+      metaDescription: settings.seoDescription,
       keywords: settings.keywords || [],
       autoPublish: false,
       previewDeployment: true,
       lastSyncTime: new Date().toISOString(),
       githubRepo: "zickrian/portfolio",
+      updatedAt: new Date().toISOString(),
     }
   },
 
   async saveSettings(settings: Partial<AdminSiteSettings>): Promise<void> {
     const current = await this.getSettings()
-    const updated: SiteSettings = {
-      ...current,
-      seoTitle: settings.metaTitle ?? settings.siteTitle ?? current.seoTitle,
-      seoDescription: settings.metaDescription ?? settings.siteDescription ?? current.seoDescription,
-      ogImage: settings.defaultOgImage ?? current.ogImage,
-      keywords: settings.keywords ?? current.keywords,
+    const cleanSettings: SiteSettings = {
+      seoTitle: settings.siteTitle || current.seoTitle,
+      seoDescription: settings.siteDescription || current.seoDescription,
+      keywords: settings.keywords || current.keywords,
+      ogImage: settings.ogImage || current.ogImage,
+      favicon: settings.favicon || current.favicon,
     }
-    await writeJsonFile(path.join(CONTENT_DIR, "settings.json"), updated)
+    await writeJsonFile(path.join(CONTENT_DIR, "settings.json"), cleanSettings)
   },
 
   // ─── Projects ──────────────────────────────────────────────────────────────
 
   async getProjects(): Promise<Project[]> {
-    await ensureDir(PROJECTS_DIR)
-    const files = await fs.readdir(PROJECTS_DIR)
-    const jsonFiles = files.filter((f) => f.endsWith(".json"))
+    try {
+      await ensureDir(PROJECTS_DIR)
+      const files = await fs.readdir(PROJECTS_DIR)
+      const jsonFiles = files.filter((f) => f.endsWith(".json"))
 
-    const projects = await Promise.all(
-      jsonFiles.map(async (file) => {
-        return readJsonFile<Project>(path.join(PROJECTS_DIR, file))
+      const projects = await Promise.all(
+        jsonFiles.map(async (file) => {
+          try {
+            return await readJsonFile<Project>(path.join(PROJECTS_DIR, file))
+          } catch {
+            return null
+          }
+        })
+      )
+
+      const validProjects = projects.filter((p): p is Project => p !== null)
+
+      // Maintain canonical ordering
+      return validProjects.sort((a, b) => {
+        const aIndex = PROJECT_ORDER.indexOf(a.id)
+        const bIndex = PROJECT_ORDER.indexOf(b.id)
+        if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex
+        if (aIndex !== -1) return -1
+        if (bIndex !== -1) return 1
+        return 0
       })
-    )
-
-    return projects.sort((a, b) => {
-      const idxA = PROJECT_ORDER.indexOf(a.id)
-      const idxB = PROJECT_ORDER.indexOf(b.id)
-      if (idxA !== -1 && idxB !== -1) return idxA - idxB
-      if (idxA !== -1) return -1
-      if (idxB !== -1) return 1
-      return a.title.localeCompare(b.title)
-    })
+    } catch {
+      return []
+    }
   },
 
   async getAdminProjects(): Promise<AdminProject[]> {
     const projects = await this.getProjects()
-    return projects.map((p, idx) => ({
-      ...p,
-      status: (p.isExpanded ? "published" : "published") as "published" | "draft" | "archived",
-      featured: idx < 4,
+    return projects.map((project, idx) => ({
+      ...project,
+      status: "published",
+      featured: idx < 6,
       displayOrder: idx + 1,
       updatedAt: new Date(Date.now() - idx * 86400000).toISOString(),
     }))
@@ -279,6 +308,30 @@ export const LocalContentRepository = {
     const slug = normalizeSlug(project.id || project.title)
     if (!slug) {
       throw new Error("Project ID or title is required to generate a slug.")
+    }
+
+    // Validate project images
+    if (project.image) {
+      const imgCheck = validateImageUrl(project.image)
+      if (!imgCheck.isValid) {
+        throw new Error(`Project cover image error: ${imgCheck.error}`)
+      }
+    }
+    if (project.logo) {
+      const logoCheck = validateImageUrl(project.logo)
+      if (!logoCheck.isValid) {
+        throw new Error(`Project logo error: ${logoCheck.error}`)
+      }
+    }
+    if (Array.isArray(project.gallery)) {
+      for (const item of project.gallery) {
+        if (typeof item === "string" && item.trim()) {
+          const galleryCheck = validateImageUrl(item)
+          if (!galleryCheck.isValid) {
+            throw new Error(`Project gallery item error: ${galleryCheck.error}`)
+          }
+        }
+      }
     }
 
     const cleanProject: Project = {
@@ -339,24 +392,35 @@ export const LocalContentRepository = {
   // ─── Experiences ───────────────────────────────────────────────────────────
 
   async getExperiences(): Promise<Experience[]> {
-    await ensureDir(EXPERIENCES_DIR)
-    const files = await fs.readdir(EXPERIENCES_DIR)
-    const jsonFiles = files.filter((f) => f.endsWith(".json"))
+    try {
+      await ensureDir(EXPERIENCES_DIR)
+      const files = await fs.readdir(EXPERIENCES_DIR)
+      const jsonFiles = files.filter((f) => f.endsWith(".json"))
 
-    const experiences = await Promise.all(
-      jsonFiles.map(async (file) => {
-        return readJsonFile<Experience>(path.join(EXPERIENCES_DIR, file))
+      const experiences = await Promise.all(
+        jsonFiles.map(async (file) => {
+          try {
+            return await readJsonFile<Experience>(path.join(EXPERIENCES_DIR, file))
+          } catch {
+            return null
+          }
+        })
+      )
+
+      const validExperiences = experiences.filter((e): e is Experience => e !== null)
+
+      // Maintain canonical ordering
+      return validExperiences.sort((a, b) => {
+        const aIndex = EXPERIENCE_ORDER.indexOf(a.id)
+        const bIndex = EXPERIENCE_ORDER.indexOf(b.id)
+        if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex
+        if (aIndex !== -1) return -1
+        if (bIndex !== -1) return 1
+        return 0
       })
-    )
-
-    return experiences.sort((a, b) => {
-      const idxA = EXPERIENCE_ORDER.indexOf(a.id)
-      const idxB = EXPERIENCE_ORDER.indexOf(b.id)
-      if (idxA !== -1 && idxB !== -1) return idxA - idxB
-      if (idxA !== -1) return -1
-      if (idxB !== -1) return 1
-      return 0
-    })
+    } catch {
+      return []
+    }
   },
 
   async getAdminExperiences(): Promise<AdminExperience[]> {
@@ -385,10 +449,17 @@ export const LocalContentRepository = {
       throw new Error("Experience ID or company name is required.")
     }
 
+    if (experience.companyLogo) {
+      const logoCheck = validateImageUrl(experience.companyLogo)
+      if (!logoCheck.isValid) {
+        throw new Error(`Company logo image error: ${logoCheck.error}`)
+      }
+    }
+
     const cleanExperience: Experience = {
       id: slug,
       companyName: experience.companyName,
-      companyLogo: experience.companyLogo || "/logos/company.webp",
+      companyLogo: experience.companyLogo || "/logos/custompedia.webp",
       companyWebsite: experience.companyWebsite || "",
       positions: experience.positions.map((pos, idx) => ({
         id: pos.id || `${slug}-${idx + 1}`,
@@ -595,3 +666,6 @@ export const LocalContentRepository = {
     return readJsonFile<Publication[]>(path.join(CONTENT_DIR, "publications.json"))
   },
 }
+
+export const LocalContentRepository = localRepo
+

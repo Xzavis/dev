@@ -58,14 +58,16 @@ export interface SiteSettings {
   siteTitle: string
   siteDescription: string
   favicon: string
-  defaultOgImage: string
-  metaTitle: string
-  metaDescription: string
+  ogImage?: string
+  defaultOgImage?: string
+  metaTitle?: string
+  metaDescription?: string
   keywords: string[]
   autoPublish: boolean
   previewDeployment: boolean
   lastSyncTime?: string
   githubRepo?: string
+  updatedAt?: string
 }
 
 export interface RecentChange {

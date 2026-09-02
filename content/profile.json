@@ -34,7 +34,8 @@
   ],
   "about": "I'm an AI Engineer based in Indonesia, specializing in building practical machine learning systems, data workflows, and modern full-stack web applications. I focus on developing reliable, end-to-end solutions that turn complex ideas into intuitive products designed for real-world impact.",
   "aboutId": "Saya seorang AI Engineer yang berbasis di Indonesia, dengan spesialisasi dalam membangun sistem machine learning yang praktis, alur kerja data, dan aplikasi web full-stack modern. Saya fokus mengembangkan solusi end-to-end yang andal, yang mengubah ide-ide kompleks menjadi produk intuitif yang dirancang untuk memberikan dampak nyata.",
-  "avatar": "/image/https://pin.it/rI8eRSJ4h",
+  "avatar": "/image/profile.webp",
+  "banner": "/banner.webp",
   "sameAs": [
     "https://www.zickrian.dev",
     "https://github.com/zickrian",
@@ -45,5 +46,32 @@
   ],
   "timeZone": "Asia/Jakarta",
   "dateCreated": "2023-11-01T00:00:00Z",
-  "dateModified": "2026-09-02T03:18:28.897Z"
+  "dateModified": "2026-09-02T03:42:04.971Z",
+  "headline": "AI & Machine Learning Engineer",
+  "resumeUrl": "/resume.pdf",
+  "availabilityStatus": "Open to opportunities",
+  "shortBio": "I'm Firdaus Khotibul Zickrian, an AI Engineer based in Indonesia building practical machine learning systems, data workflows, and modern full-stack web applications that turn ideas into impactful products.",
+  "longBio": "I'm an AI Engineer based in Indonesia, specializing in building practical machine learning systems, data workflows, and modern full-stack web applications. I focus on developing reliable, end-to-end solutions that turn complex ideas into intuitive products designed for real-world impact.",
+  "githubUrl": "https://github.com/zickrian",
+  "linkedinUrl": "https://linkedin.com/in/firdauskhotibulzickrian/",
+  "mediumUrl": "https://medium.com/@zickriann",
+  "instagramUrl": "https://instagram.com/zickrian",
+  "keywords": [
+    "Firdaus Khotibul Zickrian",
+    "zickrian",
+    "Firdaus Khotibul Zickrian portfolio",
+    "zickrian portfolio",
+    "AI engineer Indonesia",
+    "machine learning engineer Indonesia",
+    "AI and machine learning",
+    "full stack developer",
+    "data products",
+    "MLOps",
+    "computer vision",
+    "AI portfolio",
+    "machine learning portfolio"
+  ],
+  "ogImage": "/image/og.png",
+  "seoTitle": "Xza Abdul Malik Ibrahim | AI & Machine Learning Engineer",
+  "seoDescription": "I'm Xza Abdul Malik Ibrahim an AI and machine learning engineer from Indonesia. I build practical software, data products, and machine learning systems."
 }

@@ -25,6 +25,8 @@ export type User = {
   website: string
   /** Primary/current role shown on profile */
   jobTitle: string
+  /** Availability status for opportunities or contracts */
+  availabilityStatus?: string
   /** Short homepage title used for search/social snippets */
   seoTitle?: string
   /** Short homepage description used for search/social snippets */

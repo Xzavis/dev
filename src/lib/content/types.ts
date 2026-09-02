@@ -53,6 +53,7 @@ export interface Profile {
   aboutId?: string
   avatar: string
   banner?: string
+  availabilityStatus?: string
   sameAs?: string[]
   timeZone: string
   dateCreated?: string
@@ -65,4 +66,5 @@ export interface SiteSettings {
   keywords: string[]
   ogImage: string
   favicon: string
+  updatedAt?: string
 }
