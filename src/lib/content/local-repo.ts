@@ -298,7 +298,8 @@ export const localRepo = {
     return projects.map((project, idx) => ({
       ...project,
       status: "published",
-      featured: idx < 6,
+      // Read persisted featured flag; default to true if field is absent
+      featured: project.featured !== false,
       displayOrder: idx + 1,
       updatedAt: new Date(Date.now() - idx * 86400000).toISOString(),
     }))
@@ -385,6 +386,8 @@ export const localRepo = {
       badge: project.badge,
       badgeId: project.badgeId,
       gallery: project.gallery || [],
+      // Persist featured flag: omit field (defaults true) when featured, save false when not
+      ...(project.featured === false ? { featured: false } : {}),
     }
 
     const filePath = path.join(PROJECTS_DIR, `${slug}.json`)

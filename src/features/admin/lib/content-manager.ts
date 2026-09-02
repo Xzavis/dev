@@ -48,7 +48,8 @@ export async function getAdminProjectById(id: string): Promise<AdminProject | nu
   return {
     ...project,
     status: (project.isExpanded ? "published" : "published") as "published" | "draft" | "archived",
-    featured: true,
+    // Read persisted featured flag; default to true if field is absent
+    featured: project.featured !== false,
     displayOrder: 1,
     updatedAt: new Date().toISOString(),
   }

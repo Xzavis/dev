@@ -2,23 +2,17 @@
   "id": "custora",
   "title": "Custora - AI Customer Intelligence Platform",
   "category": "AI / Machine Learning",
-  "categoryId": "AI / Machine Learning",
   "tagline": "An AI-powered customer intelligence dashboard that combines churn prediction, sentiment analysis, and LLM-driven recommendations to help businesses identify at-risk customers and make better retention decisions.",
-  "taglineId": "Dashboard intelijen pelanggan berbasis AI yang menggabungkan prediksi churn, analisis sentimen, dan rekomendasi berbasis LLM untuk membantu bisnis mengidentifikasi pelanggan berisiko dan membuat keputusan retensi yang lebih baik.",
   "seoDescription": "I built Custora as an AI customer intelligence platform for churn prediction, sentiment analysis, and retention recommendations.",
   "year": "2026",
   "image": "/projects/custora/1.webp",
-  "videoEmbed": {
-    "src": "https://res.cloudinary.com/dujp9ydkx/video/upload/v1782958401/custora_d7dczo.mp4",
-    "title": "Custora AI Customer Intelligence Platform demo video"
-  },
   "period": {
     "start": "2026"
   },
   "link": "https://custoraa.vercel.app/",
   "links": {
-    "live": "https://custoraa.vercel.app/",
-    "repo": "https://github.com/zickrian/Custora"
+    "repo": "https://github.com/zickrian/Custora",
+    "live": "https://custoraa.vercel.app/"
   },
   "skills": [
     "Next.js",
@@ -45,16 +39,6 @@
     "AI recommendation panel that turns churn and sentiment results into retention action suggestions.",
     "REST API integration connecting the dashboard, database, ML model service, and LLM recommendation flow."
   ],
-  "featuresId": [
-    "Akses dashboard aman dengan autentikasi login.",
-    "CSV Data Hub untuk mengunggah dataset pelanggan dan ulasan.",
-    "Prediksi churn pelanggan dengan probabilitas churn dan klasifikasi tingkat risiko.",
-    "Analisis sentimen untuk memahami feedback pelanggan dan sinyal ulasan.",
-    "Daftar prioritas pelanggan untuk menyoroti pengguna yang butuh tindakan retensi segera.",
-    "Dashboard overview dengan kartu KPI, grafik, ringkasan kesehatan pelanggan, dan visualisasi tren.",
-    "Panel rekomendasi AI yang mengubah hasil churn dan sentimen menjadi saran tindakan retensi.",
-    "Integrasi REST API yang menghubungkan dashboard, database, layanan model ML, dan alur rekomendasi LLM."
-  ],
   "impact": [
     "Helps businesses detect at-risk customers earlier before they churn.",
     "Turns raw customer data and feedback into clear business insights.",
@@ -62,20 +46,11 @@
     "Reduces manual analysis by combining prediction, visualization, and recommendation in one dashboard.",
     "Provides an end-to-end AI system, from data upload and ML inference to retention decision support."
   ],
-  "impactId": [
-    "Membantu bisnis mendeteksi pelanggan berisiko lebih awal sebelum mereka churn.",
-    "Mengubah data pelanggan dan feedback mentah menjadi insight bisnis yang jelas.",
-    "Mendukung keputusan retensi berbasis data melalui risiko churn, sinyal sentimen, dan rekomendasi AI.",
-    "Mengurangi analisis manual dengan menggabungkan prediksi, visualisasi, dan rekomendasi dalam satu dashboard.",
-    "Menyediakan sistem AI end-to-end, dari upload data dan inferensi ML hingga dukungan keputusan retensi."
-  ],
   "collaboration": {
     "ownership": "Team project",
-    "ownershipId": "Proyek Tim",
     "label": "Team",
     "team": "PIJAK Capstone Team",
     "role": "Project Leader, AI Architecture Planner, and Coordinator",
-    "roleId": "Pemimpin Proyek, Perencana Arsitektur AI, dan Koordinator",
     "contributions": [
       "Led the planning and overall development direction of the Custora AI customer intelligence platform.",
       "Designed the AI system architecture that connects customer data, machine learning models, LLM-based insight generation, and dashboard workflows.",
@@ -87,22 +62,12 @@
       "Advised and supervised ML model development for churn prediction and sentiment analysis.",
       "Assisted backend integration between the dashboard, REST API, ML model service, database, and LLM recommendation flow.",
       "Ensured the platform can transform raw customer data into churn risk insights, customer priority lists, and actionable retention decisions."
-    ],
-    "contributionsId": [
-      "Memimpin perencanaan dan arah pengembangan keseluruhan platform intelijen pelanggan Custora AI.",
-      "Merancang arsitektur sistem AI yang menghubungkan data pelanggan, model machine learning, pembuatan insight berbasis LLM, dan alur kerja dashboard.",
-      "Merencanakan alur pengambilan data pelanggan mulai dari upload CSV, penyimpanan Supabase, inferensi ML, hingga rekomendasi retensi berbasis AI.",
-      "Menginisiasi ide inti penggunaan AI untuk mendukung keputusan retensi pelanggan melalui prediksi churn, analisis sentimen, dan pembuatan rekomendasi.",
-      "Mengoordinasikan pembagian tugas lintas frontend, machine learning, integrasi backend, dan dokumentasi.",
-      "Membangun UI dashboard visual menggunakan Next.js dan menghubungkan platform dengan Supabase sebagai database utama.",
-      "Menyiapkan alur deployment model ML menggunakan Azure ML dan men-deploy aplikasi web melalui Vercel.",
-      "Memberi arahan dan mengawasi pengembangan model ML untuk prediksi churn dan analisis sentimen.",
-      "Membantu integrasi backend antara dashboard, REST API, layanan model ML, database, dan alur rekomendasi LLM.",
-      "Memastikan platform dapat mengubah data pelanggan mentah menjadi insight risiko churn, daftar prioritas pelanggan, dan keputusan retensi yang dapat ditindaklanjuti."
     ]
   },
+  "description": "",
+  "notes": "",
+  "isExpanded": true,
   "badge": "🚧 Ongoing - PIJAK Capstone Project",
-  "badgeId": "🚧 Berjalan - Proyek Capstone PIJAK",
   "gallery": [
     "/projects/custora/1.webp",
     "/projects/custora/2.webp",

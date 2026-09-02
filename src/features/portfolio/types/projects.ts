@@ -73,4 +73,6 @@ export type Project = {
   badgeId?: string
   /** Optional gallery images for carousel in detail page */
   gallery?: string[]
+  /** Whether this project is featured/highlighted on the homepage. Defaults to true. */
+  featured?: boolean
 }

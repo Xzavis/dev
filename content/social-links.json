@@ -2,7 +2,8 @@
   {
     "icon": "discord",
     "title": "Discord",
-    "href": "https://discord.com/users/zickrian"
+    "href": "https://discord.com/users/zickrian",
+    "visible": false
   },
   {
     "icon": "github",

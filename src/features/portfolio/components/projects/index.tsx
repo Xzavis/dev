@@ -13,6 +13,8 @@ import { ProjectItem } from "./project-item"
 
 export function Projects({ projects = [] }: { projects?: Project[] } = {}) {
   const { t } = useTranslation()
+  // Homepage highlights: only show featured projects (featured field absent = true by default)
+  const featuredProjects = projects.filter((p) => p.featured !== false)
 
   return (
     <Panel id="projects">
@@ -24,7 +26,7 @@ export function Projects({ projects = [] }: { projects?: Project[] } = {}) {
         <div className="flex items-center justify-between gap-3">
           <PanelTitle>
             {t.projects.title}
-            <PanelTitleSup>({projects.length})</PanelTitleSup>
+            <PanelTitleSup>({featuredProjects.length})</PanelTitleSup>
           </PanelTitle>
 
           <Link
@@ -39,7 +41,7 @@ export function Projects({ projects = [] }: { projects?: Project[] } = {}) {
       </PanelHeader>
 
       <CollapsibleList
-        items={projects}
+        items={featuredProjects}
         max={4}
         renderItem={(item) => <ProjectItem project={item} />}
       />
