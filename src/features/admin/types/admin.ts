@@ -34,7 +34,24 @@ export interface AdminSkill {
 
 export interface AdminSocialLink {
   id: string
-  platform: "GitHub" | "LinkedIn" | "Medium" | "Instagram" | "Email" | "Discord" | "Hugging Face" | "Other"
+  platform:
+    | "GitHub"
+    | "LinkedIn"
+    | "Medium"
+    | "Instagram"
+    | "Email"
+    | "Discord"
+    | "Hugging Face"
+    | "X (Twitter)"
+    | "TikTok"
+    | "Threads"
+    | "YouTube"
+    | "Telegram"
+    | "Behance"
+    | "Dribbble"
+    | "Kaggle"
+    | "Website"
+    | "Other"
   label: string
   url: string
   icon?: string

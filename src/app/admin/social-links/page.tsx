@@ -29,16 +29,34 @@ import { AdminHeader } from "@/features/admin/components/admin-header"
 import { useToast } from "@/features/admin/components/admin-toast"
 import type { AdminSocialLink } from "@/features/admin/types/admin"
 
-const PLATFORMS: AdminSocialLink["platform"][] = [
-  "GitHub",
-  "LinkedIn",
-  "Medium",
-  "Instagram",
-  "Email",
-  "Discord",
-  "Hugging Face",
-  "Other",
-]
+// Platform config: label, icon key (maps to IconRegistry), and URL placeholder
+type PlatformConfig = {
+  label: string
+  icon: string
+  placeholder: string
+}
+
+const PLATFORM_CONFIG: Record<AdminSocialLink["platform"], PlatformConfig> = {
+  "GitHub":       { label: "GitHub",       icon: "github",       placeholder: "https://github.com/username" },
+  "LinkedIn":     { label: "LinkedIn",     icon: "linkedin",     placeholder: "https://linkedin.com/in/username" },
+  "Instagram":    { label: "Instagram",    icon: "instagram",    placeholder: "https://instagram.com/username" },
+  "X (Twitter)":  { label: "X (Twitter)",  icon: "x",           placeholder: "https://x.com/username" },
+  "TikTok":       { label: "TikTok",       icon: "tiktok",      placeholder: "https://tiktok.com/@username" },
+  "Threads":      { label: "Threads",      icon: "threads",     placeholder: "https://threads.net/@username" },
+  "YouTube":      { label: "YouTube",      icon: "youtube",     placeholder: "https://youtube.com/@username" },
+  "Telegram":     { label: "Telegram",     icon: "telegram",    placeholder: "https://t.me/username" },
+  "Medium":       { label: "Medium",       icon: "medium",      placeholder: "https://medium.com/@username" },
+  "Discord":      { label: "Discord",      icon: "discord",     placeholder: "https://discord.com/users/username" },
+  "Behance":      { label: "Behance",      icon: "behance",     placeholder: "https://behance.net/username" },
+  "Dribbble":     { label: "Dribbble",     icon: "dribbble",    placeholder: "https://dribbble.com/username" },
+  "Kaggle":       { label: "Kaggle",       icon: "kaggle",      placeholder: "https://kaggle.com/username" },
+  "Hugging Face": { label: "Hugging Face", icon: "huggingface", placeholder: "https://huggingface.co/username" },
+  "Email":        { label: "Email",        icon: "email",       placeholder: "mailto:yourname@email.com" },
+  "Website":      { label: "Website",      icon: "website",     placeholder: "https://yourwebsite.com" },
+  "Other":        { label: "Other",        icon: "",            placeholder: "https://" },
+}
+
+const PLATFORMS = Object.keys(PLATFORM_CONFIG) as AdminSocialLink["platform"][]
 
 export default function AdminSocialLinksPage() {
   const [links, setLinks] = useState<AdminSocialLink[]>([])
@@ -62,11 +80,13 @@ export default function AdminSocialLinksPage() {
   }, [])
 
   const openCreateModal = () => {
+    const cfg = PLATFORM_CONFIG["GitHub"]
     const newLink: AdminSocialLink = {
       id: `social-${Date.now()}`,
       platform: "GitHub",
-      label: "GitHub",
-      url: "https://github.com/zickrian",
+      label: cfg.label,
+      icon: cfg.icon,
+      url: "",
       displayOrder: links.length + 1,
       visible: true,
     }
@@ -312,30 +332,31 @@ export default function AdminSocialLinksPage() {
             <FormField label="Platform">
               <FormSelect
                 value={editingLink.platform}
-                onChange={(e) =>
+                onChange={(e) => {
+                  const platform = e.target.value as AdminSocialLink["platform"]
+                  const cfg = PLATFORM_CONFIG[platform]
                   setEditingLink({
                     ...editingLink,
-                    platform: e.target.value as AdminSocialLink["platform"],
-                    label: editingLink.label || e.target.value,
+                    platform,
+                    label: cfg.label,
+                    icon: cfg.icon,
+                    // Only reset URL if it's still empty or the old placeholder
+                    url: editingLink.url && editingLink.url !== "https://" ? editingLink.url : "",
                   })
-                }
+                }}
                 options={PLATFORMS.map((p) => ({ label: p, value: p }))}
               />
             </FormField>
 
-            <FormField label="Display Label" required>
-              <FormInput
-                value={editingLink.label}
-                onChange={(e) => setEditingLink({ ...editingLink, label: e.target.value })}
-                placeholder="GitHub"
-              />
-            </FormField>
-
-            <FormField label="Destination URL" required description="e.g. https://github.com/username">
+            <FormField
+              label="Destination URL"
+              required
+              description={`e.g. ${PLATFORM_CONFIG[editingLink.platform]?.placeholder ?? "https://"}`}
+            >
               <FormInput
                 value={editingLink.url}
                 onChange={(e) => setEditingLink({ ...editingLink, url: e.target.value })}
-                placeholder="https://github.com/zickrian"
+                placeholder={PLATFORM_CONFIG[editingLink.platform]?.placeholder ?? "https://"}
               />
             </FormField>
 

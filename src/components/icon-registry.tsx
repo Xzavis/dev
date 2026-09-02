@@ -93,6 +93,38 @@ export function IconRegistry({ name, className, fallback, ...props }: IconRegist
     case "claudecode":
       return <Icons.claudeCode className={className} {...props} />
 
+    case "instagram":
+      return <Icons.instagram className={className} {...props} />
+
+    case "x":
+    case "twitter":
+      return <Icons.x className={className} {...props} />
+
+    case "tiktok":
+      return <Icons.tiktok className={className} {...props} />
+
+    case "threads":
+      return <Icons.threads className={className} {...props} />
+
+    case "youtube":
+      return <Icons.youtube className={className} {...props} />
+
+    case "telegram":
+      return <Icons.telegram className={className} {...props} />
+
+    case "behance":
+      return <Icons.behance className={className} {...props} />
+
+    case "dribbble":
+      return <Icons.dribbble className={className} {...props} />
+
+    case "kaggle":
+      return <Icons.kaggle className={className} {...props} />
+
+    case "website":
+    case "portfolio":
+      return <Icons.website className={className} {...props} />
+
     default:
       return <>{fallback ?? <BriefcaseBusinessIcon className={className} {...props} />}</>
   }
