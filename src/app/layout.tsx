@@ -2,7 +2,6 @@ import "@/styles/globals.css"
 
 import type { Metadata, Viewport } from "next"
 import dynamic from "next/dynamic"
-import Script from "next/script"
 import type { Person, ProfilePage, WebSite, WithContext } from "schema-dts"
 
 import { Providers } from "@/components/providers"
@@ -70,19 +69,16 @@ function getProfilePageJsonLd(): WithContext<ProfilePage> {
       "@type": "PostalAddress",
       addressCountry: profile.address,
     },
-    mainEntityOfPage: `${SITE_INFO.url}/#profile-page`,
+    mainEntityOfPage: `${SITE_INFO.url}/#profilepage`,
   }
 
   return {
     "@context": "https://schema.org",
     "@type": "ProfilePage",
-    "@id": `${SITE_INFO.url}/#profile-page`,
+    "@id": `${SITE_INFO.url}/#profilepage`,
     url: SITE_INFO.url,
     name: profileTitle,
-    headline: profileTitle,
     description: profileDescription,
-    dateCreated: profile.dateCreated,
-    dateModified: profile.dateModified,
     mainEntity: person,
   }
 }
@@ -97,24 +93,6 @@ function getRootJsonLd() {
   }
 }
 
-// Runs synchronously before body paint to set the theme-color meta tag
-// for the initial render. next-themes handles the `class` attribute swap.
-const themeColorBootstrap = String.raw`
-  try {
-    var isDark = localStorage.theme === 'dark' || (!('theme' in localStorage)) || (localStorage.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-    if (isDark) {
-      var meta = document.querySelector('meta[name="theme-color"]');
-      if (meta) meta.setAttribute('content', '${META_THEME_COLORS.dark}');
-    }
-  } catch (_) {}
-
-  try {
-    if (/(Mac|iPhone|iPod|iPad)/i.test(navigator.platform)) {
-      document.documentElement.classList.add('os-macos');
-    }
-  } catch (_) {}
-`
-
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_INFO.url),
   title: {
@@ -124,8 +102,6 @@ export const metadata: Metadata = {
   description: profileDescription,
   keywords: settings.keywords,
   applicationName: SITE_INFO.name,
-  referrer: "origin-when-cross-origin",
-  manifest: "/manifest.webmanifest",
   authors: [
     {
       name: profile.displayName,
@@ -180,10 +156,6 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  // The on-screen keyboard resizes the visual viewport only, so it leaves both
-  // the layout viewport and `dvh` alone - the floating dock stays put while
-  // typing instead of being shoved up over the chat panel's own input. Stated
-  // explicitly rather than relied on as a default.
   interactiveWidget: "resizes-visual",
   themeColor: META_THEME_COLORS.dark,
 }
@@ -196,12 +168,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* No preconnect/dns-prefetch needed: icons are inline SVG and API calls are server-side */}
-        <Script
-          id="theme-color-bootstrap"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{ __html: themeColorBootstrap }}
-        />
         <link
           rel="preload"
           href="/fonts/geist-sans-latin.woff2"
