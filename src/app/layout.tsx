@@ -2,6 +2,7 @@ import "@/styles/globals.css"
 
 import type { Metadata, Viewport } from "next"
 import dynamic from "next/dynamic"
+import Script from "next/script"
 import type { Person, ProfilePage, WebSite, WithContext } from "schema-dts"
 
 import { Providers } from "@/components/providers"
@@ -196,9 +197,9 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         {/* No preconnect/dns-prefetch needed: icons are inline SVG and API calls are server-side */}
-        <script
+        <Script
           id="theme-color-bootstrap"
-          suppressHydrationWarning
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: themeColorBootstrap }}
         />
         <link
