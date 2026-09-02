@@ -42,6 +42,8 @@ export type User = {
   aboutId?: string
   /** Public URL to avatar image */
   avatar: string
+  /** Public URL to profile banner / cover image */
+  banner?: string
   /** Open Graph image URL for social sharing */
   ogImage: string
   /** Authoritative public profile URLs used for entity matching */

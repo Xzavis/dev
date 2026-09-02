@@ -52,6 +52,7 @@ export interface Profile {
   about: string
   aboutId?: string
   avatar: string
+  banner?: string
   sameAs?: string[]
   timeZone: string
   dateCreated?: string

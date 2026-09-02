@@ -26,8 +26,8 @@ export function ProfileHeader({
     >
       <div className="relative h-36 overflow-hidden border-b border-line sm:h-44">
         <Image
-          src="/banner.webp"
-          alt="Profile Banner"
+          src={profile.banner || "/banner.webp"}
+          alt={`${profile.displayName} Profile Banner`}
           fill
           loading="eager"
           fetchPriority="high"

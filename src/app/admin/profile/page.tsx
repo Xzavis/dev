@@ -112,33 +112,69 @@ export default function AdminProfilePage() {
       />
 
       <form onSubmit={handleSave} className="space-y-6">
-        {/* Profile Avatar Card */}
-        <div className="rounded-xl border border-border/80 bg-card p-5 dark:border-line">
-          <h2 className="text-sm font-semibold text-foreground flex items-center gap-1.5 mb-4">
-            <ImageIcon className="size-4 text-primary" /> Profile Photo & Media
+        {/* Profile Photo & Cover Banner Card */}
+        <div className="rounded-xl border border-border/80 bg-card p-5 dark:border-line space-y-6">
+          <h2 className="text-sm font-semibold text-foreground flex items-center gap-1.5">
+            <ImageIcon className="size-4 text-primary" /> Profile Photo & Cover Banner
           </h2>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <div className="relative size-20 shrink-0 overflow-hidden rounded-full border-2 border-border bg-muted">
-              {profile.avatar ? (
-                <img
-                  src={profile.avatar}
-                  alt={profile.displayName}
-                  className="size-full object-cover"
-                />
-              ) : (
-                <div className="flex size-full items-center justify-center text-muted-foreground">
-                  <UserIcon className="size-8" />
+
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            {/* Avatar Photo */}
+            <div className="rounded-lg border border-border/70 bg-muted/20 p-4 space-y-3 dark:border-line">
+              <label className="text-xs font-semibold text-foreground">
+                Avatar Photo
+              </label>
+              <div className="flex items-center gap-4">
+                <div className="relative size-16 shrink-0 overflow-hidden rounded-full border-2 border-border bg-muted flex items-center justify-center">
+                  {profile.avatar ? (
+                    <img
+                      src={profile.avatar}
+                      alt={profile.displayName}
+                      className="size-full object-cover"
+                      onError={(e) => {
+                        ;(e.currentTarget as HTMLElement).style.display = "none"
+                      }}
+                    />
+                  ) : (
+                    <UserIcon className="size-7 text-muted-foreground" />
+                  )}
                 </div>
-              )}
+                <div className="flex-1 min-w-0">
+                  <FormField label="Avatar Path / URL" description="Local path in /public or absolute URL">
+                    <FormInput
+                      value={profile.avatar}
+                      onChange={(e) => handleChange("avatar", e.target.value)}
+                      placeholder="/image/profile.webp"
+                    />
+                  </FormField>
+                </div>
+              </div>
             </div>
-            <div className="flex-1 w-full space-y-2">
-              <FormField label="Avatar Image Path / URL" description="Local path in /public or absolute URL">
-                <FormInput
-                  value={profile.avatar}
-                  onChange={(e) => handleChange("avatar", e.target.value)}
-                  placeholder="/image/profile.webp"
-                />
-              </FormField>
+
+            {/* Cover Banner */}
+            <div className="rounded-lg border border-border/70 bg-muted/20 p-4 space-y-3 dark:border-line">
+              <label className="text-xs font-semibold text-foreground">
+                Cover Banner
+              </label>
+              <div className="space-y-3">
+                <div className="relative h-20 w-full overflow-hidden rounded-md border border-border bg-muted">
+                  <img
+                    src={profile.banner || "/banner.webp"}
+                    alt="Cover banner preview"
+                    className="size-full object-cover object-center"
+                    onError={(e) => {
+                      ;(e.currentTarget as HTMLElement).style.display = "none"
+                    }}
+                  />
+                </div>
+                <FormField label="Banner Path / URL" description="Displays at top of profile header">
+                  <FormInput
+                    value={profile.banner ?? "/banner.webp"}
+                    onChange={(e) => handleChange("banner", e.target.value)}
+                    placeholder="/banner.webp or https://example.com/banner.jpg"
+                  />
+                </FormField>
+              </div>
             </div>
           </div>
         </div>
@@ -311,35 +347,56 @@ export default function AdminProfilePage() {
         title="Live Profile Preview"
         maxWidth="lg"
       >
-        <div className="space-y-4 rounded-xl border border-line bg-card p-6">
-          <div className="flex items-center gap-4">
-            <div className="size-16 overflow-hidden rounded-full border border-border">
-              {profile.avatar && (
-                <img src={profile.avatar} alt={profile.displayName} className="size-full object-cover" />
-              )}
-            </div>
-            <div>
-              <h3 className="text-base font-bold text-foreground">{profile.displayName}</h3>
-              <p className="text-xs text-muted-foreground font-mono">@{profile.username}</p>
-              <p className="text-xs text-foreground/80 mt-0.5">{profile.jobTitle}</p>
-              <div className="mt-1.5 flex items-center gap-2">
-                <Tag className="text-[0.625rem]">{profile.address}</Tag>
-                <Tag className="text-[0.625rem]">{profile.availabilityStatus ?? "Open to opportunities"}</Tag>
+        <div className="overflow-hidden rounded-xl border border-line bg-card">
+          {/* Banner Preview */}
+          <div className="relative h-28 w-full overflow-hidden bg-muted border-b border-line sm:h-36">
+            <img
+              src={profile.banner || "/banner.webp"}
+              alt="Profile banner preview"
+              className="size-full object-cover object-center"
+              onError={(e) => {
+                ;(e.currentTarget as HTMLElement).style.display = "none"
+              }}
+            />
+          </div>
+
+          <div className="p-6 space-y-4">
+            <div className="flex items-start gap-4 -mt-12 sm:-mt-14">
+              <div className="relative size-16 shrink-0 overflow-hidden rounded-full border-4 border-card bg-muted shadow-md sm:size-20">
+                {profile.avatar && (
+                  <img
+                    src={profile.avatar}
+                    alt={profile.displayName}
+                    className="size-full object-cover"
+                    onError={(e) => {
+                      ;(e.currentTarget as HTMLElement).style.display = "none"
+                    }}
+                  />
+                )}
+              </div>
+              <div className="mt-6 sm:mt-8 min-w-0">
+                <h3 className="text-base font-bold text-foreground truncate">{profile.displayName}</h3>
+                <p className="text-xs text-muted-foreground font-mono">@{profile.username}</p>
+                <p className="text-xs text-foreground/80 mt-0.5">{profile.jobTitle}</p>
+                <div className="mt-1.5 flex flex-wrap items-center gap-2">
+                  <Tag className="text-[0.625rem]">{profile.address}</Tag>
+                  <Tag className="text-[0.625rem]">{profile.availabilityStatus ?? "Open to opportunities"}</Tag>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="border-t border-line pt-3">
-            <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Short Bio</h4>
-            <p className="text-xs text-foreground leading-relaxed">{profile.bio}</p>
-          </div>
-
-          {profile.about && (
             <div className="border-t border-line pt-3">
-              <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">About Narrative</h4>
-              <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-line">{profile.about}</p>
+              <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Short Bio</h4>
+              <p className="text-xs text-foreground leading-relaxed">{profile.bio}</p>
             </div>
-          )}
+
+            {profile.about && (
+              <div className="border-t border-line pt-3">
+                <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">About Narrative</h4>
+                <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-line">{profile.about}</p>
+              </div>
+            )}
+          </div>
         </div>
       </AdminDialog>
     </div>
