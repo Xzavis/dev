@@ -13,13 +13,14 @@ import {
 import React, { useEffect, useState } from "react"
 
 import { Button } from "@/components/ui/button"
-import { Tag } from "@/components/ui/tag"
 import { fetchProfileAction, updateProfileAction } from "@/features/admin/actions/content-actions"
 import { AdminDialog } from "@/features/admin/components/admin-dialog"
 import { FormField, FormInput, FormTextarea } from "@/features/admin/components/admin-form-elements"
 import { AdminHeader } from "@/features/admin/components/admin-header"
 import { useToast } from "@/features/admin/components/admin-toast"
 import type { AdminProfile } from "@/features/admin/types/admin"
+import { ProfileHeader } from "@/features/portfolio/components/profile-header"
+import type { Profile } from "@/lib/content/types"
 
 export default function AdminProfilePage() {
   const [profile, setProfile] = useState<AdminProfile | null>(null)
@@ -340,7 +341,7 @@ export default function AdminProfilePage() {
         </div>
       </form>
 
-      {/* Live Preview Modal */}
+      {/* Live Profile Preview Modal (1:1 identical with public homepage header) */}
       <AdminDialog
         open={previewOpen}
         onClose={() => setPreviewOpen(false)}
@@ -348,55 +349,7 @@ export default function AdminProfilePage() {
         maxWidth="lg"
       >
         <div className="overflow-hidden rounded-xl border border-line bg-card">
-          {/* Banner Preview */}
-          <div className="relative h-28 w-full overflow-hidden bg-muted border-b border-line sm:h-36">
-            <img
-              src={profile.banner || "/banner.webp"}
-              alt="Profile banner preview"
-              className="size-full object-cover object-center"
-              onError={(e) => {
-                ;(e.currentTarget as HTMLElement).style.display = "none"
-              }}
-            />
-          </div>
-
-          <div className="p-6 space-y-4">
-            <div className="flex items-start gap-4 -mt-12 sm:-mt-14">
-              <div className="relative size-16 shrink-0 overflow-hidden rounded-full border-4 border-card bg-muted shadow-md sm:size-20">
-                {profile.avatar && (
-                  <img
-                    src={profile.avatar}
-                    alt={profile.displayName}
-                    className="size-full object-cover"
-                    onError={(e) => {
-                      ;(e.currentTarget as HTMLElement).style.display = "none"
-                    }}
-                  />
-                )}
-              </div>
-              <div className="mt-6 sm:mt-8 min-w-0">
-                <h3 className="text-base font-bold text-foreground truncate">{profile.displayName}</h3>
-                <p className="text-xs text-muted-foreground font-mono">@{profile.username}</p>
-                <p className="text-xs text-foreground/80 mt-0.5">{profile.jobTitle}</p>
-                <div className="mt-1.5 flex flex-wrap items-center gap-2">
-                  <Tag className="text-[0.625rem]">{profile.address}</Tag>
-                  <Tag className="text-[0.625rem]">{profile.availabilityStatus ?? "Open to opportunities"}</Tag>
-                </div>
-              </div>
-            </div>
-
-            <div className="border-t border-line pt-3">
-              <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">Short Bio</h4>
-              <p className="text-xs text-foreground leading-relaxed">{profile.bio}</p>
-            </div>
-
-            {profile.about && (
-              <div className="border-t border-line pt-3">
-                <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">About Narrative</h4>
-                <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-line">{profile.about}</p>
-              </div>
-            )}
-          </div>
+          <ProfileHeader profile={profile as unknown as Profile} />
         </div>
       </AdminDialog>
     </div>
