@@ -20,6 +20,7 @@ import { Tag } from "@/components/ui/tag"
 import {
   deleteSocialLinkAction,
   fetchSocialLinksAction,
+  reorderSocialLinksAction,
   saveSocialLinkAction,
 } from "@/features/admin/actions/content-actions"
 import { AdminAlertDialog, AdminDialog } from "@/features/admin/components/admin-dialog"
@@ -91,10 +92,11 @@ export default function AdminSocialLinksPage() {
     }
   }
 
-  const handleMove = (index: number, direction: "up" | "down") => {
+  const handleMove = async (index: number, direction: "up" | "down") => {
     const targetIndex = direction === "up" ? index - 1 : index + 1
     if (targetIndex < 0 || targetIndex >= links.length) return
 
+    const previous = [...links]
     const updated = [...links]
     const temp = updated[index]
     updated[index] = updated[targetIndex]
@@ -105,7 +107,20 @@ export default function AdminSocialLinksPage() {
     })
 
     setLinks(updated)
-    success("Social links reordered.")
+
+    try {
+      const res = await reorderSocialLinksAction(updated)
+      if (res.success) {
+        if (res.data) setLinks(res.data)
+        success("Social links reordered.")
+      } else {
+        setLinks(previous)
+        error(res.message || "Failed to save social links order.")
+      }
+    } catch {
+      setLinks(previous)
+      error("Failed to save social links order.")
+    }
   }
 
   const handleSave = async (e: React.FormEvent) => {

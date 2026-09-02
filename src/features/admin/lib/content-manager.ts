@@ -148,6 +148,39 @@ export async function saveExperienceData(experience: AdminExperience): Promise<{
   return { success: true, message: "Experience saved successfully." }
 }
 
+export async function reorderExperiencesData(experiences: AdminExperience[]): Promise<{ success: boolean; message: string; data?: AdminExperience[] }> {
+  try {
+    const updated = await LocalContentRepository.reorderExperiences(experiences)
+    recordRecentChange("experiences-reorder", "Reordered Experiences", "Experience", "published", "/admin/experience")
+    return { success: true, message: "Experience order saved successfully.", data: updated }
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : "Failed to reorder experiences."
+    return { success: false, message: msg }
+  }
+}
+
+export async function reorderProjectsData(projects: AdminProject[]): Promise<{ success: boolean; message: string; data?: AdminProject[] }> {
+  try {
+    const updated = await LocalContentRepository.reorderProjects(projects)
+    recordRecentChange("projects-reorder", "Reordered Projects", "Project", "published", "/admin/projects")
+    return { success: true, message: "Projects order saved successfully.", data: updated }
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : "Failed to reorder projects."
+    return { success: false, message: msg }
+  }
+}
+
+export async function reorderSocialLinksData(links: AdminSocialLink[]): Promise<{ success: boolean; message: string; data?: AdminSocialLink[] }> {
+  try {
+    const updated = await LocalContentRepository.reorderSocialLinks(links)
+    recordRecentChange("social-links-reorder", "Reordered Social Links", "Social Link", "published", "/admin/social-links")
+    return { success: true, message: "Social links reordered successfully.", data: updated }
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : "Failed to reorder social links."
+    return { success: false, message: msg }
+  }
+}
+
 export async function deleteExperienceData(id: string): Promise<{ success: boolean; message: string }> {
   await LocalContentRepository.deleteExperience(id)
   return { success: true, message: "Experience deleted successfully." }

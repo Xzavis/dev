@@ -17,7 +17,10 @@ import {
   getAdminSkills,
   getAdminSocialLinks,
   getDashboardMetrics,
+  reorderExperiencesData,
+  reorderProjectsData,
   reorderSkillsData,
+  reorderSocialLinksData,
   saveExperienceData,
   saveProfileData,
   saveProjectData,
@@ -82,6 +85,19 @@ export async function deleteProjectAction(id: string): Promise<{ success: boolea
   return res
 }
 
+export async function reorderProjectsAction(
+  projects: AdminProject[]
+): Promise<{ success: boolean; message: string; data?: AdminProject[] }> {
+  const res = await reorderProjectsData(projects)
+  if (res.success) {
+    revalidatePath("/admin")
+    revalidatePath("/admin/projects")
+    revalidatePath("/projects")
+    revalidatePath("/")
+  }
+  return res
+}
+
 // ─── Experience ───────────────────────────────────────────────────────────────
 
 export async function fetchExperiencesAction(): Promise<AdminExperience[]> {
@@ -93,6 +109,18 @@ export async function saveExperienceAction(experience: AdminExperience): Promise
   revalidatePath("/admin")
   revalidatePath("/admin/experience")
   revalidatePath("/")
+  return res
+}
+
+export async function reorderExperiencesAction(
+  experiences: AdminExperience[]
+): Promise<{ success: boolean; message: string; data?: AdminExperience[] }> {
+  const res = await reorderExperiencesData(experiences)
+  if (res.success) {
+    revalidatePath("/admin")
+    revalidatePath("/admin/experience")
+    revalidatePath("/")
+  }
   return res
 }
 
@@ -151,6 +179,18 @@ export async function saveSocialLinkAction(link: AdminSocialLink): Promise<{ suc
   revalidatePath("/admin")
   revalidatePath("/admin/social-links")
   revalidatePath("/")
+  return res
+}
+
+export async function reorderSocialLinksAction(
+  links: AdminSocialLink[]
+): Promise<{ success: boolean; message: string; data?: AdminSocialLink[] }> {
+  const res = await reorderSocialLinksData(links)
+  if (res.success) {
+    revalidatePath("/admin")
+    revalidatePath("/admin/social-links")
+    revalidatePath("/")
+  }
   return res
 }
 

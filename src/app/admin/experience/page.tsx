@@ -21,6 +21,7 @@ import { Tag } from "@/components/ui/tag"
 import {
   deleteExperienceAction,
   fetchExperiencesAction,
+  reorderExperiencesAction,
   saveExperienceAction,
 } from "@/features/admin/actions/content-actions"
 import { AdminAlertDialog, AdminDialog } from "@/features/admin/components/admin-dialog"
@@ -140,6 +141,7 @@ export default function AdminExperiencePage() {
     const targetIndex = direction === "up" ? index - 1 : index + 1
     if (targetIndex < 0 || targetIndex >= experiences.length) return
 
+    const previous = [...experiences]
     const updated = [...experiences]
     const temp = updated[index]
     updated[index] = updated[targetIndex]
@@ -150,7 +152,20 @@ export default function AdminExperiencePage() {
     })
 
     setExperiences(updated)
-    success("Experience reordered.")
+
+    try {
+      const res = await reorderExperiencesAction(updated)
+      if (res.success) {
+        if (res.data) setExperiences(res.data)
+        success("Experience order updated.")
+      } else {
+        setExperiences(previous)
+        error(res.message || "Failed to save experience order.")
+      }
+    } catch {
+      setExperiences(previous)
+      error("Failed to save experience order.")
+    }
   }
 
   const handleAddSkill = (skillToAdd?: string) => {

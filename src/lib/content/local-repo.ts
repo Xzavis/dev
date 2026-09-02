@@ -255,7 +255,17 @@ export const localRepo = {
     try {
       await ensureDir(PROJECTS_DIR)
       const files = await fs.readdir(PROJECTS_DIR)
-      const jsonFiles = files.filter((f) => f.endsWith(".json"))
+      const jsonFiles = files.filter((f) => f.endsWith(".json") && f !== "order.json")
+
+      let orderList: string[] = PROJECT_ORDER
+      try {
+        const orderData = await readJsonFile<string[]>(path.join(PROJECTS_DIR, "order.json"))
+        if (Array.isArray(orderData) && orderData.length > 0) {
+          orderList = orderData
+        }
+      } catch {
+        // fallback to default PROJECT_ORDER
+      }
 
       const projects = await Promise.all(
         jsonFiles.map(async (file) => {
@@ -269,10 +279,10 @@ export const localRepo = {
 
       const validProjects = projects.filter((p): p is Project => p !== null)
 
-      // Maintain canonical ordering
+      // Maintain dynamic persisted ordering
       return validProjects.sort((a, b) => {
-        const aIndex = PROJECT_ORDER.indexOf(a.id)
-        const bIndex = PROJECT_ORDER.indexOf(b.id)
+        const aIndex = orderList.indexOf(a.id)
+        const bIndex = orderList.indexOf(b.id)
         if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex
         if (aIndex !== -1) return -1
         if (bIndex !== -1) return 1
@@ -292,6 +302,12 @@ export const localRepo = {
       displayOrder: idx + 1,
       updatedAt: new Date(Date.now() - idx * 86400000).toISOString(),
     }))
+  },
+
+  async reorderProjects(orderedProjectsOrIds: (AdminProject | Project)[] | string[]): Promise<AdminProject[]> {
+    const ids = orderedProjectsOrIds.map((item) => (typeof item === "string" ? item : item.id))
+    await writeJsonFile(path.join(PROJECTS_DIR, "order.json"), ids)
+    return await this.getAdminProjects()
   },
 
   async getProjectById(id: string): Promise<Project | null> {
@@ -373,6 +389,19 @@ export const localRepo = {
 
     const filePath = path.join(PROJECTS_DIR, `${slug}.json`)
     await writeJsonFile(filePath, cleanProject)
+
+    // Ensure newly saved project is added to order list if not present
+    try {
+      const orderFile = path.join(PROJECTS_DIR, "order.json")
+      const order = await readJsonFile<string[]>(orderFile)
+      if (Array.isArray(order) && !order.includes(slug)) {
+        order.unshift(slug)
+        await writeJsonFile(orderFile, order)
+      }
+    } catch {
+      // ignore
+    }
+
     return { id: slug }
   },
 
@@ -387,6 +416,17 @@ export const localRepo = {
         throw err
       }
     }
+
+    try {
+      const orderFile = path.join(PROJECTS_DIR, "order.json")
+      let order = await readJsonFile<string[]>(orderFile)
+      if (Array.isArray(order)) {
+        order = order.filter((item) => item !== slug)
+        await writeJsonFile(orderFile, order)
+      }
+    } catch {
+      // ignore
+    }
   },
 
   // ─── Experiences ───────────────────────────────────────────────────────────
@@ -395,7 +435,17 @@ export const localRepo = {
     try {
       await ensureDir(EXPERIENCES_DIR)
       const files = await fs.readdir(EXPERIENCES_DIR)
-      const jsonFiles = files.filter((f) => f.endsWith(".json"))
+      const jsonFiles = files.filter((f) => f.endsWith(".json") && f !== "order.json")
+
+      let orderList: string[] = EXPERIENCE_ORDER
+      try {
+        const orderData = await readJsonFile<string[]>(path.join(EXPERIENCES_DIR, "order.json"))
+        if (Array.isArray(orderData) && orderData.length > 0) {
+          orderList = orderData
+        }
+      } catch {
+        // fallback to default EXPERIENCE_ORDER
+      }
 
       const experiences = await Promise.all(
         jsonFiles.map(async (file) => {
@@ -409,10 +459,10 @@ export const localRepo = {
 
       const validExperiences = experiences.filter((e): e is Experience => e !== null)
 
-      // Maintain canonical ordering
+      // Maintain dynamic persisted ordering
       return validExperiences.sort((a, b) => {
-        const aIndex = EXPERIENCE_ORDER.indexOf(a.id)
-        const bIndex = EXPERIENCE_ORDER.indexOf(b.id)
+        const aIndex = orderList.indexOf(a.id)
+        const bIndex = orderList.indexOf(b.id)
         if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex
         if (aIndex !== -1) return -1
         if (bIndex !== -1) return 1
@@ -431,6 +481,12 @@ export const localRepo = {
       displayOrder: idx + 1,
       updatedAt: new Date(Date.now() - idx * 172800000).toISOString(),
     }))
+  },
+
+  async reorderExperiences(orderedExperiencesOrIds: (AdminExperience | Experience)[] | string[]): Promise<AdminExperience[]> {
+    const ids = orderedExperiencesOrIds.map((item) => (typeof item === "string" ? item : item.id))
+    await writeJsonFile(path.join(EXPERIENCES_DIR, "order.json"), ids)
+    return await this.getAdminExperiences()
   },
 
   async getExperienceById(id: string): Promise<Experience | null> {
@@ -476,6 +532,19 @@ export const localRepo = {
 
     const filePath = path.join(EXPERIENCES_DIR, `${slug}.json`)
     await writeJsonFile(filePath, cleanExperience)
+
+    // Ensure newly saved experience is added to order list if not present
+    try {
+      const orderFile = path.join(EXPERIENCES_DIR, "order.json")
+      const order = await readJsonFile<string[]>(orderFile)
+      if (Array.isArray(order) && !order.includes(slug)) {
+        order.unshift(slug)
+        await writeJsonFile(orderFile, order)
+      }
+    } catch {
+      // ignore
+    }
+
     return { id: slug }
   },
 
@@ -489,6 +558,17 @@ export const localRepo = {
       if (nodeErr.code !== "ENOENT") {
         throw err
       }
+    }
+
+    try {
+      const orderFile = path.join(EXPERIENCES_DIR, "order.json")
+      let order = await readJsonFile<string[]>(orderFile)
+      if (Array.isArray(order)) {
+        order = order.filter((item) => item !== slug)
+        await writeJsonFile(orderFile, order)
+      }
+    } catch {
+      // ignore
     }
   },
 
@@ -518,37 +598,27 @@ export const localRepo = {
     const originalKey = normalizeSlug(skill.id)
 
     // Prevent duplicates (case-insensitive & alias-normalized)
-    const duplicateIdx = skills.findIndex(
-      (s) =>
-        (normalizeTechName(s.title) === normalizeTechName(skill.name) || s.key === targetKey) &&
-        s.key !== originalKey
+    const existingIdx = skills.findIndex(
+      (s) => s.key === originalKey || s.key === targetKey || normalizeTechName(s.title) === normalizeTechName(skill.name)
     )
-
-    if (duplicateIdx >= 0) {
-      throw new Error(`Technology "${skill.name}" already exists in your skills list.`)
-    }
 
     const baseItem = {
       key: targetKey,
       title: skill.name,
-      href: `https://www.google.com/search?q=${encodeURIComponent(skill.name)}`,
+      href: existingIdx >= 0 ? skills[existingIdx].href : `https://www.google.com/search?q=${encodeURIComponent(skill.name)}`,
       categories: [mapAdminCategoryToPublic(skill.category)],
     }
 
-    const updatedItem: TechStack = {
+    const cleanSkill: TechStack = {
       ...baseItem,
       type: "technology",
       iconId: skill.icon || targetKey,
     }
 
-    const existingIdx = skills.findIndex((s) => s.key === originalKey || s.key === targetKey)
     if (existingIdx >= 0) {
-      skills[existingIdx] = {
-        ...skills[existingIdx],
-        ...updatedItem,
-      } as TechStack
+      skills[existingIdx] = cleanSkill
     } else {
-      skills.push(updatedItem)
+      skills.push(cleanSkill)
     }
 
     await writeJsonFile(path.join(CONTENT_DIR, "skills.json"), skills)
@@ -643,6 +713,11 @@ export const localRepo = {
       }))
 
     await writeJsonFile(path.join(CONTENT_DIR, "social-links.json"), visibleLinks)
+  },
+
+  async reorderSocialLinks(adminLinks: AdminSocialLink[]): Promise<AdminSocialLink[]> {
+    await this.saveAllSocialLinks(adminLinks)
+    return await this.getAdminSocialLinks()
   },
 
   async deleteSocialLink(id: string): Promise<void> {
