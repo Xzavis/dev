@@ -4,7 +4,9 @@
 import {
   BriefcaseIcon,
   EyeIcon,
+  FolderIcon,
   ImageIcon,
+  InfoIcon,
   Link2Icon,
   RotateCcwIcon,
   SaveIcon,
@@ -122,6 +124,8 @@ export default function AdminProfilePage() {
       <AdminHeader
         title="Profile Information"
         subtitle="Manage personal bio, headline, availability, and public identity."
+        backHref="/admin"
+        backLabel="Back to Overview"
         actions={
           <Button variant="outline" size="sm" onClick={() => setPreviewOpen(true)} className="gap-1.5">
             <EyeIcon className="size-3.5" /> Preview
@@ -131,10 +135,43 @@ export default function AdminProfilePage() {
 
       <form onSubmit={handleSave} className="space-y-6">
         {/* Profile Photo & Cover Banner Card */}
-        <div className="rounded-xl border border-border/80 bg-card p-5 dark:border-line space-y-6">
-          <h2 className="text-sm font-semibold text-foreground flex items-center gap-1.5">
-            <ImageIcon className="size-4 text-primary" /> Profile Photo & Cover Banner
-          </h2>
+        <div className="rounded-xl border border-border/80 bg-card p-5 dark:border-line space-y-5">
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            <h2 className="text-sm font-semibold text-foreground flex items-center gap-1.5">
+              <ImageIcon className="size-4 text-primary" /> Profile Photo & Cover Banner
+            </h2>
+          </div>
+
+          {/* Local File Storage Info Callout */}
+          <div className="flex items-start gap-3 rounded-lg border border-primary/20 bg-primary/5 p-3.5 text-xs text-muted-foreground dark:border-primary/30 dark:bg-primary/10">
+            <InfoIcon className="size-4 text-primary shrink-0 mt-0.5" />
+            <div className="space-y-1.5">
+              <p className="font-semibold text-foreground flex items-center gap-1.5">
+                <FolderIcon className="size-3.5 text-primary" /> Lokasi File Gambar di Proyek:
+              </p>
+              <p className="leading-relaxed">
+                File gambar disimpan di folder root:{" "}
+                <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[0.6875rem] text-foreground font-semibold border border-border/60">
+                  public/image/
+                </code>{" "}
+                atau{" "}
+                <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-[0.6875rem] text-foreground font-semibold border border-border/60">
+                  public/
+                </code>
+              </p>
+              <div className="space-y-1 pt-0.5 text-[0.7rem] text-muted-foreground">
+                <div>
+                  • <strong>Avatar</strong>: Simpan di <code className="font-mono text-foreground font-medium">public/image/profile.webp</code> → Isi input: <code className="font-mono text-primary font-medium">/image/profile.webp</code>
+                </div>
+                <div>
+                  • <strong>Cover Banner</strong>: Simpan di <code className="font-mono text-foreground font-medium">public/banner.webp</code> → Isi input: <code className="font-mono text-primary font-medium">/banner.webp</code>
+                </div>
+                <div className="text-muted-foreground/80">
+                  • <em>Atau</em> Anda juga dapat memasukkan direct link <strong>HTTPS</strong> gambar publik online.
+                </div>
+              </div>
+            </div>
+          </div>
 
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             {/* Avatar Photo */}
@@ -160,7 +197,7 @@ export default function AdminProfilePage() {
                 <div className="flex-1 min-w-0">
                   <FormField
                     label="Avatar Path / URL"
-                    description="Use a local public path such as /image/profile.webp or a direct HTTPS image URL."
+                    description="Path lokal (public/image/...) atau direct URL HTTPS"
                     error={errors.avatar}
                   >
                     <FormInput
@@ -192,7 +229,7 @@ export default function AdminProfilePage() {
                 </div>
                 <FormField
                   label="Banner Path / URL"
-                  description="Use a local public path such as /banner.webp or a direct HTTPS image URL."
+                  description="Path lokal (public/banner.webp) atau direct URL HTTPS"
                   error={errors.banner}
                 >
                   <FormInput

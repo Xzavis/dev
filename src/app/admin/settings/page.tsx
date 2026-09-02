@@ -72,6 +72,8 @@ export default function AdminSettingsPage() {
       <AdminHeader
         title="Settings & CI/CD"
         subtitle="Manage website metadata, search engine configuration, and deployment sync."
+        backHref="/admin"
+        backLabel="Back to Overview"
       />
 
       <form onSubmit={handleSave} className="space-y-6">

@@ -1,7 +1,8 @@
 "use client"
 
 // ponytail: admin top header with fast GitHub publish trigger and sync indicator
-import { GitCommitIcon, Loader2Icon, SparklesIcon } from "lucide-react"
+import { ArrowLeftIcon, GitCommitIcon, Loader2Icon, SparklesIcon } from "lucide-react"
+import Link from "next/link"
 import React, { useState } from "react"
 
 import { Button } from "@/components/ui/button"
@@ -15,10 +16,14 @@ export function AdminHeader({
   title,
   subtitle,
   actions,
+  backHref,
+  backLabel,
 }: {
   title: string
   subtitle?: string
   actions?: React.ReactNode
+  backHref?: string
+  backLabel?: string
 }) {
   const [publishOpen, setPublishOpen] = useState(false)
   const [commitMessage, setCommitMessage] = useState("")
@@ -50,6 +55,15 @@ export function AdminHeader({
     <>
       <div className="flex flex-col gap-4 pb-6 sm:flex-row sm:items-center sm:justify-between border-b border-border/60 dark:border-line">
         <div>
+          {backHref && (
+            <Link
+              href={backHref}
+              className="group mb-1.5 inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+            >
+              <ArrowLeftIcon className="size-3.5 transition-transform group-hover:-translate-x-0.5" />
+              <span>{backLabel || "Back"}</span>
+            </Link>
+          )}
           <h1 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">{title}</h1>
           {subtitle && <p className="text-xs text-muted-foreground mt-0.5">{subtitle}</p>}
         </div>

@@ -2,6 +2,7 @@
 
 // ponytail: progressive disclosure project editor with tabbed sections, live preview and delete confirmation
 import {
+  ArrowLeftIcon,
   BookOpenIcon,
   CodeIcon,
   EyeIcon,
@@ -9,7 +10,6 @@ import {
   LayersIcon,
   PlusIcon,
   SaveIcon,
-  SendIcon,
   SparklesIcon,
   Trash2Icon,
   XIcon,
@@ -165,6 +165,8 @@ export function ProjectForm({ initialData, isNew = false }: ProjectFormProps) {
       <AdminHeader
         title={isNew ? "Create New Project" : `Edit: ${project.title || "Project"}`}
         subtitle="Manage project case study, screenshots, technical stack, and publication status."
+        backHref="/admin/projects"
+        backLabel="Back to Projects"
         actions={
           <div className="flex items-center gap-2">
             <Button
@@ -528,17 +530,33 @@ export function ProjectForm({ initialData, isNew = false }: ProjectFormProps) {
         {/* 5. PUBLISHING */}
         {activeTab === "publishing" && (
           <div className="rounded-xl border border-border/80 bg-card p-5 dark:border-line space-y-4">
-            <h2 className="text-sm font-semibold text-foreground">Publishing & Visibility</h2>
+            <div className="flex items-center justify-between gap-2 flex-wrap">
+              <h2 className="text-sm font-semibold text-foreground">Publishing & Visibility</h2>
+              <span
+                className={`rounded px-2 py-0.5 text-xs font-medium uppercase ${
+                  project.status === "draft"
+                    ? "bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                    : project.status === "archived"
+                    ? "bg-zinc-500/10 text-zinc-500"
+                    : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                }`}
+              >
+                Status: {project.status ?? "published"}
+              </span>
+            </div>
 
             <div>
-              <FormField label="Publication Status">
+              <FormField
+                label="Publication Status"
+                description="Tentukan visibilitas proyek ini. Proyek dengan status Published akan ditampilkan di portfolio publik."
+              >
                 <FormSelect
                   value={project.status ?? "published"}
                   onChange={(e) => handleChange("status", e.target.value as ContentStatus)}
                   options={[
                     { label: "Published (Visible on Portfolio)", value: "published" },
-                    { label: "Draft (Saved privately)", value: "draft" },
-                    { label: "Archived (Hidden from main list)", value: "archived" },
+                    { label: "Draft (Saved privately, hidden from public)", value: "draft" },
+                    { label: "Archived (Hidden from main portfolio list)", value: "archived" },
                   ]}
                 />
               </FormField>
@@ -550,30 +568,29 @@ export function ProjectForm({ initialData, isNew = false }: ProjectFormProps) {
       {/* Actions Bottom Bar */}
       <div className="sticky bottom-4 z-20 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card/90 p-4 shadow-xl backdrop-blur-md dark:border-line">
         <Link href="/admin/projects">
-          <Button variant="ghost" size="sm">
-            Cancel
+          <Button variant="outline" size="sm" className="gap-1.5">
+            <ArrowLeftIcon className="size-3.5" /> Back to Projects
           </Button>
         </Link>
 
         <div className="flex flex-wrap items-center gap-2.5">
           <Button
             type="button"
-            variant="outline"
             size="sm"
-            onClick={() => handleSubmit("draft")}
+            onClick={() => handleSubmit()}
             disabled={isSaving}
-            className="gap-1.5"
+            className="gap-1.5 min-w-[130px]"
           >
-            <SaveIcon className="size-3.5" /> Save Draft
-          </Button>
-          <Button
-            type="button"
-            size="sm"
-            onClick={() => handleSubmit("published")}
-            disabled={isSaving}
-            className="gap-1.5"
-          >
-            <SendIcon className="size-3.5" /> {isSaving ? "Saving..." : "Publish & Save"}
+            <SaveIcon className="size-3.5" />
+            {isSaving
+              ? "Saving..."
+              : isNew
+              ? "Create Project"
+              : project.status === "draft"
+              ? "Save Draft"
+              : project.status === "archived"
+              ? "Save (Archived)"
+              : "Save Changes"}
           </Button>
         </div>
       </div>
