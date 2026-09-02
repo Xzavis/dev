@@ -80,14 +80,23 @@ export default function AdminSocialLinksPage() {
   }
 
   const handleToggleVisibility = async (link: AdminSocialLink) => {
-    const updated = { ...link, visible: !link.visible }
+    const previous = [...links]
+    const updated = links.map((l) =>
+      l.id === link.id ? { ...l, visible: !l.visible } : l
+    )
+    setLinks(updated)
+
     try {
-      const res = await saveSocialLinkAction(updated)
+      const res = await reorderSocialLinksAction(updated)
       if (res.success) {
-        setLinks((prev) => prev.map((l) => (l.id === link.id ? updated : l)))
-        success(`Social link visibility updated.`)
+        if (res.data) setLinks(res.data)
+        success(link.visible ? "Link hidden from portfolio." : "Link visible on portfolio.")
+      } else {
+        setLinks(previous)
+        error(res.message || "Failed to update visibility.")
       }
     } catch {
+      setLinks(previous)
       error("Failed to update visibility.")
     }
   }

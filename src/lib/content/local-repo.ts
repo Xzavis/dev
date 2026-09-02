@@ -676,7 +676,8 @@ export const localRepo = {
       url: link.href,
       icon: typeof link.icon === "string" ? link.icon : normalizeSlug(link.title),
       displayOrder: idx + 1,
-      visible: true,
+      // Read persisted visible flag; default to true if field is absent
+      visible: link.visible !== false,
     }))
   },
 
@@ -688,6 +689,8 @@ export const localRepo = {
       icon: link.icon || link.platform.toLowerCase(),
       title: link.label || link.platform,
       href: link.url,
+      // Persist visible flag: omit field (defaults true) when visible, save false when hidden
+      ...(link.visible === false ? { visible: false } : {}),
     }
 
     const existingIdx = links.findIndex(
@@ -704,15 +707,15 @@ export const localRepo = {
   },
 
   async saveAllSocialLinks(adminLinks: AdminSocialLink[]): Promise<void> {
-    const visibleLinks = adminLinks
-      .filter((l) => l.visible !== false)
-      .map((l) => ({
-        icon: l.icon || l.platform.toLowerCase(),
-        title: l.label || l.platform,
-        href: l.url,
-      }))
+    // Store ALL links including hidden ones — visible field controls display, not storage
+    const allLinks: SocialLink[] = adminLinks.map((l) => ({
+      icon: l.icon || l.platform.toLowerCase(),
+      title: l.label || l.platform,
+      href: l.url,
+      ...(l.visible === false ? { visible: false } : {}),
+    }))
 
-    await writeJsonFile(path.join(CONTENT_DIR, "social-links.json"), visibleLinks)
+    await writeJsonFile(path.join(CONTENT_DIR, "social-links.json"), allLinks)
   },
 
   async reorderSocialLinks(adminLinks: AdminSocialLink[]): Promise<AdminSocialLink[]> {

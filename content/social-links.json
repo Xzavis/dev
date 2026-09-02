@@ -1,5 +1,10 @@
 [
   {
+    "icon": "discord",
+    "title": "Discord",
+    "href": "https://discord.com/users/zickrian"
+  },
+  {
     "icon": "github",
     "title": "GitHub",
     "href": "https://github.com/xzavis"
@@ -8,11 +13,6 @@
     "icon": "linkedin",
     "title": "LinkedIn",
     "href": "https://linkedin.com/in/firdauskhotibulzickrian/"
-  },
-  {
-    "icon": "discord",
-    "title": "Discord",
-    "href": "https://discord.com/users/zickrian"
   },
   {
     "icon": "medium",

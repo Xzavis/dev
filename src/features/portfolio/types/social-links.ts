@@ -6,4 +6,7 @@ export type SocialLink = {
   subtitle?: string
   /** External profile URL opened when the item is clicked. */
   href: string
+  /** Whether the link is visible on the public portfolio. Defaults to true. */
+  visible?: boolean
 }
+
