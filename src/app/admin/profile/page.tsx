@@ -61,6 +61,7 @@ export default function AdminProfilePage() {
   const validate = () => {
     const errs: Record<string, string> = {}
     if (!profile?.displayName?.trim()) errs.displayName = "Name is required."
+    if (!profile?.username?.trim()) errs.username = "Username / Handle is required."
     if (!profile?.jobTitle?.trim()) errs.jobTitle = "Role / Headline is required."
     if (!profile?.bio?.trim()) errs.bio = "Short Bio is required."
     setErrors(errs)
@@ -153,11 +154,33 @@ export default function AdminProfilePage() {
               <FormInput
                 value={profile.displayName}
                 onChange={(e) => handleChange("displayName", e.target.value)}
-                placeholder="Firdaus Khotibul Zickrian"
+                placeholder="Xza Abdul Malik Ibrahim"
                 error={errors.displayName}
               />
             </FormField>
 
+            <FormField
+              label="Username / Handle"
+              required
+              error={errors.username}
+              description="Displays as @username under your name"
+            >
+              <div className="relative flex items-center">
+                <span className="absolute left-3 text-xs font-semibold text-muted-foreground select-none">
+                  @
+                </span>
+                <FormInput
+                  value={profile.username}
+                  onChange={(e) => handleChange("username", e.target.value.replace(/^@/, ""))}
+                  placeholder="zickrian"
+                  error={errors.username}
+                  className="pl-7"
+                />
+              </div>
+            </FormField>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <FormField label="Role / Headline" required error={errors.jobTitle}>
               <FormInput
                 value={profile.jobTitle}
@@ -166,9 +189,7 @@ export default function AdminProfilePage() {
                 error={errors.jobTitle}
               />
             </FormField>
-          </div>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <FormField label="Location" description="Country or city displayed on header">
               <FormInput
                 value={profile.address}
@@ -176,12 +197,22 @@ export default function AdminProfilePage() {
                 placeholder="Indonesia"
               />
             </FormField>
+          </div>
 
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <FormField label="Availability Status" description="e.g. Open to opportunities">
               <FormInput
                 value={profile.availabilityStatus ?? "Open to opportunities"}
                 onChange={(e) => handleChange("availabilityStatus", e.target.value)}
                 placeholder="Open to opportunities"
+              />
+            </FormField>
+
+            <FormField label="Website URL" description="Personal domain / portfolio URL">
+              <FormInput
+                value={profile.website}
+                onChange={(e) => handleChange("website", e.target.value)}
+                placeholder="https://www.zickrian.dev"
               />
             </FormField>
           </div>
@@ -289,8 +320,9 @@ export default function AdminProfilePage() {
             </div>
             <div>
               <h3 className="text-base font-bold text-foreground">{profile.displayName}</h3>
-              <p className="text-xs text-muted-foreground">{profile.jobTitle}</p>
-              <div className="mt-1 flex items-center gap-2">
+              <p className="text-xs text-muted-foreground font-mono">@{profile.username}</p>
+              <p className="text-xs text-foreground/80 mt-0.5">{profile.jobTitle}</p>
+              <div className="mt-1.5 flex items-center gap-2">
                 <Tag className="text-[0.625rem]">{profile.address}</Tag>
                 <Tag className="text-[0.625rem]">{profile.availabilityStatus ?? "Open to opportunities"}</Tag>
               </div>
