@@ -1,11 +1,5 @@
 [
   {
-    "icon": "discord",
-    "title": "Discord",
-    "href": "https://discord.com/users/zickrian",
-    "visible": false
-  },
-  {
     "icon": "github",
     "title": "GitHub",
     "href": "https://github.com/xzavis"

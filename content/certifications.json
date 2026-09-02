@@ -1,19 +1,19 @@
 [
   {
-    "title": "McKinsey.org Forward Program",
-    "issuer": "McKinsey.org",
-    "issuerLogoURL": "/logos/mckinsey.webp",
-    "issueDate": "2026-06-26",
-    "credentialID": "c17a2d46-1ec0-45cd-9498-d6935837d1f1",
-    "credentialURL": "https://www.credly.com/badges/c17a2d46-1ec0-45cd-9498-d6935837d1f1/linked_in_profile"
-  },
-  {
     "title": "Belajar Fundamental Analisis Data",
     "issuer": "Dicoding Indonesia",
     "issuerLogoURL": "/logos/dicoding.webp",
     "issueDate": "2026-03-28",
     "credentialID": "53XE1493KZRN",
     "credentialURL": "https://www.dicoding.com/certificates/53XE1493KZRN"
+  },
+  {
+    "title": "McKinsey.org Forward Program",
+    "issuer": "McKinsey.org",
+    "issuerLogoURL": "/logos/mckinsey.webp",
+    "issueDate": "2026-06-26",
+    "credentialID": "c17a2d46-1ec0-45cd-9498-d6935837d1f1",
+    "credentialURL": "https://www.credly.com/badges/c17a2d46-1ec0-45cd-9498-d6935837d1f1/linked_in_profile"
   },
   {
     "title": "Membangun Aplikasi Gen AI dengan Microsoft Azure",
@@ -46,22 +46,6 @@
     "issueDate": "2026-07-20",
     "credentialID": "PIJAK/DIST/XXVI-07/APC007D6Y0298",
     "credentialURL": "https://www.linkedin.com/in/firdauskhotibulzickrian/overlay/Position/2823682009/treasury/?profileId=ACoAAEUlvokBZwLRhAjftG0Pul50c46i8puoyr4"
-  },
-  {
-    "title": "Belajar Fundamental Analisis Data",
-    "issuer": "Dicoding Indonesia",
-    "issuerLogoURL": "/logos/dicoding.webp",
-    "issueDate": "2026-03-28",
-    "credentialID": "53XE1493KZRN",
-    "credentialURL": "https://www.dicoding.com/certificates/53XE1493KZRN"
-  },
-  {
-    "title": "Membangun Aplikasi Gen AI dengan Microsoft Azure",
-    "issuer": "Dicoding Indonesia",
-    "issuerLogoURL": "/logos/dicoding.webp",
-    "issueDate": "2026-01-29",
-    "credentialID": "QLZ96W6K7Z5D",
-    "credentialURL": "https://www.dicoding.com/certificates/QLZ96W6K7Z5D"
   },
   {
     "title": "Belajar Penerapan Data Science dengan Microsoft Fabric",

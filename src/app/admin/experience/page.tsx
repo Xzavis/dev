@@ -1,12 +1,12 @@
 "use client"
 
 // ponytail: streamlined experience CRUD with company logo manager, role icon selector, skills tag manager, current-position toggle, modal editor and reordering
+import { differenceInMonths, parse } from "date-fns"
 import {
   ArrowDownIcon,
   ArrowUpIcon,
   Building2Icon,
   EditIcon,
-  GlobeIcon,
   ImageIcon,
   PlusIcon,
   SaveIcon,
@@ -17,6 +17,7 @@ import React, { useEffect, useState } from "react"
 
 import { IconRegistry } from "@/components/icon-registry"
 import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
 import { Tag } from "@/components/ui/tag"
 import {
   deleteExperienceAction,
@@ -35,6 +36,37 @@ import {
 import { AdminHeader } from "@/features/admin/components/admin-header"
 import { useToast } from "@/features/admin/components/admin-toast"
 import type { AdminExperience } from "@/features/admin/types/admin"
+import { cn } from "@/lib/utils"
+
+function formatDuration(start: string, end?: string): string {
+  if (!start) return ""
+  const startHasMonth = start.includes(".")
+  const endHasMonth = end ? end.includes(".") : true
+
+  if (!startHasMonth && end && !endHasMonth) {
+    const years = parseInt(end, 10) - parseInt(start, 10)
+    if (years <= 0) return ""
+    return `${years}y`
+  }
+
+  const parsePeriodDate = (str: string, fallbackMonth: "first" | "last"): Date => {
+    if (str.includes(".")) {
+      return parse(str, "MM.yyyy", new Date())
+    }
+    return parse(`${fallbackMonth === "last" ? "12" : "01"}.${str}`, "MM.yyyy", new Date())
+  }
+
+  const startDate = parsePeriodDate(start, "first")
+  const endDate = end ? parsePeriodDate(end, "last") : new Date()
+
+  const totalMonths = differenceInMonths(endDate, startDate) + 1
+  if (totalMonths <= 0) return ""
+  if (totalMonths < 12) return `${totalMonths}m`
+  const years = Math.floor(totalMonths / 12)
+  const months = totalMonths % 12
+  if (months === 0) return `${years}y`
+  return `${years}y ${months}m`
+}
 
 const ROLE_ICONS = [
   { id: "astroid", label: "AI / Machine Learning", description: "AI Engineer, ML Cohort" },
@@ -293,126 +325,154 @@ export default function AdminExperiencePage() {
         ) : (
           <div className="divide-y divide-border/60 dark:divide-line">
             {experiences.map((exp, idx) => {
-              const pos = exp.positions[0]
               return (
                 <div
                   key={exp.id}
-                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:p-5 hover:bg-muted/30 transition-colors"
+                  className="flex items-start gap-3.5 p-4 sm:p-5 hover:bg-muted/20 transition-colors"
                 >
-                  <div className="flex items-start gap-3.5 min-w-0">
-                    {/* Company Logo or Initial */}
-                    <div className="relative size-10 shrink-0 overflow-hidden rounded-full border border-border bg-muted flex items-center justify-center">
-                      {exp.companyLogo ? (
-                        <img
-                          src={exp.companyLogo}
-                          alt={exp.companyName}
-                          className="size-full object-cover"
-                          onError={(e) => {
-                            // Fallback on broken image
-                            ;(e.currentTarget as HTMLElement).style.display = "none"
-                          }}
-                        />
-                      ) : (
-                        <span className="text-xs font-bold text-muted-foreground uppercase">
-                          {exp.companyName.charAt(0) || "E"}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Role Icon */}
-                    <div
-                      className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground border border-muted-foreground/15 ring-1 ring-line ring-offset-1 ring-offset-background [&_svg]:size-4.5 [&_svg]:shrink-0"
-                      title={`Icon: ${pos?.icon || "briefcase"}`}
+                  {/* Left Column: Stacked Reorder Buttons */}
+                  <div className="flex flex-col gap-1 pt-0.5 shrink-0">
+                    <button
+                      onClick={() => handleMove(idx, "up")}
+                      disabled={idx === 0}
+                      className="rounded p-1 hover:bg-muted disabled:opacity-25 text-muted-foreground hover:text-foreground transition-colors"
+                      aria-label="Move up"
                     >
-                      <IconRegistry name={pos?.icon} />
+                      <ArrowUpIcon className="size-3.5" />
+                    </button>
+                    <button
+                      onClick={() => handleMove(idx, "down")}
+                      disabled={idx === experiences.length - 1}
+                      className="rounded p-1 hover:bg-muted disabled:opacity-25 text-muted-foreground hover:text-foreground transition-colors"
+                      aria-label="Move down"
+                    >
+                      <ArrowDownIcon className="size-3.5" />
+                    </button>
+                  </div>
+
+                  {/* Center Column: Homepage-Style Company + Timeline Node */}
+                  <div className="flex-1 min-w-0 space-y-4">
+                    {/* Company Header */}
+                    <div className="flex items-center gap-3">
+                      <div className="flex size-6 shrink-0 items-center justify-center select-none">
+                        {exp.companyLogo ? (
+                          <img
+                            src={exp.companyLogo}
+                            alt={`${exp.companyName} logo`}
+                            width={24}
+                            height={24}
+                            className="size-6 rounded-full dark:bg-white dark:p-0.5 object-cover"
+                            onError={(e) => {
+                              ;(e.currentTarget as HTMLElement).style.display = "none"
+                            }}
+                          />
+                        ) : (
+                          <span className="flex size-2 rounded-full bg-muted-foreground/40" />
+                        )}
+                      </div>
+
+                      <h3 className="text-lg leading-snug font-semibold text-foreground">
+                        {exp.companyName}
+                      </h3>
                     </div>
 
-                    <div className="space-y-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-sm font-semibold text-foreground">
-                          {exp.companyName}
-                        </span>
-                        {exp.companyWebsite && (
-                          <a
-                            href={exp.companyWebsite}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-muted-foreground hover:text-primary transition-colors"
-                            title={exp.companyWebsite}
-                          >
-                            <GlobeIcon className="size-3" />
-                          </a>
-                        )}
-                        {exp.isCurrentEmployer && (
-                          <span className="rounded bg-emerald-500/10 px-1.5 py-0.5 text-[0.625rem] font-medium text-emerald-600 dark:text-emerald-400">
-                            Current Role
-                          </span>
-                        )}
-                        <Tag className="text-[0.625rem]">{pos?.employmentType || "Full-time"}</Tag>
-                      </div>
+                    {/* Connected Timeline Positions */}
+                    <div className="relative space-y-4 before:absolute before:left-3 before:h-full before:w-px before:bg-border">
+                      {exp.positions.map((position, pIdx) => {
+                        const pStart = position.employmentPeriod?.start || ""
+                        const pEnd = position.employmentPeriod?.end
+                        const pOngoing = exp.isCurrentEmployer || !pEnd
+                        const pDuration = formatDuration(pStart, pOngoing ? undefined : pEnd)
 
-                      <div className="text-xs text-muted-foreground">
-                        <span className="font-medium text-foreground">{pos?.title}</span> •{" "}
-                        <span>
-                          {pos?.employmentPeriod?.start} –{" "}
-                          {exp.isCurrentEmployer || !pos?.employmentPeriod?.end
-                            ? "Present"
-                            : pos?.employmentPeriod?.end}
-                        </span>
-                      </div>
-
-                      {/* Skills Badges Preview */}
-                      {Array.isArray(pos?.skills) && pos.skills.length > 0 && (
-                        <div className="flex flex-wrap gap-1 pt-1">
-                          {pos.skills.map((skill, sIdx) => (
-                            <span
-                              key={sIdx}
-                              className="rounded bg-muted/60 px-1.5 py-0.5 font-mono text-[0.6875rem] text-muted-foreground border border-border/50"
+                        return (
+                          <div key={position.id || pIdx} className="group/experience-position relative">
+                            <div
+                              className="pointer-events-none absolute bottom-0 left-3 hidden size-4 bg-card group-last/experience-position:flex"
+                              aria-hidden
                             >
-                              {skill}
-                            </span>
-                          ))}
-                        </div>
-                      )}
+                              <span className="size-full -translate-y-2.25 rounded-bl-sm border-b border-l border-border" />
+                            </div>
+
+                            <div>
+                              <div className="relative z-1 mb-1 flex items-start gap-3">
+                                <div
+                                  className={cn(
+                                    "flex size-6 shrink-0 items-center justify-center rounded-lg",
+                                    "bg-muted text-muted-foreground",
+                                    "border border-muted-foreground/15 ring-1 ring-line ring-offset-1 ring-offset-background",
+                                    "[&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
+                                  )}
+                                >
+                                  <IconRegistry name={position.icon} />
+                                </div>
+
+                                <span className="flex-1 font-medium text-foreground text-balance">
+                                  {position.title}
+                                </span>
+                              </div>
+
+                              <div className="flex items-center gap-2 pl-9 text-sm text-muted-foreground">
+                                {position.employmentType && (
+                                  <>
+                                    <span>{position.employmentType}</span>
+                                    <Separator
+                                      className="data-vertical:h-4 data-vertical:self-center"
+                                      orientation="vertical"
+                                    />
+                                  </>
+                                )}
+
+                                <span className="flex items-center gap-0.5 font-mono text-xs tabular-nums">
+                                  <span>{pStart}</span>
+                                  <span>-</span>
+                                  <span>{pOngoing ? "Present" : pEnd}</span>
+                                </span>
+
+                                {pDuration && (
+                                  <>
+                                    <Separator
+                                      className="data-vertical:h-4 data-vertical:self-center"
+                                      orientation="vertical"
+                                    />
+                                    <span className="font-mono text-xs tabular-nums">{pDuration}</span>
+                                  </>
+                                )}
+                              </div>
+
+                              {Array.isArray(position.skills) && position.skills.length > 0 && (
+                                <ul className="flex flex-wrap gap-1.5 pt-3 pl-9">
+                                  {position.skills.map((skill, sIdx) => (
+                                    <li key={sIdx} className="flex">
+                                      <Tag>{skill}</Tag>
+                                    </li>
+                                  ))}
+                                </ul>
+                              )}
+                            </div>
+                          </div>
+                        )
+                      })}
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-1.5 self-end sm:self-auto shrink-0">
-                    {/* Reorder Buttons */}
+                  {/* Right Column: Edit & Delete Actions */}
+                  <div className="flex items-center gap-1 shrink-0 self-start">
                     <Button
                       variant="ghost"
-                      size="icon-xs"
-                      disabled={idx === 0}
-                      onClick={() => handleMove(idx, "up")}
-                      aria-label="Move up"
-                    >
-                      <ArrowUpIcon className="size-3" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon-xs"
-                      disabled={idx === experiences.length - 1}
-                      onClick={() => handleMove(idx, "down")}
-                      aria-label="Move down"
-                    >
-                      <ArrowDownIcon className="size-3" />
-                    </Button>
-
-                    <Button
-                      variant="outline"
-                      size="xs"
+                      size="icon-sm"
                       onClick={() => openEditModal(exp)}
-                      className="gap-1 ml-1"
+                      aria-label="Edit experience"
                     >
-                      <EditIcon className="size-3" /> Edit
+                      <EditIcon className="size-3.5" />
                     </Button>
                     <Button
-                      variant="destructive"
-                      size="icon-xs"
+                      variant="ghost"
+                      size="icon-sm"
+                      className="text-destructive hover:text-destructive"
                       onClick={() => setDeleteTarget(exp)}
                       aria-label="Delete experience"
                     >
-                      <Trash2Icon className="size-3" />
+                      <Trash2Icon className="size-3.5" />
                     </Button>
                   </div>
                 </div>

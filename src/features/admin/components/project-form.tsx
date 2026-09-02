@@ -24,7 +24,12 @@ import { Tag } from "@/components/ui/tag"
 import { deleteProjectAction, saveProjectAction } from "../actions/content-actions"
 import type { AdminProject, ContentStatus } from "../types/admin"
 import { AdminAlertDialog, AdminDialog } from "./admin-dialog"
-import { FormField, FormInput, FormSelect, FormSwitch, FormTextarea } from "./admin-form-elements"
+import {
+  FormField,
+  FormInput,
+  FormSelect,
+  FormTextarea,
+} from "./admin-form-elements"
 import { AdminHeader } from "./admin-header"
 import { useToast } from "./admin-toast"
 
@@ -72,7 +77,6 @@ export function ProjectForm({ initialData, isNew = false }: ProjectFormProps) {
     badge: initialData?.badge || "",
     gallery: initialData?.gallery || [],
     status: initialData?.status || "published",
-    featured: initialData?.featured ?? true,
     displayOrder: initialData?.displayOrder || 1,
   }
 
@@ -526,7 +530,7 @@ export function ProjectForm({ initialData, isNew = false }: ProjectFormProps) {
           <div className="rounded-xl border border-border/80 bg-card p-5 dark:border-line space-y-4">
             <h2 className="text-sm font-semibold text-foreground">Publishing & Visibility</h2>
 
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
               <FormField label="Publication Status">
                 <FormSelect
                   value={project.status ?? "published"}
@@ -538,23 +542,6 @@ export function ProjectForm({ initialData, isNew = false }: ProjectFormProps) {
                   ]}
                 />
               </FormField>
-
-              <FormField label="Display Order (Sort weight)">
-                <FormInput
-                  type="number"
-                  value={project.displayOrder ?? 1}
-                  onChange={(e) => handleChange("displayOrder", parseInt(e.target.value, 10) || 1)}
-                />
-              </FormField>
-            </div>
-
-            <div className="border-t border-border/60 pt-4 dark:border-line">
-              <FormSwitch
-                checked={project.featured ?? false}
-                onChange={(checked) => handleChange("featured", checked)}
-                label="Featured Project"
-                description="Highlight this project at the top of your portfolio homepage."
-              />
             </div>
           </div>
         )}

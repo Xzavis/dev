@@ -220,14 +220,35 @@ export default function AdminSocialLinksPage() {
             {links.map((link, idx) => (
               <div
                 key={link.id}
-                className="flex items-center justify-between gap-3 p-3.5 sm:px-5 hover:bg-muted/30 transition-colors"
+                className="flex items-start gap-3.5 p-3.5 sm:px-5 hover:bg-muted/20 transition-colors"
               >
-                <div className="flex items-center gap-3 min-w-0">
+                {/* Left Column: Stacked Reorder Buttons */}
+                <div className="flex flex-col gap-1 pt-0.5 shrink-0">
+                  <button
+                    onClick={() => handleMove(idx, "up")}
+                    disabled={idx === 0}
+                    className="rounded p-1 hover:bg-muted disabled:opacity-25 text-muted-foreground hover:text-foreground transition-colors"
+                    aria-label="Move up"
+                  >
+                    <ArrowUpIcon className="size-3.5" />
+                  </button>
+                  <button
+                    onClick={() => handleMove(idx, "down")}
+                    disabled={idx === links.length - 1}
+                    className="rounded p-1 hover:bg-muted disabled:opacity-25 text-muted-foreground hover:text-foreground transition-colors"
+                    aria-label="Move down"
+                  >
+                    <ArrowDownIcon className="size-3.5" />
+                  </button>
+                </div>
+
+                {/* Center Column: Social Link Info */}
+                <div className="flex items-center gap-3 min-w-0 flex-1">
                   <div className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-border bg-muted/40 text-foreground font-mono text-xs">
                     <Share2Icon className="size-4" />
                   </div>
-                  <div className="space-y-0.5 min-w-0">
-                    <div className="flex items-center gap-2">
+                  <div className="space-y-0.5 min-w-0 flex-1">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-sm font-semibold text-foreground">{link.label}</span>
                       <Tag className="text-[0.625rem]">{link.platform}</Tag>
                       {!link.visible && (
@@ -248,54 +269,38 @@ export default function AdminSocialLinksPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-1.5 shrink-0">
+                {/* Right Column: Visibility Toggle, Edit & Delete Actions */}
+                <div className="flex items-center gap-1 shrink-0 self-start">
                   <Button
                     variant="ghost"
-                    size="icon-xs"
+                    size="icon-sm"
                     onClick={() => handleToggleVisibility(link)}
                     aria-label={link.visible ? "Hide link" : "Show link"}
+                    title={link.visible ? "Visible on site (click to hide)" : "Hidden (click to show)"}
                   >
                     {link.visible ? (
-                      <EyeIcon className="size-3 text-emerald-500" />
+                      <EyeIcon className="size-3.5 text-emerald-500" />
                     ) : (
-                      <EyeOffIcon className="size-3 text-muted-foreground" />
+                      <EyeOffIcon className="size-3.5 text-muted-foreground" />
                     )}
                   </Button>
 
                   <Button
                     variant="ghost"
-                    size="icon-xs"
-                    disabled={idx === 0}
-                    onClick={() => handleMove(idx, "up")}
-                    aria-label="Move up"
-                  >
-                    <ArrowUpIcon className="size-3" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon-xs"
-                    disabled={idx === links.length - 1}
-                    onClick={() => handleMove(idx, "down")}
-                    aria-label="Move down"
-                  >
-                    <ArrowDownIcon className="size-3" />
-                  </Button>
-
-                  <Button
-                    variant="outline"
-                    size="icon-xs"
+                    size="icon-sm"
                     onClick={() => openEditModal(link)}
                     aria-label="Edit link"
                   >
-                    <EditIcon className="size-3" />
+                    <EditIcon className="size-3.5" />
                   </Button>
                   <Button
-                    variant="destructive"
-                    size="icon-xs"
+                    variant="ghost"
+                    size="icon-sm"
+                    className="text-destructive hover:text-destructive"
                     onClick={() => setDeleteTarget(link)}
                     aria-label="Delete link"
                   >
-                    <Trash2Icon className="size-3" />
+                    <Trash2Icon className="size-3.5" />
                   </Button>
                 </div>
               </div>

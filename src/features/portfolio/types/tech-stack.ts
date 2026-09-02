@@ -3,6 +3,10 @@ export type TechStack = {
   title: string
   href?: string
   categories: string[]
-  type: "technology"
-  iconId: string
+  type: "technology" | "soft-skill"
+  iconId?: string
+  /** Persisted skill proficiency level */
+  level?: "Beginner" | "Intermediate" | "Advanced" | "Expert"
+  /** Whether to highlight on homepage tech stack */
+  featured?: boolean
 }

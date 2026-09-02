@@ -74,6 +74,7 @@ export default function AdminOverviewPage() {
           <p className="mt-1 text-[0.6875rem] text-muted-foreground">Tech & frameworks</p>
         </div>
 
+
         <div className="rounded-xl border border-border/80 bg-card p-4 sm:p-5 dark:border-line">
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium text-muted-foreground">Drafts</span>
@@ -83,6 +84,40 @@ export default function AdminOverviewPage() {
             {loading ? "..." : metrics?.draftsCount}
           </div>
           <p className="mt-1 text-[0.6875rem] text-muted-foreground">Unpublished items</p>
+        </div>
+      </div>
+
+      {/* Secondary Stats: Awards / Certifications / Publications */}
+      <div className="grid grid-cols-3 gap-3 sm:gap-4">
+        <div className="rounded-xl border border-border/80 bg-card p-4 sm:p-5 dark:border-line">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-medium text-muted-foreground">Awards</span>
+            <SparklesIcon className="size-4 text-primary" />
+          </div>
+          <div className="mt-3 text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+            {loading ? "..." : metrics?.awardsCount}
+          </div>
+          <p className="mt-1 text-[0.6875rem] text-muted-foreground">Recognitions</p>
+        </div>
+        <div className="rounded-xl border border-border/80 bg-card p-4 sm:p-5 dark:border-line">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-medium text-muted-foreground">Certifications</span>
+            <CpuIcon className="size-4 text-primary" />
+          </div>
+          <div className="mt-3 text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+            {loading ? "..." : metrics?.certificationsCount}
+          </div>
+          <p className="mt-1 text-[0.6875rem] text-muted-foreground">Credentials</p>
+        </div>
+        <div className="rounded-xl border border-border/80 bg-card p-4 sm:p-5 dark:border-line">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-medium text-muted-foreground">Publications</span>
+            <FileEditIcon className="size-4 text-primary" />
+          </div>
+          <div className="mt-3 text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+            {loading ? "..." : metrics?.publicationsCount}
+          </div>
+          <p className="mt-1 text-[0.6875rem] text-muted-foreground">Research</p>
         </div>
       </div>
 
@@ -102,6 +137,21 @@ export default function AdminOverviewPage() {
               <PlusIcon className="size-3.5" /> Add Experience
             </Button>
           </Link>
+          <Link href="/admin/awards">
+            <Button variant="outline" size="sm" className="gap-1.5">
+              <PlusIcon className="size-3.5" /> Add Award
+            </Button>
+          </Link>
+          <Link href="/admin/certifications">
+            <Button variant="outline" size="sm" className="gap-1.5">
+              <PlusIcon className="size-3.5" /> Add Certification
+            </Button>
+          </Link>
+          <Link href="/admin/publications">
+            <Button variant="outline" size="sm" className="gap-1.5">
+              <PlusIcon className="size-3.5" /> Add Publication
+            </Button>
+          </Link>
           <Link href="/admin/profile">
             <Button variant="outline" size="sm" className="gap-1.5">
               <UserIcon className="size-3.5" /> Edit Profile
@@ -119,18 +169,18 @@ export default function AdminOverviewPage() {
       <div className="rounded-xl border border-border/80 bg-card dark:border-line overflow-hidden">
         <div className="flex items-center justify-between border-b border-border/80 px-5 py-4 dark:border-line">
           <div>
-            <h2 className="text-sm font-semibold text-foreground">Recent Changes</h2>
-            <p className="text-xs text-muted-foreground">Audit log of your recent portfolio updates</p>
+            <h2 className="text-sm font-semibold text-foreground">Recent Session Activity</h2>
+            <p className="text-xs text-muted-foreground">Session-local activity (resets on server restart)</p>
           </div>
         </div>
 
         <div className="divide-y divide-border/60 dark:divide-line">
           {loading ? (
             <div className="p-6 text-center text-xs text-muted-foreground">Loading recent activity...</div>
-          ) : metrics?.recentChanges.length === 0 ? (
-            <div className="p-6 text-center text-xs text-muted-foreground">No recent changes recorded yet.</div>
+          ) : !metrics?.recentActivity || metrics.recentActivity.length === 0 ? (
+            <div className="p-6 text-center text-xs text-muted-foreground">No recent activity this session.</div>
           ) : (
-            metrics?.recentChanges.map((item) => (
+            metrics.recentActivity.map((item) => (
               <div
                 key={item.id}
                 className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 hover:bg-muted/40 transition-colors"

@@ -1,37 +1,52 @@
 "use server"
 
-// ponytail: Next.js Server Actions connecting Admin UI with Content Manager & GitHub API
+// ponytail: Next.js Server Actions connecting Admin UI with Content Manager
 import { revalidatePath } from "next/cache"
 
 import {
   commitToGitHub,
+  deleteAwardData,
+  deleteCertificationData,
   deleteExperienceData,
   deleteProjectData,
+  deletePublicationData,
   deleteSkillData,
   deleteSocialLinkData,
+  getAdminAwards,
+  getAdminCertifications,
   getAdminExperiences,
   getAdminProfile,
   getAdminProjectById,
   getAdminProjects,
+  getAdminPublications,
   getAdminSettings,
   getAdminSkills,
   getAdminSocialLinks,
   getDashboardMetrics,
+  reorderAwardsData,
+  reorderCertificationsData,
   reorderExperiencesData,
   reorderProjectsData,
+  reorderPublicationsData,
   reorderSkillsData,
   reorderSocialLinksData,
+  saveAwardData,
+  saveCertificationData,
   saveExperienceData,
   saveProfileData,
   saveProjectData,
+  savePublicationData,
   saveSettingsData,
   saveSkillData,
   saveSocialLinkData,
 } from "../lib/content-manager"
 import type {
+  AdminAward,
+  AdminCertification,
   AdminExperience,
   AdminProfile,
   AdminProject,
+  AdminPublication,
   AdminSkill,
   AdminSocialLink,
   DashboardMetrics,
@@ -43,8 +58,7 @@ export async function fetchDashboardOverviewAction(): Promise<DashboardMetrics> 
   return getDashboardMetrics()
 }
 
-// ─── Profile ──────────────────────────────────────────────────────────────────
-
+// Profile
 export async function fetchProfileAction(): Promise<AdminProfile> {
   return getAdminProfile()
 }
@@ -57,8 +71,7 @@ export async function updateProfileAction(profile: AdminProfile): Promise<{ succ
   return res
 }
 
-// ─── Projects ─────────────────────────────────────────────────────────────────
-
+// Projects
 export async function fetchProjectsAction(): Promise<AdminProject[]> {
   return getAdminProjects()
 }
@@ -98,8 +111,7 @@ export async function reorderProjectsAction(
   return res
 }
 
-// ─── Experience ───────────────────────────────────────────────────────────────
-
+// Experience
 export async function fetchExperiencesAction(): Promise<AdminExperience[]> {
   return getAdminExperiences()
 }
@@ -132,8 +144,7 @@ export async function deleteExperienceAction(id: string): Promise<{ success: boo
   return res
 }
 
-// ─── Skills ───────────────────────────────────────────────────────────────────
-
+// Skills
 export async function fetchSkillsAction(): Promise<AdminSkill[]> {
   return getAdminSkills()
 }
@@ -168,8 +179,7 @@ export async function deleteSkillAction(id: string): Promise<{ success: boolean;
   return res
 }
 
-// ─── Social Links ─────────────────────────────────────────────────────────────
-
+// Social Links
 export async function fetchSocialLinksAction(): Promise<AdminSocialLink[]> {
   return getAdminSocialLinks()
 }
@@ -202,8 +212,7 @@ export async function deleteSocialLinkAction(id: string): Promise<{ success: boo
   return res
 }
 
-// ─── Settings & GitHub Publish ────────────────────────────────────────────────
-
+// Settings & GitHub Publish
 export async function fetchSettingsAction(): Promise<SiteSettings> {
   return getAdminSettings()
 }
@@ -221,8 +230,112 @@ export async function publishToGitHubAction(message: string): Promise<SyncResult
   return res
 }
 
-// ─── Admin Security Check ─────────────────────────────────────────────────────
+// Awards
+export async function fetchAwardsAction(): Promise<AdminAward[]> {
+  return getAdminAwards()
+}
 
+export async function saveAwardAction(award: AdminAward): Promise<{ success: boolean; message: string }> {
+  const res = await saveAwardData(award)
+  if (res.success) {
+    revalidatePath("/admin")
+    revalidatePath("/admin/awards")
+    revalidatePath("/")
+  }
+  return res
+}
+
+export async function reorderAwardsAction(
+  awards: AdminAward[]
+): Promise<{ success: boolean; message: string; data?: AdminAward[] }> {
+  const res = await reorderAwardsData(awards)
+  if (res.success) {
+    revalidatePath("/admin")
+    revalidatePath("/admin/awards")
+    revalidatePath("/")
+  }
+  return res
+}
+
+export async function deleteAwardAction(id: string): Promise<{ success: boolean; message: string }> {
+  const res = await deleteAwardData(id)
+  revalidatePath("/admin")
+  revalidatePath("/admin/awards")
+  revalidatePath("/")
+  return res
+}
+
+// Certifications
+export async function fetchCertificationsAction(): Promise<AdminCertification[]> {
+  return getAdminCertifications()
+}
+
+export async function saveCertificationAction(cert: AdminCertification): Promise<{ success: boolean; message: string }> {
+  const res = await saveCertificationData(cert)
+  if (res.success) {
+    revalidatePath("/admin")
+    revalidatePath("/admin/certifications")
+    revalidatePath("/")
+  }
+  return res
+}
+
+export async function reorderCertificationsAction(
+  certs: AdminCertification[]
+): Promise<{ success: boolean; message: string; data?: AdminCertification[] }> {
+  const res = await reorderCertificationsData(certs)
+  if (res.success) {
+    revalidatePath("/admin")
+    revalidatePath("/admin/certifications")
+    revalidatePath("/")
+  }
+  return res
+}
+
+export async function deleteCertificationAction(adminId: string): Promise<{ success: boolean; message: string }> {
+  const res = await deleteCertificationData(adminId)
+  revalidatePath("/admin")
+  revalidatePath("/admin/certifications")
+  revalidatePath("/")
+  return res
+}
+
+// Publications
+export async function fetchPublicationsAction(): Promise<AdminPublication[]> {
+  return getAdminPublications()
+}
+
+export async function savePublicationAction(pub: AdminPublication): Promise<{ success: boolean; message: string }> {
+  const res = await savePublicationData(pub)
+  if (res.success) {
+    revalidatePath("/admin")
+    revalidatePath("/admin/publications")
+    revalidatePath("/")
+  }
+  return res
+}
+
+export async function reorderPublicationsAction(
+  pubs: AdminPublication[]
+): Promise<{ success: boolean; message: string; data?: AdminPublication[] }> {
+  const res = await reorderPublicationsData(pubs)
+  if (res.success) {
+    revalidatePath("/admin")
+    revalidatePath("/admin/publications")
+    revalidatePath("/")
+  }
+  return res
+}
+
+export async function deletePublicationAction(id: string): Promise<{ success: boolean; message: string }> {
+  const res = await deletePublicationData(id)
+  revalidatePath("/admin")
+  revalidatePath("/admin/publications")
+  revalidatePath("/")
+  return res
+}
+
+// Admin Security Check
 export async function verifyAdminAuthAction(password: string): Promise<{ authorized: boolean; message?: string }> {
   const adminSecret = process.env.ADMIN_PASSWORD || process.env.ADMIN_PIN || "zickrian2026"
   if (password === adminSecret) {

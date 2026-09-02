@@ -1,7 +1,8 @@
 "use client"
 
-// ponytail: streamlined admin sidebar reusing Lucide icons and active route highlighting
 import {
+  AwardIcon,
+  BookOpenIcon,
   BriefcaseIcon,
   CpuIcon,
   ExternalLinkIcon,
@@ -10,6 +11,7 @@ import {
   LogOutIcon,
   SettingsIcon,
   Share2Icon,
+  TrophyIcon,
   UserIcon,
 } from "lucide-react"
 import Link from "next/link"
@@ -24,6 +26,9 @@ export const ADMIN_NAV_ITEMS = [
   { label: "Profile", href: "/admin/profile", icon: UserIcon },
   { label: "Projects", href: "/admin/projects", icon: FolderGit2Icon },
   { label: "Experience", href: "/admin/experience", icon: BriefcaseIcon },
+  { label: "Awards", href: "/admin/awards", icon: TrophyIcon },
+  { label: "Certifications", href: "/admin/certifications", icon: AwardIcon },
+  { label: "Publications", href: "/admin/publications", icon: BookOpenIcon },
   { label: "Skills", href: "/admin/skills", icon: CpuIcon },
   { label: "Social Links", href: "/admin/social-links", icon: Share2Icon },
   { label: "Settings", href: "/admin/settings", icon: SettingsIcon },

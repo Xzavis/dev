@@ -125,20 +125,18 @@ export const localRepo = {
     const profile = await this.getProfile()
     const settings = await this.getSettings()
 
+    // Social URLs (GitHub, LinkedIn, etc.) are canonical in social-links.json.
+    // They are intentionally NOT included here to avoid dual-ownership.
     return {
       ...profile,
       dateCreated: profile.dateCreated || "2023-11-01T00:00:00Z",
       sameAs: profile.sameAs || [],
       gender: (profile.gender as AdminProfile["gender"]) || "male",
       headline: profile.jobTitle,
-      resumeUrl: "/resume.pdf",
-      availabilityStatus: "Open to opportunities",
+      // Read from profile.json — do not hardcode
+      availabilityStatus: profile.availabilityStatus || "",
       shortBio: profile.bio,
       longBio: profile.about,
-      githubUrl: "https://github.com/zickrian",
-      linkedinUrl: "https://linkedin.com/in/firdauskhotibulzickrian/",
-      mediumUrl: "https://medium.com/@zickriann",
-      instagramUrl: "https://instagram.com/zickrian",
       keywords: settings.keywords || [],
       ogImage: settings.ogImage || "/og.png",
       seoTitle: settings.seoTitle || profile.displayName,
@@ -231,11 +229,10 @@ export const localRepo = {
       keywords: settings.keywords || [],
       autoPublish: false,
       previewDeployment: true,
-      lastSyncTime: new Date().toISOString(),
       githubRepo: "zickrian/portfolio",
-      updatedAt: new Date().toISOString(),
     }
   },
+
 
   async saveSettings(settings: Partial<AdminSiteSettings>): Promise<void> {
     const current = await this.getSettings()
@@ -298,8 +295,6 @@ export const localRepo = {
     return projects.map((project, idx) => ({
       ...project,
       status: "published",
-      // Read persisted featured flag; default to true if field is absent
-      featured: project.featured !== false,
       displayOrder: idx + 1,
       updatedAt: new Date(Date.now() - idx * 86400000).toISOString(),
     }))
@@ -386,8 +381,6 @@ export const localRepo = {
       badge: project.badge,
       badgeId: project.badgeId,
       gallery: project.gallery || [],
-      // Persist featured flag: omit field (defaults true) when featured, save false when not
-      ...(project.featured === false ? { featured: false } : {}),
     }
 
     const filePath = path.join(PROJECTS_DIR, `${slug}.json`)
@@ -586,11 +579,14 @@ export const localRepo = {
     return skills.map((item, idx) => ({
       id: item.key,
       name: item.title,
-      type: item.type,
+      // skill type defaults to "technology" for legacy entries without explicit type
+      type: (item.type as AdminSkill["type"]) || "technology",
       category: mapSkillCategory(item.categories),
-      level: idx < 5 ? "Expert" : idx < 12 ? "Advanced" : "Intermediate",
-      icon: item.type === "technology" ? item.iconId : undefined,
-      featured: idx < 8,
+      // Read persisted level; fall back to position-based default only for legacy skills without level
+      level: (item.level as AdminSkill["level"]) || (idx < 5 ? "Expert" : idx < 12 ? "Advanced" : "Intermediate"),
+      icon: item.type === "technology" || !item.type ? item.iconId : undefined,
+      // Read persisted featured flag; fall back to position for legacy items without the field
+      featured: typeof item.featured === "boolean" ? item.featured : idx < 8,
       displayOrder: idx + 1,
     }))
   },
@@ -605,17 +601,19 @@ export const localRepo = {
       (s) => s.key === originalKey || s.key === targetKey || normalizeTechName(s.title) === normalizeTechName(skill.name)
     )
 
-    const baseItem = {
-      key: targetKey,
-      title: skill.name,
-      href: existingIdx >= 0 ? skills[existingIdx].href : `https://www.google.com/search?q=${encodeURIComponent(skill.name)}`,
-      categories: [mapAdminCategoryToPublic(skill.category)],
-    }
+    const existing = existingIdx >= 0 ? skills[existingIdx] : undefined
 
     const cleanSkill: TechStack = {
-      ...baseItem,
-      type: "technology",
-      iconId: skill.icon || targetKey,
+      key: targetKey,
+      title: skill.name,
+      href: existing?.href || `https://www.google.com/search?q=${encodeURIComponent(skill.name)}`,
+      categories: [mapAdminCategoryToPublic(skill.category)],
+      type: skill.type || "technology",
+      // For technology skills, always persist iconId
+      ...(skill.type !== "soft-skill" ? { iconId: skill.icon || targetKey } : {}),
+      // Persist admin metadata so they survive reload
+      level: skill.level || "Intermediate",
+      ...(typeof skill.featured === "boolean" ? { featured: skill.featured } : {}),
     }
 
     if (existingIdx >= 0) {
@@ -635,18 +633,18 @@ export const localRepo = {
     const newSkills: TechStack[] = adminSkills.map((skill) => {
       const key = normalizeTechName(skill.name) || normalizeSlug(skill.id || skill.name)
       const existing = currentMap.get(key) || currentMap.get(normalizeSlug(skill.id))
-      
-      const baseItem = {
+
+      return {
         key,
         title: skill.name,
         href: existing?.href || `https://www.google.com/search?q=${encodeURIComponent(skill.name)}`,
         categories: [mapAdminCategoryToPublic(skill.category)],
-      }
-
-      return {
-        ...baseItem,
-        type: "technology",
-        iconId: skill.icon || key,
+        type: skill.type || existing?.type || "technology",
+        // Preserve iconId for technology skills
+        ...(skill.type !== "soft-skill" ? { iconId: skill.icon || existing?.iconId || key } : {}),
+        // Preserve admin metadata through reorder
+        level: skill.level || existing?.level || "Intermediate",
+        ...(typeof skill.featured === "boolean" ? { featured: skill.featured } : {}),
       } as TechStack
     })
 
@@ -733,18 +731,157 @@ export const localRepo = {
     await writeJsonFile(path.join(CONTENT_DIR, "social-links.json"), filtered)
   },
 
-  // ─── Awards, Certifications, Publications ──────────────────────────────────
+  // ─── Awards ────────────────────────────────────────────────────────────────
 
   async getAwards(): Promise<Award[]> {
     return readJsonFile<Award[]>(path.join(CONTENT_DIR, "awards.json"))
   },
 
+  async saveAward(award: Award): Promise<{ id: string }> {
+    const awards = await this.getAwards()
+    const slug = normalizeSlug(award.id || award.title)
+    if (!slug) throw new Error("Award id or title is required.")
+    const cleanAward: Award = {
+      id: slug,
+      prize: award.prize,
+      title: award.title,
+      date: award.date,
+      grade: award.grade,
+      ...(award.description ? { description: award.description } : {}),
+      ...(award.descriptionId ? { descriptionId: award.descriptionId } : {}),
+      ...(award.referenceLink ? { referenceLink: award.referenceLink } : {}),
+    }
+    const idx = awards.findIndex((a) => a.id === slug)
+    if (idx >= 0) {
+      awards[idx] = cleanAward
+    } else {
+      awards.unshift(cleanAward)
+    }
+    await writeJsonFile(path.join(CONTENT_DIR, "awards.json"), awards)
+    return { id: slug }
+  },
+
+  async reorderAwards(awards: Award[]): Promise<Award[]> {
+    const cleanAwards: Award[] = awards.map((a) => ({
+      id: normalizeSlug(a.id || a.title),
+      prize: a.prize,
+      title: a.title,
+      date: a.date,
+      grade: a.grade,
+      ...(a.description ? { description: a.description } : {}),
+      ...(a.descriptionId ? { descriptionId: a.descriptionId } : {}),
+      ...(a.referenceLink ? { referenceLink: a.referenceLink } : {}),
+    }))
+    await writeJsonFile(path.join(CONTENT_DIR, "awards.json"), cleanAwards)
+    return cleanAwards
+  },
+
+  async deleteAward(id: string): Promise<void> {
+    const awards = await this.getAwards()
+    const slug = normalizeSlug(id)
+    const filtered = awards.filter((a) => normalizeSlug(a.id) !== slug)
+    await writeJsonFile(path.join(CONTENT_DIR, "awards.json"), filtered)
+  },
+
+  // ─── Certifications ────────────────────────────────────────────────────────
+
   async getCertifications(): Promise<Certification[]> {
     return readJsonFile<Certification[]>(path.join(CONTENT_DIR, "certifications.json"))
   },
 
+  certAdminId(cert: Certification): string {
+    const primary = cert.credentialID?.trim() || `${cert.title}-${cert.issuer}-${cert.issueDate}`
+    return normalizeSlug(primary)
+  },
+
+  async reorderCertifications(certs: Certification[]): Promise<Certification[]> {
+    const cleanCerts: Certification[] = certs.map((cert) => ({
+      title: cert.title,
+      issuer: cert.issuer,
+      ...(cert.issuerLogoURL ? { issuerLogoURL: cert.issuerLogoURL } : {}),
+      ...(cert.issuerIconName ? { issuerIconName: cert.issuerIconName } : {}),
+      issueDate: cert.issueDate,
+      credentialID: cert.credentialID,
+      credentialURL: cert.credentialURL,
+    }))
+    await writeJsonFile(path.join(CONTENT_DIR, "certifications.json"), cleanCerts)
+    return cleanCerts
+  },
+
+  async saveCertification(cert: Certification): Promise<{ _adminId: string }> {
+    const certs = await this.getCertifications()
+    const adminId = this.certAdminId(cert)
+    const cleanCert: Certification = {
+      title: cert.title,
+      issuer: cert.issuer,
+      ...(cert.issuerLogoURL ? { issuerLogoURL: cert.issuerLogoURL } : {}),
+      ...(cert.issuerIconName ? { issuerIconName: cert.issuerIconName } : {}),
+      issueDate: cert.issueDate,
+      credentialID: cert.credentialID,
+      credentialURL: cert.credentialURL,
+    }
+    const idx = certs.findIndex((c) => this.certAdminId(c) === adminId)
+    if (idx >= 0) {
+      certs[idx] = cleanCert
+    } else {
+      certs.unshift(cleanCert)
+    }
+    await writeJsonFile(path.join(CONTENT_DIR, "certifications.json"), certs)
+    return { _adminId: adminId }
+  },
+
+  async deleteCertification(adminId: string): Promise<void> {
+    const certs = await this.getCertifications()
+    const filtered = certs.filter((c) => this.certAdminId(c) !== adminId)
+    await writeJsonFile(path.join(CONTENT_DIR, "certifications.json"), filtered)
+  },
+
+  // ─── Publications ──────────────────────────────────────────────────────────
+
   async getPublications(): Promise<Publication[]> {
     return readJsonFile<Publication[]>(path.join(CONTENT_DIR, "publications.json"))
+  },
+
+  async reorderPublications(pubs: Publication[]): Promise<Publication[]> {
+    const cleanPubs: Publication[] = pubs.map((pub) => ({
+      id: normalizeSlug(pub.id || pub.title),
+      title: pub.title,
+      journal: pub.journal,
+      date: pub.date,
+      url: pub.url,
+      ...(pub.description ? { description: pub.description } : {}),
+    }))
+    await writeJsonFile(path.join(CONTENT_DIR, "publications.json"), cleanPubs)
+    return cleanPubs
+  },
+
+  async savePublication(pub: Publication): Promise<{ id: string }> {
+    const pubs = await this.getPublications()
+    const slug = normalizeSlug(pub.id || pub.title)
+    if (!slug) throw new Error("Publication id or title is required.")
+    const cleanPub: Publication = {
+      id: slug,
+      title: pub.title,
+      journal: pub.journal,
+      date: pub.date,
+      url: pub.url,
+      ...(pub.description ? { description: pub.description } : {}),
+    }
+    const idx = pubs.findIndex((p) => p.id === slug)
+    if (idx >= 0) {
+      pubs[idx] = cleanPub
+    } else {
+      pubs.unshift(cleanPub)
+    }
+    await writeJsonFile(path.join(CONTENT_DIR, "publications.json"), pubs)
+    return { id: slug }
+  },
+
+  async deletePublication(id: string): Promise<void> {
+    const pubs = await this.getPublications()
+    const slug = normalizeSlug(id)
+    const filtered = pubs.filter((p) => p.id !== slug && normalizeSlug(p.id) !== slug)
+    await writeJsonFile(path.join(CONTENT_DIR, "publications.json"), filtered)
   },
 }
 

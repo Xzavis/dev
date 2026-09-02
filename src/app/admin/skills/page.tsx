@@ -257,12 +257,33 @@ export default function AdminSkillsPage() {
               return (
                 <div
                   key={skill.id}
-                  className="flex items-center justify-between gap-3 p-3 sm:px-5 hover:bg-muted/30 transition-colors"
+                  className="flex items-start gap-3.5 p-3.5 sm:px-5 hover:bg-muted/20 transition-colors"
                 >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="flex size-7 shrink-0 items-center justify-center rounded-md bg-muted text-muted-foreground">
+                  {/* Left Column: Stacked Reorder Buttons */}
+                  <div className="flex flex-col gap-1 pt-0.5 shrink-0">
+                    <button
+                      onClick={() => handleMove(idx, "up")}
+                      disabled={idx === 0}
+                      className="rounded p-1 hover:bg-muted disabled:opacity-25 text-muted-foreground hover:text-foreground transition-colors"
+                      aria-label="Move up"
+                    >
+                      <ArrowUpIcon className="size-3.5" />
+                    </button>
+                    <button
+                      onClick={() => handleMove(idx, "down")}
+                      disabled={idx === filteredSkills.length - 1}
+                      className="rounded p-1 hover:bg-muted disabled:opacity-25 text-muted-foreground hover:text-foreground transition-colors"
+                      aria-label="Move down"
+                    >
+                      <ArrowDownIcon className="size-3.5" />
+                    </button>
+                  </div>
+
+                  {/* Center Column: Skill Info */}
+                  <div className="flex items-center gap-3 min-w-0 flex-1">
+                    <div className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-border bg-muted/50 text-muted-foreground">
                       {skill.icon ? (
-                        <svg className="size-4 fill-current text-foreground" viewBox="0 0 24 24" aria-hidden>
+                        <svg className="size-4.5 fill-current text-foreground" viewBox="0 0 24 24" aria-hidden>
                           <use href={`/icons/tech-stack-v1.svg?v=2#${skill.icon}`} />
                         </svg>
                       ) : (
@@ -275,7 +296,7 @@ export default function AdminSkillsPage() {
                       <span className="text-sm font-semibold text-foreground truncate">
                         {skill.name}
                       </span>
-                      <div className="flex items-center gap-1.5">
+                      <div className="flex items-center gap-1.5 flex-wrap">
                         <Tag className="text-[0.625rem]">{skill.category}</Tag>
                         <span
                           className={`rounded px-1.5 py-0.5 text-[0.625rem] font-medium ${
@@ -297,41 +318,24 @@ export default function AdminSkillsPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-1 shrink-0">
+                  {/* Right Column: Edit & Delete Actions */}
+                  <div className="flex items-center gap-1 shrink-0 self-start">
                     <Button
                       variant="ghost"
-                      size="icon-xs"
-                      disabled={idx === 0}
-                      onClick={() => handleMove(idx, "up")}
-                      aria-label="Move up"
-                    >
-                      <ArrowUpIcon className="size-3" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon-xs"
-                      disabled={idx === filteredSkills.length - 1}
-                      onClick={() => handleMove(idx, "down")}
-                      aria-label="Move down"
-                    >
-                      <ArrowDownIcon className="size-3" />
-                    </Button>
-
-                    <Button
-                      variant="outline"
-                      size="icon-xs"
+                      size="icon-sm"
                       onClick={() => openEditModal(skill)}
                       aria-label="Edit skill"
                     >
-                      <EditIcon className="size-3" />
+                      <EditIcon className="size-3.5" />
                     </Button>
                     <Button
-                      variant="destructive"
-                      size="icon-xs"
+                      variant="ghost"
+                      size="icon-sm"
+                      className="text-destructive hover:text-destructive"
                       onClick={() => setDeleteTarget(skill)}
                       aria-label="Delete skill"
                     >
-                      <Trash2Icon className="size-3" />
+                      <Trash2Icon className="size-3.5" />
                     </Button>
                   </div>
                 </div>

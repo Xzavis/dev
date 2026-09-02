@@ -7,7 +7,6 @@ import {
   EditIcon,
   PlusIcon,
   SearchIcon,
-  StarIcon,
   Trash2Icon,
 } from "lucide-react"
 import Link from "next/link"
@@ -31,7 +30,6 @@ export default function AdminProjectsPage() {
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("all")
-  const [featuredOnly, setFeaturedOnly] = useState(false)
   const [sortBy] = useState<"order" | "title" | "date">("order")
   const [projectToDelete, setProjectToDelete] = useState<AdminProject | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
@@ -88,15 +86,14 @@ export default function AdminProjectsPage() {
           p.category.toLowerCase().includes(search.toLowerCase())
         const matchesStatus =
           statusFilter === "all" || (p.status ?? "published") === statusFilter
-        const matchesFeatured = !featuredOnly || p.featured
-        return matchesSearch && matchesStatus && matchesFeatured
+        return matchesSearch && matchesStatus
       })
       .sort((a, b) => {
         if (sortBy === "title") return a.title.localeCompare(b.title)
         if (sortBy === "date") return (b.updatedAt || "").localeCompare(a.updatedAt || "")
         return (a.displayOrder || 0) - (b.displayOrder || 0)
       })
-  }, [projects, search, statusFilter, featuredOnly, sortBy])
+  }, [projects, search, statusFilter, sortBy])
 
   const handleDelete = async () => {
     if (!projectToDelete) return
@@ -161,16 +158,6 @@ export default function AdminProjectsPage() {
               </button>
             ))}
           </div>
-
-          <Button
-            variant={featuredOnly ? "secondary" : "outline"}
-            size="xs"
-            onClick={() => setFeaturedOnly(!featuredOnly)}
-            className="gap-1.5"
-          >
-            <StarIcon className={`size-3 ${featuredOnly ? "fill-amber-400 text-amber-500" : ""}`} />
-            Featured
-          </Button>
         </div>
       </div>
 
@@ -183,130 +170,53 @@ export default function AdminProjectsPage() {
             No projects found matching your criteria.
           </div>
         ) : (
-          <>
-            {/* Desktop Table */}
-            <div className="hidden md:block overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead>
-                  <tr className="border-b border-border/70 bg-muted/40 text-muted-foreground font-medium dark:border-line">
-                    <th className="px-4 py-3">Project</th>
-                    <th className="px-4 py-3">Category</th>
-                    <th className="px-4 py-3">Status</th>
-                    <th className="px-4 py-3">Featured</th>
-                    <th className="px-4 py-3 text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border/60 dark:divide-line">
-                  {filteredProjects.map((p, idx) => (
-                    <tr key={p.id} className="hover:bg-muted/30 transition-colors">
-                      <td className="px-4 py-3">
-                        <div className="flex items-center gap-3">
-                          {p.image && (
-                            <img
-                              src={p.image}
-                              alt=""
-                              className="size-8 rounded object-cover border border-border shrink-0"
-                            />
-                          )}
-                          <div>
-                            <span className="font-semibold text-foreground">{p.title}</span>
-                            <p className="text-[0.6875rem] text-muted-foreground line-clamp-1 max-w-xs">
-                              {p.tagline}
-                            </p>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-4 py-3">
-                        <Tag className="text-[0.625rem]">{p.category}</Tag>
-                      </td>
-                      <td className="px-4 py-3">
-                        <span
-                          className={`rounded px-1.5 py-0.5 text-[0.625rem] font-medium uppercase ${
-                            p.status === "draft"
-                              ? "bg-amber-500/10 text-amber-600 dark:text-amber-400"
-                              : p.status === "archived"
-                              ? "bg-zinc-500/10 text-zinc-500"
-                              : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                          }`}
-                        >
-                          {p.status ?? "published"}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3">
-                        {p.featured ? (
-                          <StarIcon className="size-3.5 fill-amber-400 text-amber-500" />
-                        ) : (
-                          <span className="text-muted-foreground/50">-</span>
-                        )}
-                      </td>
-                      <td className="px-4 py-3 text-right">
-                        <div className="flex items-center justify-end gap-1.5">
-                          <Button
-                            variant="ghost"
-                            size="icon-xs"
-                            disabled={idx === 0}
-                            onClick={() => handleMove(idx, "up")}
-                            title="Move Up"
-                            aria-label="Move Up"
-                          >
-                            <ArrowUpIcon className="size-3" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon-xs"
-                            disabled={idx === filteredProjects.length - 1}
-                            onClick={() => handleMove(idx, "down")}
-                            title="Move Down"
-                            aria-label="Move Down"
-                          >
-                            <ArrowDownIcon className="size-3" />
-                          </Button>
-                          <Link href={`/admin/projects/${p.id}`}>
-                            <Button variant="outline" size="icon-xs" aria-label="Edit project">
-                              <EditIcon className="size-3" />
-                            </Button>
-                          </Link>
-                          <Button
-                            variant="destructive"
-                            size="icon-xs"
-                            onClick={() => setProjectToDelete(p)}
-                            aria-label="Delete project"
-                          >
-                            <Trash2Icon className="size-3" />
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+          <div className="divide-y divide-border/60 dark:divide-line">
+            {filteredProjects.map((p, idx) => (
+              <div
+                key={p.id}
+                className="flex items-start gap-3.5 p-4 sm:p-5 hover:bg-muted/20 transition-colors"
+              >
+                {/* Left Column: Stacked Reorder Buttons */}
+                <div className="flex flex-col gap-1 pt-0.5 shrink-0">
+                  <button
+                    onClick={() => handleMove(idx, "up")}
+                    disabled={idx === 0}
+                    className="rounded p-1 hover:bg-muted disabled:opacity-25 text-muted-foreground hover:text-foreground transition-colors"
+                    aria-label="Move up"
+                  >
+                    <ArrowUpIcon className="size-3.5" />
+                  </button>
+                  <button
+                    onClick={() => handleMove(idx, "down")}
+                    disabled={idx === filteredProjects.length - 1}
+                    className="rounded p-1 hover:bg-muted disabled:opacity-25 text-muted-foreground hover:text-foreground transition-colors"
+                    aria-label="Move down"
+                  >
+                    <ArrowDownIcon className="size-3.5" />
+                  </button>
+                </div>
 
-            {/* Mobile Stacked Card View */}
-            <div className="divide-y divide-border/60 md:hidden dark:divide-line">
-              {filteredProjects.map((p, idx) => (
-                <div key={p.id} className="p-4 space-y-3">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-1.5 flex-wrap">
-                        <span className="text-sm font-semibold text-foreground">{p.title}</span>
-                        {p.featured && (
-                          <StarIcon className="size-3 fill-amber-400 text-amber-500" />
-                        )}
-                      </div>
-                      <p className="text-xs text-muted-foreground line-clamp-2">{p.tagline}</p>
+                {/* Center Column: Project Info */}
+                <div className="flex items-start gap-3.5 min-w-0 flex-1">
+                  {p.image ? (
+                    <img
+                      src={p.image}
+                      alt=""
+                      className="size-11 rounded-lg object-cover border border-border shrink-0 bg-muted"
+                      onError={(e) => {
+                        ;(e.currentTarget as HTMLElement).style.display = "none"
+                      }}
+                    />
+                  ) : (
+                    <div className="flex size-11 shrink-0 items-center justify-center rounded-lg border border-border bg-muted font-bold text-xs text-muted-foreground uppercase">
+                      {p.title.charAt(0) || "P"}
                     </div>
-                    {p.image && (
-                      <img
-                        src={p.image}
-                        alt=""
-                        className="size-12 shrink-0 rounded object-cover border border-border"
-                      />
-                    )}
-                  </div>
+                  )}
 
-                  <div className="flex items-center justify-between pt-1">
-                    <div className="flex items-center gap-2">
+                  <div className="space-y-1 min-w-0 flex-1">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-sm font-semibold text-foreground">{p.title}</span>
+                      <Tag className="text-[0.625rem]">{p.category}</Tag>
                       <span
                         className={`rounded px-1.5 py-0.5 text-[0.625rem] font-medium uppercase ${
                           p.status === "draft"
@@ -318,48 +228,31 @@ export default function AdminProjectsPage() {
                       >
                         {p.status ?? "published"}
                       </span>
-                      <Tag className="text-[0.625rem]">{p.category}</Tag>
                     </div>
-
-                    <div className="flex items-center gap-1.5">
-                      <Button
-                        variant="ghost"
-                        size="icon-xs"
-                        disabled={idx === 0}
-                        onClick={() => handleMove(idx, "up")}
-                        title="Move Up"
-                        aria-label="Move Up"
-                      >
-                        <ArrowUpIcon className="size-3" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon-xs"
-                        disabled={idx === filteredProjects.length - 1}
-                        onClick={() => handleMove(idx, "down")}
-                        title="Move Down"
-                        aria-label="Move Down"
-                      >
-                        <ArrowDownIcon className="size-3" />
-                      </Button>
-                      <Link href={`/admin/projects/${p.id}`}>
-                        <Button variant="outline" size="xs" className="gap-1">
-                          <EditIcon className="size-3" /> Edit
-                        </Button>
-                      </Link>
-                      <Button
-                        variant="destructive"
-                        size="xs"
-                        onClick={() => setProjectToDelete(p)}
-                      >
-                        <Trash2Icon className="size-3" />
-                      </Button>
-                    </div>
+                    <p className="text-xs text-muted-foreground line-clamp-2">{p.tagline}</p>
                   </div>
                 </div>
-              ))}
-            </div>
-          </>
+
+                {/* Right Column: Edit & Delete Actions */}
+                <div className="flex items-center gap-1 shrink-0 self-start">
+                  <Link href={`/admin/projects/${p.id}`}>
+                    <Button variant="ghost" size="icon-sm" aria-label="Edit project">
+                      <EditIcon className="size-3.5" />
+                    </Button>
+                  </Link>
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    className="text-destructive hover:text-destructive"
+                    onClick={() => setProjectToDelete(p)}
+                    aria-label="Delete project"
+                  >
+                    <Trash2Icon className="size-3.5" />
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
         )}
       </div>
 

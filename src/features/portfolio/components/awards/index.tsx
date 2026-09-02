@@ -1,7 +1,5 @@
 "use client"
 
-import { compareDesc } from "date-fns"
-
 import { CollapsibleList } from "@/components/collapsible-list"
 import { SectionCallout } from "@/components/section-callout"
 import defaultAwards from "@/content/awards.json"
@@ -13,10 +11,6 @@ import { AwardItem } from "./award-item"
 
 export function Awards({ awards = defaultAwards }: { awards?: Award[] } = {}) {
   const { t } = useTranslation()
-
-  const sortedAwards = [...awards].sort((a, b) => {
-    return compareDesc(new Date(a.date), new Date(b.date))
-  })
 
   return (
     <Panel id="awards">
@@ -32,7 +26,7 @@ export function Awards({ awards = defaultAwards }: { awards?: Award[] } = {}) {
       </PanelHeader>
 
       <CollapsibleList
-        items={sortedAwards}
+        items={awards}
         max={3}
         keyExtractor={(item) => item.id}
         renderItem={(item) => <AwardItem award={item} />}

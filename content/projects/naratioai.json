@@ -22,7 +22,8 @@
     "TensorFlow",
     "Keras",
     "BiLSTM",
-    "Sentence Transformers"
+    "Sentence Transformers",
+    "FastAPI"
   ],
   "coverSkills": [
     "AI Agent",
@@ -35,13 +36,15 @@
     "BiLSTM sentiment analysis to classify multilingual text into positive, negative, or neutral signals.",
     "Embedding-based semantic layer to improve context matching between research findings, business signals, and slide content.",
     "LLM-powered slide generation to produce polished consulting-style narratives, charts, and recommendations.",
-    "End-to-end workflow from research and analysis to modular presentation-ready deck components."
+    "End-to-end workflow from research and analysis to modular presentation-ready deck components.",
+    "Real-Time Pitch Deck Generation"
   ],
   "impact": [
     "Reduces manual research and slide-writing work by turning unstructured information into ready-to-use business narratives.",
     "Helps teams understand market trends, risks, and opportunities through sentiment signals and AI reasoning.",
     "Supports data-driven consulting decisions by combining web insights, machine learning sentiment analysis, and LLM recommendations.",
-    "Makes multilingual business intelligence more accessible by processing sentiment across multiple languages."
+    "Makes multilingual business intelligence more accessible by processing sentiment across multiple languages.",
+    "Reduced deck preparation time by 60%."
   ],
   "collaboration": {
     "ownership": "Team project",
@@ -56,10 +59,10 @@
       "Helped transform raw web insights and conversation context into structured signals for business narrative and consulting-style deck generation."
     ]
   },
-  "description": "",
+  "description": "Narratio AI transforms complex corporate metrics into compelling boardroom narratives and automated presentations.",
   "notes": "",
   "isExpanded": true,
-  "badge": "Ongoing - 2026 Team Project",
+  "badge": "Updated Top AI Capstone 2026",
   "gallery": [
     "/projects/naratioai/1.webp",
     "/projects/naratioai/2.webp",
