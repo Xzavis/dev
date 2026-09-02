@@ -1,14 +1,13 @@
 "use client"
 
-// ponytail: streamlined experience CRUD with current-position toggle, modal editor and reordering
+// ponytail: streamlined experience CRUD with company logo manager, role icon selector, skills tag manager, current-position toggle, modal editor and reordering
 import {
   ArrowDownIcon,
   ArrowUpIcon,
-  BriefcaseIcon,
   Building2Icon,
-  CalendarIcon,
   EditIcon,
-  MapPinIcon,
+  GlobeIcon,
+  ImageIcon,
   PlusIcon,
   SaveIcon,
   Trash2Icon,
@@ -16,6 +15,7 @@ import {
 } from "lucide-react"
 import React, { useEffect, useState } from "react"
 
+import { IconRegistry } from "@/components/icon-registry"
 import { Button } from "@/components/ui/button"
 import { Tag } from "@/components/ui/tag"
 import {
@@ -35,12 +35,52 @@ import { AdminHeader } from "@/features/admin/components/admin-header"
 import { useToast } from "@/features/admin/components/admin-toast"
 import type { AdminExperience } from "@/features/admin/types/admin"
 
+const ROLE_ICONS = [
+  { id: "astroid", label: "AI / Machine Learning", description: "AI Engineer, ML Cohort" },
+  { id: "flask-conical", label: "Laboratory / Research", description: "Lab Assistant, Experiments" },
+  { id: "graduation-cap", label: "University / Degree", description: "Higher Education, College" },
+  { id: "school", label: "School / Academic", description: "High School, Academy" },
+  { id: "network", label: "Network / Architecture", description: "Deep Learning, Systems" },
+  { id: "bar-chart-3", label: "Data / Analytics", description: "Data Analyst, Statistics" },
+  { id: "users", label: "Community / Organization", description: "GDGOC, Club, Team" },
+  { id: "briefcase", label: "Work / Corporate", description: "Industry, Full-time, Business" },
+]
+
+const PRESET_LOGOS = [
+  { label: "Custompedia", path: "/logos/custompedia.webp" },
+  { label: "Pijak (Dicoding)", path: "/logos/pijak.webp" },
+  { label: "Udinus", path: "/logos/udinus.webp" },
+  { label: "GDGOC", path: "/logos/gdgoc.webp" },
+  { label: "Asah", path: "/logos/asah.webp" },
+  { label: "Dicoding", path: "/logos/dicoding.webp" },
+  { label: "IBM", path: "/logos/ibm.webp" },
+  { label: "Blockvizo", path: "/logos/blockvizo.svg" },
+  { label: "DNCC", path: "/logos/dncc.webp" },
+]
+
+const SUGGESTED_SKILLS = [
+  "Artificial Intelligence",
+  "Machine Learning",
+  "Deep Learning",
+  "MLOps",
+  "Teaching",
+  "Mentorship",
+  "Programming Fundamentals",
+  "Software Development",
+  "Debugging",
+  "Data Analysis",
+  "Team Leadership",
+  "Communication",
+  "Problem Solving",
+]
+
 export default function AdminExperiencePage() {
   const [experiences, setExperiences] = useState<AdminExperience[]>([])
   const [loading, setLoading] = useState(true)
   const [modalOpen, setModalOpen] = useState(false)
   const [editingExp, setEditingExp] = useState<AdminExperience | null>(null)
   const [isCurrent, setIsCurrent] = useState(false)
+  const [newSkill, setNewSkill] = useState("")
   const [deleteTarget, setDeleteTarget] = useState<AdminExperience | null>(null)
   const [isSaving, setIsSaving] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
@@ -62,7 +102,7 @@ export default function AdminExperiencePage() {
     const newExp: AdminExperience = {
       id: `exp-${Date.now()}`,
       companyName: "",
-      companyLogo: "/logos/company.webp",
+      companyLogo: "/logos/custompedia.webp",
       companyWebsite: "",
       positions: [
         {
@@ -73,8 +113,9 @@ export default function AdminExperiencePage() {
             end: undefined,
           },
           employmentType: "Full-time",
+          icon: "astroid",
           description: "",
-          skills: ["Machine Learning", "Python"],
+          skills: ["Artificial Intelligence", "Machine Learning"],
         },
       ],
       isCurrentEmployer: true,
@@ -82,6 +123,7 @@ export default function AdminExperiencePage() {
     }
     setEditingExp(newExp)
     setIsCurrent(true)
+    setNewSkill("")
     setErrors({})
     setModalOpen(true)
   }
@@ -89,6 +131,7 @@ export default function AdminExperiencePage() {
   const openEditModal = (exp: AdminExperience) => {
     setEditingExp(JSON.parse(JSON.stringify(exp)))
     setIsCurrent(exp.isCurrentEmployer ?? !exp.positions[0]?.employmentPeriod?.end)
+    setNewSkill("")
     setErrors({})
     setModalOpen(true)
   }
@@ -110,6 +153,38 @@ export default function AdminExperiencePage() {
     success("Experience reordered.")
   }
 
+  const handleAddSkill = (skillToAdd?: string) => {
+    if (!editingExp) return
+    const tag = (skillToAdd || newSkill).trim()
+    if (!tag) return
+
+    const positions = [...editingExp.positions]
+    const currentSkills = positions[0]?.skills || []
+
+    if (!currentSkills.includes(tag)) {
+      positions[0] = {
+        ...positions[0],
+        skills: [...currentSkills, tag],
+      }
+      setEditingExp({ ...editingExp, positions })
+    }
+    if (!skillToAdd) {
+      setNewSkill("")
+    }
+  }
+
+  const handleRemoveSkill = (skillToRemove: string) => {
+    if (!editingExp) return
+    const positions = [...editingExp.positions]
+    const currentSkills = positions[0]?.skills || []
+
+    positions[0] = {
+      ...positions[0],
+      skills: currentSkills.filter((s) => s !== skillToRemove),
+    }
+    setEditingExp({ ...editingExp, positions })
+  }
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!editingExp) return
@@ -126,10 +201,14 @@ export default function AdminExperiencePage() {
     setIsSaving(true)
     const payload: AdminExperience = {
       ...editingExp,
+      companyWebsite: editingExp.companyWebsite?.trim() || "",
+      companyLogo: editingExp.companyLogo?.trim() || undefined,
       isCurrentEmployer: isCurrent,
       positions: [
         {
           ...pos,
+          icon: pos.icon || "briefcase",
+          skills: pos.skills || [],
           employmentPeriod: {
             start: pos.employmentPeriod.start,
             end: isCurrent ? undefined : pos.employmentPeriod.end,
@@ -177,7 +256,7 @@ export default function AdminExperiencePage() {
     <div className="space-y-6">
       <AdminHeader
         title="Experience Management"
-        subtitle="Manage professional background, roles, achievements, and employment timeline."
+        subtitle="Manage professional background, roles, achievements, skills, logos, and employment timeline."
         actions={
           <Button size="sm" onClick={openCreateModal} className="gap-1.5">
             <PlusIcon className="size-3.5" /> Add Experience
@@ -205,15 +284,50 @@ export default function AdminExperiencePage() {
                   key={exp.id}
                   className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 sm:p-5 hover:bg-muted/30 transition-colors"
                 >
-                  <div className="flex items-start gap-3.5">
-                    <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-border bg-muted/50 text-foreground font-bold text-xs">
-                      {exp.companyName.charAt(0)}
+                  <div className="flex items-start gap-3.5 min-w-0">
+                    {/* Company Logo or Initial */}
+                    <div className="relative size-10 shrink-0 overflow-hidden rounded-full border border-border bg-muted flex items-center justify-center">
+                      {exp.companyLogo ? (
+                        <img
+                          src={exp.companyLogo}
+                          alt={exp.companyName}
+                          className="size-full object-cover"
+                          onError={(e) => {
+                            // Fallback on broken image
+                            ;(e.currentTarget as HTMLElement).style.display = "none"
+                          }}
+                        />
+                      ) : (
+                        <span className="text-xs font-bold text-muted-foreground uppercase">
+                          {exp.companyName.charAt(0) || "E"}
+                        </span>
+                      )}
                     </div>
-                    <div className="space-y-1">
+
+                    {/* Role Icon */}
+                    <div
+                      className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground border border-muted-foreground/15 ring-1 ring-line ring-offset-1 ring-offset-background [&_svg]:size-4.5 [&_svg]:shrink-0"
+                      title={`Icon: ${pos?.icon || "briefcase"}`}
+                    >
+                      <IconRegistry name={pos?.icon} />
+                    </div>
+
+                    <div className="space-y-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
                         <span className="text-sm font-semibold text-foreground">
                           {exp.companyName}
                         </span>
+                        {exp.companyWebsite && (
+                          <a
+                            href={exp.companyWebsite}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-muted-foreground hover:text-primary transition-colors"
+                            title={exp.companyWebsite}
+                          >
+                            <GlobeIcon className="size-3" />
+                          </a>
+                        )}
                         {exp.isCurrentEmployer && (
                           <span className="rounded bg-emerald-500/10 px-1.5 py-0.5 text-[0.625rem] font-medium text-emerald-600 dark:text-emerald-400">
                             Current Role
@@ -221,6 +335,7 @@ export default function AdminExperiencePage() {
                         )}
                         <Tag className="text-[0.625rem]">{pos?.employmentType || "Full-time"}</Tag>
                       </div>
+
                       <div className="text-xs text-muted-foreground">
                         <span className="font-medium text-foreground">{pos?.title}</span> •{" "}
                         <span>
@@ -230,10 +345,24 @@ export default function AdminExperiencePage() {
                             : pos?.employmentPeriod?.end}
                         </span>
                       </div>
+
+                      {/* Skills Badges Preview */}
+                      {Array.isArray(pos?.skills) && pos.skills.length > 0 && (
+                        <div className="flex flex-wrap gap-1 pt-1">
+                          {pos.skills.map((skill, sIdx) => (
+                            <span
+                              key={sIdx}
+                              className="rounded bg-muted/60 px-1.5 py-0.5 font-mono text-[0.6875rem] text-muted-foreground border border-border/50"
+                            >
+                              {skill}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-1.5 self-end sm:self-auto">
+                  <div className="flex items-center gap-1.5 self-end sm:self-auto shrink-0">
                     {/* Reorder Buttons */}
                     <Button
                       variant="ghost"
@@ -302,7 +431,7 @@ export default function AdminExperiencePage() {
             </>
           }
         >
-          <form onSubmit={handleSave} className="space-y-4 max-h-[70vh] overflow-y-auto pr-1">
+          <form onSubmit={handleSave} className="space-y-4 max-h-[72vh] overflow-y-auto pr-1">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <FormField label="Company / Organization" required error={errors.companyName}>
                 <FormInput
@@ -315,7 +444,7 @@ export default function AdminExperiencePage() {
                 />
               </FormField>
 
-              <FormField label="Role / Position" required error={errors.title}>
+              <FormField label="Role / Position Title" required error={errors.title}>
                 <FormInput
                   value={editingExp.positions[0]?.title || ""}
                   onChange={(e) => {
@@ -327,6 +456,116 @@ export default function AdminExperiencePage() {
                   error={errors.title}
                 />
               </FormField>
+            </div>
+
+            {/* Company Logo & Image Section (Same as Profile Photo pattern) */}
+            <div className="rounded-lg border border-border/80 bg-muted/20 p-3 dark:border-line space-y-3">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-semibold text-foreground flex items-center gap-1.5">
+                  <ImageIcon className="size-3.5 text-primary" /> Company Logo / Image (Optional)
+                </label>
+                <span className="text-[11px] text-muted-foreground">
+                  Displays on homepage next to title
+                </span>
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                <div className="relative size-12 shrink-0 overflow-hidden rounded-full border-2 border-border bg-muted flex items-center justify-center">
+                  {editingExp.companyLogo ? (
+                    <img
+                      src={editingExp.companyLogo}
+                      alt={editingExp.companyName || "Logo preview"}
+                      className="size-full object-cover"
+                      onError={(e) => {
+                        ;(e.currentTarget as HTMLElement).style.display = "none"
+                      }}
+                    />
+                  ) : (
+                    <Building2Icon className="size-6 text-muted-foreground" />
+                  )}
+                </div>
+
+                <div className="flex-1 w-full space-y-2">
+                  <FormInput
+                    value={editingExp.companyLogo || ""}
+                    onChange={(e) =>
+                      setEditingExp({ ...editingExp, companyLogo: e.target.value })
+                    }
+                    placeholder="/logos/custompedia.webp or https://example.com/logo.png"
+                  />
+
+                  {/* Preset Quick Logos */}
+                  <div className="flex flex-wrap items-center gap-1 pt-1">
+                    <span className="text-[0.625rem] text-muted-foreground mr-1">Presets:</span>
+                    {PRESET_LOGOS.map((preset) => {
+                      const isCurrentLogo = editingExp.companyLogo === preset.path
+                      return (
+                        <button
+                          key={preset.path}
+                          type="button"
+                          onClick={() => setEditingExp({ ...editingExp, companyLogo: preset.path })}
+                          className={`rounded px-1.5 py-0.5 text-[0.625rem] font-mono transition-colors ${
+                            isCurrentLogo
+                              ? "bg-primary text-primary-foreground font-semibold"
+                              : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground"
+                          }`}
+                        >
+                          {preset.label}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Role Icon Selector */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-semibold text-foreground">
+                  Role Icon <span className="text-muted-foreground font-normal">(displayed next to role)</span>
+                </label>
+                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                  <span>Selected:</span>
+                  <div className="flex size-5 items-center justify-center rounded bg-muted text-foreground border border-border [&_svg]:size-3.5">
+                    <IconRegistry name={editingExp.positions[0]?.icon || "briefcase"} />
+                  </div>
+                  <span className="font-mono text-[11px] text-foreground font-medium">
+                    {editingExp.positions[0]?.icon || "briefcase"}
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {ROLE_ICONS.map((iconItem) => {
+                  const isSelected =
+                    (editingExp.positions[0]?.icon || "briefcase").toLowerCase() === iconItem.id.toLowerCase()
+
+                  return (
+                    <button
+                      key={iconItem.id}
+                      type="button"
+                      onClick={() => {
+                        const positions = [...editingExp.positions]
+                        positions[0] = { ...positions[0], icon: iconItem.id }
+                        setEditingExp({ ...editingExp, positions })
+                      }}
+                      className={`flex items-center gap-2 rounded-lg border p-2 text-left transition-colors ${
+                        isSelected
+                          ? "border-primary bg-primary/10 text-primary font-medium ring-1 ring-primary"
+                          : "border-border/70 bg-card hover:bg-muted/60 text-foreground"
+                      }`}
+                    >
+                      <div className="flex size-6 shrink-0 items-center justify-center rounded bg-muted text-muted-foreground [&_svg]:size-3.5">
+                        <IconRegistry name={iconItem.id} />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-xs font-medium truncate">{iconItem.label}</div>
+                      </div>
+                    </button>
+                  )
+                })}
+              </div>
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -350,7 +589,10 @@ export default function AdminExperiencePage() {
                 />
               </FormField>
 
-              <FormField label="Company Website (Optional)">
+              <FormField
+                label="Company Website (Optional)"
+                description="If provided, clicking the title on the homepage opens this URL"
+              >
                 <FormInput
                   value={editingExp.companyWebsite || ""}
                   onChange={(e) =>
@@ -412,6 +654,86 @@ export default function AdminExperiencePage() {
               </div>
             </div>
 
+            {/* Skills & Competency Badges Manager */}
+            <div className="space-y-2 rounded-lg border border-border/80 bg-muted/20 p-3 dark:border-line">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-semibold text-foreground">
+                  Skills & Competency Badges <span className="text-muted-foreground font-normal">(displays under role on homepage)</span>
+                </label>
+                <span className="text-[11px] text-muted-foreground">
+                  {(editingExp.positions[0]?.skills || []).length} badge(s)
+                </span>
+              </div>
+
+              {/* Tag Input */}
+              <div className="flex items-center gap-2">
+                <FormInput
+                  value={newSkill}
+                  onChange={(e) => setNewSkill(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault()
+                      handleAddSkill()
+                    }
+                  }}
+                  placeholder="Type skill tag (e.g. Artificial Intelligence, Mentorship) & press Enter..."
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleAddSkill()}
+                  className="gap-1 shrink-0"
+                >
+                  <PlusIcon className="size-3.5" /> Add
+                </Button>
+              </div>
+
+              {/* Active Badges List */}
+              <div className="flex flex-wrap gap-1.5 pt-1 min-h-6">
+                {(editingExp.positions[0]?.skills || []).map((skill, sIdx) => (
+                  <Tag key={sIdx} className="flex items-center gap-1.5 py-1 px-2.5 text-xs font-mono">
+                    <span>{skill}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveSkill(skill)}
+                      className="text-muted-foreground hover:text-foreground ml-0.5"
+                      aria-label={`Remove ${skill}`}
+                    >
+                      <XIcon className="size-3" />
+                    </button>
+                  </Tag>
+                ))}
+              </div>
+
+              {/* Quick Suggestions Chips */}
+              <div className="pt-2 border-t border-border/40">
+                <div className="text-[0.6875rem] font-medium text-muted-foreground mb-1.5">
+                  Quick Add Suggestions:
+                </div>
+                <div className="flex flex-wrap gap-1">
+                  {SUGGESTED_SKILLS.map((suggestion) => {
+                    const isAlreadyAdded = (editingExp.positions[0]?.skills || []).includes(suggestion)
+                    return (
+                      <button
+                        key={suggestion}
+                        type="button"
+                        onClick={() => handleAddSkill(suggestion)}
+                        disabled={isAlreadyAdded}
+                        className={`rounded-md px-2 py-0.5 text-[0.6875rem] font-mono transition-colors ${
+                          isAlreadyAdded
+                            ? "bg-muted/40 text-muted-foreground/50 cursor-not-allowed"
+                            : "bg-muted text-muted-foreground hover:bg-muted/90 hover:text-foreground"
+                        }`}
+                      >
+                        + {suggestion}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
+
             <FormField
               label="Responsibilities & Achievements (Markdown)"
               description="Use bullet points and bold text to highlight key contributions"
@@ -445,3 +767,4 @@ export default function AdminExperiencePage() {
     </div>
   )
 }
+

@@ -1,7 +1,7 @@
 "use client"
 
 // ponytail: admin top header with fast GitHub publish trigger and sync indicator
-import { CheckCircle2Icon, GitCommitIcon, Loader2Icon, SparklesIcon } from "lucide-react"
+import { GitCommitIcon, Loader2Icon, SparklesIcon } from "lucide-react"
 import React, { useState } from "react"
 
 import { Button } from "@/components/ui/button"

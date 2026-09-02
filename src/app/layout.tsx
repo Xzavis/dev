@@ -195,13 +195,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* No preconnect/dns-prefetch here on purpose: the GitHub contributions
-            API is only ever called server-side (see data/github-contributions),
-            and cdn.simpleicons.org is gone since all icons are inline SVG. The
-            browser never opens a connection to either, so hinting them just
-            wasted a connection slot and tripped Lighthouse's unused-preconnect
-            audit. */}
-        <script dangerouslySetInnerHTML={{ __html: themeColorBootstrap }} />
+        {/* No preconnect/dns-prefetch needed: icons are inline SVG and API calls are server-side */}
+        <script
+          id="theme-color-bootstrap"
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{ __html: themeColorBootstrap }}
+        />
         <link
           rel="preload"
           href="/fonts/geist-sans-latin.woff2"

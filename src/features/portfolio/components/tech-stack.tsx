@@ -13,7 +13,7 @@ export const STACK_CATEGORIES = [
   "DevOps / Cloud",
 ]
 
-export function TechStack({ skills = defaultSkills }: { skills?: TechStackType[] } = {}) {
+export function TechStack({ skills = defaultSkills as unknown as TechStackType[] }: { skills?: TechStackType[] } = {}) {
   const { t } = useTranslation()
   const grouped = groupByCategory(skills)
 
@@ -46,21 +46,25 @@ export function TechStack({ skills = defaultSkills }: { skills?: TechStackType[]
               </div>
 
               <ul className="flex flex-wrap gap-1.5 px-4">
-                {items.map((tech) => (
-                  <li key={tech.key} className="flex">
-                    <a
-                      href={tech.href}
-                      target="_blank"
-                      rel="noopener"
-                      className="flex h-(--badge-height) items-center justify-center gap-1.5 rounded-lg bg-muted/60 px-1.75 font-mono text-xs text-foreground inset-ring-1 inset-ring-border transition-colors hover:bg-muted/90 [&_svg]:pointer-events-none [&_svg]:size-3.5 [&_svg]:shrink-0 [&_svg]:text-muted-foreground/80"
-                    >
-                      <svg viewBox="0 0 24 24" aria-hidden>
-                        <use href={`/icons/tech-stack-v1.svg#${tech.iconId}`} />
-                      </svg>
-                      {tech.title}
-                    </a>
-                  </li>
-                ))}
+                {items.map((tech) => {
+                  return (
+                    <li key={tech.key} className="flex">
+                      <a
+                        href={tech.href}
+                        target="_blank"
+                        rel="noopener"
+                        className="flex h-(--badge-height) items-center justify-center gap-1.5 rounded-lg bg-muted/60 px-1.75 font-mono text-xs text-foreground inset-ring-1 inset-ring-border transition-colors hover:bg-muted/90 [&_svg]:pointer-events-none [&_svg]:size-3.5 [&_svg]:shrink-0 [&_svg]:text-muted-foreground/80"
+                      >
+                        {tech.iconId ? (
+                          <svg viewBox="0 0 24 24" aria-hidden>
+                            <use href={`/icons/tech-stack-v1.svg?v=2#${tech.iconId}`} />
+                          </svg>
+                        ) : null}
+                        {tech.title}
+                      </a>
+                    </li>
+                  )
+                })}
               </ul>
             </div>
           )

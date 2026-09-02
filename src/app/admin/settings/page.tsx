@@ -7,9 +7,7 @@ import {
   GlobeIcon,
   SaveIcon,
   SearchIcon,
-  SettingsIcon,
   ShieldCheckIcon,
-  SparklesIcon,
 } from "lucide-react"
 import React, { useEffect, useState } from "react"
 

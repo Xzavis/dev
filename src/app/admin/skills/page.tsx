@@ -1,37 +1,46 @@
 "use client"
 
-// ponytail: compact skills management with inline addition, category filtering and level badges
+// ponytail: compact skills management with TechnologyPicker, category filtering and level badges
 import {
   ArrowDownIcon,
   ArrowUpIcon,
-  CpuIcon,
   EditIcon,
   PlusIcon,
   SaveIcon,
-  StarIcon,
   Trash2Icon,
 } from "lucide-react"
 import React, { useEffect, useMemo, useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Tag } from "@/components/ui/tag"
-import { deleteSkillAction, fetchSkillsAction, saveSkillAction } from "@/features/admin/actions/content-actions"
+import {
+  normalizeTechName,
+} from "@/config/technology-catalog"
+import {
+  deleteSkillAction,
+  fetchSkillsAction,
+  reorderSkillsAction,
+  saveSkillAction,
+} from "@/features/admin/actions/content-actions"
 import { AdminAlertDialog, AdminDialog } from "@/features/admin/components/admin-dialog"
-import { FormField, FormInput, FormSelect, FormSwitch } from "@/features/admin/components/admin-form-elements"
+import {
+  FormField,
+  FormSelect,
+  FormSwitch,
+} from "@/features/admin/components/admin-form-elements"
 import { AdminHeader } from "@/features/admin/components/admin-header"
 import { useToast } from "@/features/admin/components/admin-toast"
+import { TechnologyPicker } from "@/features/admin/components/technology-picker"
 import type { AdminSkill } from "@/features/admin/types/admin"
 
 const CATEGORIES: AdminSkill["category"][] = [
-  "AI",
-  "Machine Learning",
-  "Deep Learning",
-  "MLOps",
-  "Backend",
+  "AI / ML",
   "Frontend",
-  "Data",
-  "Tools",
-  "Other",
+  "Backend",
+  "Database",
+  "DevOps / Cloud",
+  "Testing",
+  "Design / UI",
 ]
 
 const LEVELS: AdminSkill["level"][] = ["Beginner", "Intermediate", "Advanced", "Expert"]
@@ -68,8 +77,9 @@ export default function AdminSkillsPage() {
     const newSkill: AdminSkill = {
       id: `skill-${Date.now()}`,
       name: "",
-      category: "AI",
+      category: "AI / ML",
       level: "Advanced",
+      type: "technology",
       icon: "",
       featured: true,
       displayOrder: skills.length + 1,
@@ -83,26 +93,72 @@ export default function AdminSkillsPage() {
     setModalOpen(true)
   }
 
-  const handleMove = (index: number, direction: "up" | "down") => {
+  const handleMove = async (index: number, direction: "up" | "down") => {
     const targetIndex = direction === "up" ? index - 1 : index + 1
-    if (targetIndex < 0 || targetIndex >= skills.length) return
+    if (targetIndex < 0 || targetIndex >= filteredSkills.length) return
 
+    const currentItem = filteredSkills[index]
+    const targetItem = filteredSkills[targetIndex]
+    if (!currentItem || !targetItem) return
+
+    const originalIdx = skills.findIndex((s) => s.id === currentItem.id)
+    const targetOriginalIdx = skills.findIndex((s) => s.id === targetItem.id)
+    if (originalIdx < 0 || targetOriginalIdx < 0) return
+
+    const backup = [...skills]
     const updated = [...skills]
-    const temp = updated[index]
-    updated[index] = updated[targetIndex]
-    updated[targetIndex] = temp
+    const temp = updated[originalIdx]
+    updated[originalIdx] = updated[targetOriginalIdx]
+    updated[targetOriginalIdx] = temp
 
     updated.forEach((s, idx) => {
       s.displayOrder = idx + 1
     })
 
+    // Optimistic UI update
     setSkills(updated)
-    success("Skill reordered.")
+
+    try {
+      const res = await reorderSkillsAction(updated)
+      if (res.success) {
+        if (res.data) {
+          setSkills(res.data)
+        }
+        success(res.message || "Skill reordered.")
+      } else {
+        // Rollback on persistence failure
+        setSkills(backup)
+        error(res.message || "Failed to save skill reordering.")
+      }
+    } catch {
+      setSkills(backup)
+      error("Failed to save skill reordering.")
+    }
   }
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!editingSkill || !editingSkill.name.trim()) return
+    if (!editingSkill || !editingSkill.name.trim()) {
+      error("Technology name is required.")
+      return
+    }
+
+    if (!editingSkill.type) {
+      error("Technology type is required. Please select from the catalog.")
+      return
+    }
+
+    // Client-side duplicate check
+    const isDuplicate = skills.some(
+      (s) =>
+        normalizeTechName(s.name) === normalizeTechName(editingSkill.name) &&
+        s.id !== editingSkill.id
+    )
+
+    if (isDuplicate) {
+      error(`Technology "${editingSkill.name}" already exists in your skills list.`)
+      return
+    }
 
     setIsSaving(true)
     try {
@@ -197,75 +253,90 @@ export default function AdminSkillsPage() {
           </div>
         ) : (
           <div className="divide-y divide-border/60 dark:divide-line">
-            {filteredSkills.map((skill, idx) => (
-              <div
-                key={skill.id}
-                className="flex items-center justify-between gap-3 p-3 sm:px-5 hover:bg-muted/30 transition-colors"
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className="flex size-7 shrink-0 items-center justify-center rounded-md bg-muted text-muted-foreground text-xs font-mono font-bold">
-                    {skill.name.charAt(0)}
-                  </div>
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 min-w-0">
-                    <span className="text-sm font-semibold text-foreground truncate">
-                      {skill.name}
-                    </span>
-                    <div className="flex items-center gap-1.5">
-                      <Tag className="text-[0.625rem]">{skill.category}</Tag>
-                      <span
-                        className={`rounded px-1.5 py-0.5 text-[0.625rem] font-medium ${
-                          skill.level === "Expert"
-                            ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                            : skill.level === "Advanced"
-                            ? "bg-sky-500/10 text-sky-600 dark:text-sky-400"
-                            : "bg-muted text-muted-foreground"
-                        }`}
-                      >
-                        {skill.level}
+            {filteredSkills.map((skill, idx) => {
+              return (
+                <div
+                  key={skill.id}
+                  className="flex items-center justify-between gap-3 p-3 sm:px-5 hover:bg-muted/30 transition-colors"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="flex size-7 shrink-0 items-center justify-center rounded-md bg-muted text-muted-foreground">
+                      {skill.icon ? (
+                        <svg className="size-4 fill-current text-foreground" viewBox="0 0 24 24" aria-hidden>
+                          <use href={`/icons/tech-stack-v1.svg?v=2#${skill.icon}`} />
+                        </svg>
+                      ) : (
+                        <span className="text-[10px] font-bold text-destructive uppercase">
+                          !?
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 min-w-0">
+                      <span className="text-sm font-semibold text-foreground truncate">
+                        {skill.name}
                       </span>
+                      <div className="flex items-center gap-1.5">
+                        <Tag className="text-[0.625rem]">{skill.category}</Tag>
+                        <span
+                          className={`rounded px-1.5 py-0.5 text-[0.625rem] font-medium ${
+                            skill.level === "Expert"
+                              ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                              : skill.level === "Advanced"
+                              ? "bg-sky-500/10 text-sky-600 dark:text-sky-400"
+                              : "bg-muted text-muted-foreground"
+                          }`}
+                        >
+                          {skill.level}
+                        </span>
+                        {skill.isFlaggedForReview && (
+                          <span className="rounded bg-destructive/10 px-1.5 py-0.5 text-[0.625rem] font-medium text-destructive">
+                            Review Needed
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="flex items-center gap-1 shrink-0">
-                  <Button
-                    variant="ghost"
-                    size="icon-xs"
-                    disabled={idx === 0}
-                    onClick={() => handleMove(idx, "up")}
-                    aria-label="Move up"
-                  >
-                    <ArrowUpIcon className="size-3" />
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon-xs"
-                    disabled={idx === filteredSkills.length - 1}
-                    onClick={() => handleMove(idx, "down")}
-                    aria-label="Move down"
-                  >
-                    <ArrowDownIcon className="size-3" />
-                  </Button>
+                  <div className="flex items-center gap-1 shrink-0">
+                    <Button
+                      variant="ghost"
+                      size="icon-xs"
+                      disabled={idx === 0}
+                      onClick={() => handleMove(idx, "up")}
+                      aria-label="Move up"
+                    >
+                      <ArrowUpIcon className="size-3" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon-xs"
+                      disabled={idx === filteredSkills.length - 1}
+                      onClick={() => handleMove(idx, "down")}
+                      aria-label="Move down"
+                    >
+                      <ArrowDownIcon className="size-3" />
+                    </Button>
 
-                  <Button
-                    variant="outline"
-                    size="icon-xs"
-                    onClick={() => openEditModal(skill)}
-                    aria-label="Edit skill"
-                  >
-                    <EditIcon className="size-3" />
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    size="icon-xs"
-                    onClick={() => setDeleteTarget(skill)}
-                    aria-label="Delete skill"
-                  >
-                    <Trash2Icon className="size-3" />
-                  </Button>
+                    <Button
+                      variant="outline"
+                      size="icon-xs"
+                      onClick={() => openEditModal(skill)}
+                      aria-label="Edit skill"
+                    >
+                      <EditIcon className="size-3" />
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      size="icon-xs"
+                      onClick={() => setDeleteTarget(skill)}
+                      aria-label="Delete skill"
+                    >
+                      <Trash2Icon className="size-3" />
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         )}
       </div>
@@ -295,11 +366,24 @@ export default function AdminSkillsPage() {
           }
         >
           <form onSubmit={handleSave} className="space-y-4">
-            <FormField label="Skill / Technology Name" required>
-              <FormInput
+            <FormField label="Technology / Skill" required description="Search from the curated catalog.">
+              <TechnologyPicker
                 value={editingSkill.name}
-                onChange={(e) => setEditingSkill({ ...editingSkill, name: e.target.value })}
-                placeholder="PyTorch"
+                onChange={(name) =>
+                  setEditingSkill({
+                    ...editingSkill,
+                    name,
+                  })
+                }
+                onSelectCatalog={(item) =>
+                  setEditingSkill({
+                    ...editingSkill,
+                    name: item.name,
+                    category: item.adminCategory,
+                    type: item.type,
+                    icon: item.iconId,
+                  })
+                }
                 autoFocus
               />
             </FormField>
@@ -356,3 +440,4 @@ export default function AdminSkillsPage() {
     </div>
   )
 }
+

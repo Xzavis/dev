@@ -2,11 +2,7 @@
 
 // ponytail: projects list view with fast client-side filtering, mobile card stack and delete dialog
 import {
-  ArrowUpDownIcon,
   EditIcon,
-  ExternalLinkIcon,
-  FilterIcon,
-  MoreVerticalIcon,
   PlusIcon,
   SearchIcon,
   StarIcon,
@@ -22,7 +18,7 @@ import { AdminAlertDialog } from "@/features/admin/components/admin-dialog"
 import { FormInput } from "@/features/admin/components/admin-form-elements"
 import { AdminHeader } from "@/features/admin/components/admin-header"
 import { useToast } from "@/features/admin/components/admin-toast"
-import type { AdminProject, ContentStatus } from "@/features/admin/types/admin"
+import type { AdminProject } from "@/features/admin/types/admin"
 
 export default function AdminProjectsPage() {
   const [projects, setProjects] = useState<AdminProject[]>([])
@@ -30,7 +26,7 @@ export default function AdminProjectsPage() {
   const [search, setSearch] = useState("")
   const [statusFilter, setStatusFilter] = useState<string>("all")
   const [featuredOnly, setFeaturedOnly] = useState(false)
-  const [sortBy, setSortBy] = useState<"order" | "title" | "date">("order")
+  const [sortBy] = useState<"order" | "title" | "date">("order")
   const [projectToDelete, setProjectToDelete] = useState<AdminProject | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
   const { success, error } = useToast()

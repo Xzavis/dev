@@ -6,16 +6,8 @@
     "iconId": "python",
     "categories": [
       "AI / ML"
-    ]
-  },
-  {
-    "key": "tensorflow",
-    "title": "TensorFlow",
-    "href": "https://www.tensorflow.org/",
-    "iconId": "tensorflow",
-    "categories": [
-      "AI / ML"
-    ]
+    ],
+    "type": "technology"
   },
   {
     "key": "pytorch",
@@ -24,7 +16,8 @@
     "iconId": "pytorch",
     "categories": [
       "AI / ML"
-    ]
+    ],
+    "type": "technology"
   },
   {
     "key": "keras",
@@ -33,7 +26,8 @@
     "iconId": "keras",
     "categories": [
       "AI / ML"
-    ]
+    ],
+    "type": "technology"
   },
   {
     "key": "scikitlearn",
@@ -42,7 +36,8 @@
     "iconId": "scikitlearn",
     "categories": [
       "AI / ML"
-    ]
+    ],
+    "type": "technology"
   },
   {
     "key": "opencv",
@@ -51,7 +46,8 @@
     "iconId": "opencv",
     "categories": [
       "AI / ML"
-    ]
+    ],
+    "type": "technology"
   },
   {
     "key": "pandas",
@@ -60,7 +56,8 @@
     "iconId": "pandas",
     "categories": [
       "AI / ML"
-    ]
+    ],
+    "type": "technology"
   },
   {
     "key": "numpy",
@@ -69,16 +66,18 @@
     "iconId": "numpy",
     "categories": [
       "AI / ML"
-    ]
+    ],
+    "type": "technology"
   },
   {
-    "key": "plotly",
+    "key": "matplotlib",
     "title": "Matplotlib",
     "href": "https://matplotlib.org/",
     "iconId": "plotly",
     "categories": [
       "AI / ML"
-    ]
+    ],
+    "type": "technology"
   },
   {
     "key": "mlflow",
@@ -87,7 +86,8 @@
     "iconId": "mlflow",
     "categories": [
       "AI / ML"
-    ]
+    ],
+    "type": "technology"
   },
   {
     "key": "streamlit",
@@ -96,7 +96,8 @@
     "iconId": "streamlit",
     "categories": [
       "AI / ML"
-    ]
+    ],
+    "type": "technology"
   },
   {
     "key": "huggingface",
@@ -105,7 +106,8 @@
     "iconId": "huggingface",
     "categories": [
       "AI / ML"
-    ]
+    ],
+    "type": "technology"
   },
   {
     "key": "langchain",
@@ -114,43 +116,48 @@
     "iconId": "langchain",
     "categories": [
       "AI / ML"
-    ]
+    ],
+    "type": "technology"
   },
   {
-    "key": "claude",
+    "key": "anthropic",
     "title": "Claude",
     "href": "https://claude.ai/",
-    "iconId": "claude",
+    "iconId": "anthropic",
     "categories": [
       "AI / ML"
-    ]
+    ],
+    "type": "technology"
   },
   {
-    "key": "chatgpt",
+    "key": "openai",
     "title": "ChatGPT",
     "href": "https://chatgpt.com/",
-    "iconId": "chatgpt",
+    "iconId": "openaigym",
     "categories": [
       "AI / ML"
-    ]
+    ],
+    "type": "technology"
   },
   {
-    "key": "gemini",
+    "key": "google",
     "title": "Gemini",
-    "href": "https://gemini.google.com/",
-    "iconId": "gemini",
+    "href": "https://www.google.com/search?q=Gemini",
+    "iconId": "google",
     "categories": [
       "AI / ML"
-    ]
+    ],
+    "type": "technology"
   },
   {
-    "key": "js",
+    "key": "javascript",
     "title": "JavaScript",
     "href": "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
-    "iconId": "js",
+    "iconId": "javascript",
     "categories": [
       "Frontend"
-    ]
+    ],
+    "type": "technology"
   },
   {
     "key": "typescript",
@@ -159,7 +166,8 @@
     "iconId": "typescript",
     "categories": [
       "Frontend"
-    ]
+    ],
+    "type": "technology"
   },
   {
     "key": "react",
@@ -168,16 +176,18 @@
     "iconId": "react",
     "categories": [
       "Frontend"
-    ]
+    ],
+    "type": "technology"
   },
   {
-    "key": "nextjs2",
+    "key": "nextdotjs",
     "title": "Next.js",
     "href": "https://nextjs.org/",
-    "iconId": "nextjs2",
+    "iconId": "nextdotjs",
     "categories": [
       "Frontend"
-    ]
+    ],
+    "type": "technology"
   },
   {
     "key": "tailwindcss",
@@ -186,16 +196,18 @@
     "iconId": "tailwindcss",
     "categories": [
       "Frontend"
-    ]
+    ],
+    "type": "technology"
   },
   {
-    "key": "nodejs",
+    "key": "nodedotjs",
     "title": "Node.js",
     "href": "https://nodejs.org/",
-    "iconId": "nodejs",
+    "iconId": "nodedotjs",
     "categories": [
       "Backend"
-    ]
+    ],
+    "type": "technology"
   },
   {
     "key": "bun",
@@ -204,7 +216,8 @@
     "iconId": "bun",
     "categories": [
       "Backend"
-    ]
+    ],
+    "type": "technology"
   },
   {
     "key": "mysql",
@@ -213,7 +226,8 @@
     "iconId": "mysql",
     "categories": [
       "Backend"
-    ]
+    ],
+    "type": "technology"
   },
   {
     "key": "cplusplus",
@@ -222,7 +236,8 @@
     "iconId": "cplusplus",
     "categories": [
       "Backend"
-    ]
+    ],
+    "type": "technology"
   },
   {
     "key": "fastapi",
@@ -231,7 +246,8 @@
     "iconId": "fastapi",
     "categories": [
       "Backend"
-    ]
+    ],
+    "type": "technology"
   },
   {
     "key": "postgresql",
@@ -240,7 +256,8 @@
     "iconId": "postgresql",
     "categories": [
       "Backend"
-    ]
+    ],
+    "type": "technology"
   },
   {
     "key": "docker",
@@ -249,7 +266,8 @@
     "iconId": "docker",
     "categories": [
       "DevOps / Cloud"
-    ]
+    ],
+    "type": "technology"
   },
   {
     "key": "microsoftazure",
@@ -258,7 +276,8 @@
     "iconId": "microsoftazure",
     "categories": [
       "DevOps / Cloud"
-    ]
+    ],
+    "type": "technology"
   },
   {
     "key": "github",
@@ -267,7 +286,8 @@
     "iconId": "github",
     "categories": [
       "DevOps / Cloud"
-    ]
+    ],
+    "type": "technology"
   },
   {
     "key": "prometheus",
@@ -276,7 +296,8 @@
     "iconId": "prometheus",
     "categories": [
       "DevOps / Cloud"
-    ]
+    ],
+    "type": "technology"
   },
   {
     "key": "grafana",
@@ -285,15 +306,27 @@
     "iconId": "grafana",
     "categories": [
       "DevOps / Cloud"
-    ]
+    ],
+    "type": "technology"
   },
   {
-    "key": "vscode",
+    "key": "vscodium",
     "title": "Visual Studio Code",
     "href": "https://code.visualstudio.com/",
-    "iconId": "vscode",
+    "iconId": "vscodium",
     "categories": [
       "DevOps / Cloud"
-    ]
+    ],
+    "type": "technology"
+  },
+  {
+    "key": "tensorflow",
+    "title": "TensorFlow",
+    "href": "https://www.google.com/search?q=TensorFlow",
+    "iconId": "tensorflow",
+    "categories": [
+      "AI / ML"
+    ],
+    "type": "technology"
   }
 ]

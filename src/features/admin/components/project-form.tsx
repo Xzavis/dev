@@ -2,7 +2,6 @@
 
 // ponytail: progressive disclosure project editor with tabbed sections, live preview and delete confirmation
 import {
-  ArchiveIcon,
   BookOpenIcon,
   CodeIcon,
   EyeIcon,

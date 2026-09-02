@@ -1,7 +1,7 @@
 "use client"
 
 // ponytail: mobile top bar + drawer navigation designed for single-hand use
-import { CheckCircle2Icon, ExternalLinkIcon, GitCommitIcon,MenuIcon } from "lucide-react"
+import { ExternalLinkIcon, MenuIcon } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import React, { useState } from "react"

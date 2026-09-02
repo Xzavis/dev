@@ -11,9 +11,12 @@
         "start": "07.2026"
       },
       "employmentType": "Internship",
-      "icon": "astroid",
+      "icon": "briefcase",
       "description": "Currently onboarding and collaborating with the team to develop and integrate AI/ML solutions.",
-      "descriptionId": "Saat ini sedang menjalani onboarding dan berkolaborasi dengan tim untuk mengembangkan dan mengintegrasikan solusi AI/ML."
+      "descriptionId": "Saat ini sedang menjalani onboarding dan berkolaborasi dengan tim untuk mengembangkan dan mengintegrasikan solusi AI/ML.",
+      "skills": [
+        "Artificial Intelligence"
+      ]
     }
   ],
   "isCurrentEmployer": true

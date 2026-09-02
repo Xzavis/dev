@@ -11,11 +11,13 @@ import {
   deleteSocialLinkData,
   getAdminExperiences,
   getAdminProfile,
+  getAdminProjectById,
   getAdminProjects,
   getAdminSettings,
   getAdminSkills,
   getAdminSocialLinks,
   getDashboardMetrics,
+  reorderSkillsData,
   saveExperienceData,
   saveProfileData,
   saveProjectData,
@@ -59,8 +61,7 @@ export async function fetchProjectsAction(): Promise<AdminProject[]> {
 }
 
 export async function fetchProjectByIdAction(id: string): Promise<AdminProject | null> {
-  const projects = getAdminProjects()
-  return projects.find((p) => p.id === id) || null
+  return getAdminProjectById(id)
 }
 
 export async function saveProjectAction(project: AdminProject): Promise<{ success: boolean; message: string }> {
@@ -111,9 +112,23 @@ export async function fetchSkillsAction(): Promise<AdminSkill[]> {
 
 export async function saveSkillAction(skill: AdminSkill): Promise<{ success: boolean; message: string }> {
   const res = await saveSkillData(skill)
-  revalidatePath("/admin")
-  revalidatePath("/admin/skills")
-  revalidatePath("/")
+  if (res.success) {
+    revalidatePath("/admin")
+    revalidatePath("/admin/skills")
+    revalidatePath("/")
+  }
+  return res
+}
+
+export async function reorderSkillsAction(
+  skills: AdminSkill[]
+): Promise<{ success: boolean; message: string; data?: AdminSkill[] }> {
+  const res = await reorderSkillsData(skills)
+  if (res.success) {
+    revalidatePath("/admin")
+    revalidatePath("/admin/skills")
+    revalidatePath("/")
+  }
   return res
 }
 

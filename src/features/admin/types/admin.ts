@@ -1,9 +1,8 @@
 // ponytail: minimal clean type definitions for admin dashboard content management
 
+import type { TechnologyCategory } from "@/config/technology-catalog"
 import type { Experience } from "@/features/portfolio/types/experiences"
 import type { Project } from "@/features/portfolio/types/projects"
-import type { SocialLink } from "@/features/portfolio/types/social-links"
-import type { TechStack } from "@/features/portfolio/types/tech-stack"
 import type { User } from "@/features/portfolio/types/user"
 
 export type ContentStatus = "draft" | "published" | "archived"
@@ -24,11 +23,13 @@ export interface AdminExperience extends Experience {
 export interface AdminSkill {
   id: string
   name: string
-  category: "AI" | "Machine Learning" | "Deep Learning" | "MLOps" | "Backend" | "Frontend" | "Data" | "Tools" | "Other"
+  type: "technology"
+  category: TechnologyCategory
   level: "Beginner" | "Intermediate" | "Advanced" | "Expert"
   icon?: string
   featured?: boolean
   displayOrder?: number
+  isFlaggedForReview?: boolean
 }
 
 export interface AdminSocialLink {

@@ -32,29 +32,29 @@ export interface Profile {
   firstName: string
   lastName: string
   username: string
-  gender: string
+  gender: "male" | "female" | "non-binary" | string
   pronouns: string
   bio: string
-  bioId: string
+  bioId?: string
   flipSentences: string[]
-  flipSentencesId: string[]
+  flipSentencesId?: string[]
   address: string
   email: string
-  phone: string
+  phone?: string
   website: string
   jobTitle: string
-  jobs?: {
+  jobs: {
     title: string
     company: string
     website: string
-    experienceId: string
+    experienceId?: string
   }[]
   about: string
-  aboutId: string
+  aboutId?: string
   avatar: string
-  sameAs: string[]
+  sameAs?: string[]
   timeZone: string
-  dateCreated: string
+  dateCreated?: string
   dateModified: string
 }
 
