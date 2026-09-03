@@ -3,6 +3,8 @@ import Image from "next/image"
 import { GalleryVideo } from "@/components/gallery-video"
 import { SectionSeparator } from "@/components/section-separator"
 import { SITE_INFO } from "@/config/site"
+import { getGalleryItems } from "@/lib/content"
+import type { GalleryItem } from "@/lib/content/types"
 import { createPageMetadata } from "@/lib/seo"
 import { cn } from "@/lib/utils"
 
@@ -24,41 +26,7 @@ export const metadata = createPageMetadata({
   keywords,
 })
 
-type GalleryItem = {
-  src: string
-  title: string
-  date: string
-  type?: "image" | "video"
-  aspect?: "square" | "wide"
-}
-
-const GALLERY_ITEMS: GalleryItem[] = [
-  {
-    src: "/image/basee.webp",
-    title: "Base Realms hackathon project showcase",
-    date: "2025",
-  },
-  {
-    src: "https://res.cloudinary.com/dujp9ydkx/video/upload/WhatsApp_Video_2026-05-11_at_13.12.10_pmvmgx",
-    title: "AI and software development journey video",
-    date: "2026",
-    type: "video",
-  },
-  {
-    src: "/image/picture1.webp",
-    title: "Technology event and project collaboration moment",
-    date: "2026",
-    aspect: "wide",
-  },
-  {
-    src: "/image/btng.webp",
-    title: "Behind-the-scenes software project work",
-    date: "2026",
-    aspect: "wide",
-  },
-]
-
-function getGalleryJsonLd() {
+function getGalleryJsonLd(items: GalleryItem[]) {
   return {
     "@context": "https://schema.org",
     "@type": "ImageGallery",
@@ -70,7 +38,7 @@ function getGalleryJsonLd() {
     isPartOf: {
       "@id": `${SITE_INFO.url}/#website`,
     },
-    associatedMedia: GALLERY_ITEMS.map((item) => ({
+    associatedMedia: items.map((item) => ({
       "@type": item.type === "video" ? "VideoObject" : "ImageObject",
       name: item.title,
       contentUrl: item.src.startsWith("http")
@@ -85,29 +53,39 @@ function getGalleryJsonLd() {
   }
 }
 
-export default function GalleryPage() {
+export default async function GalleryPage() {
+  const items = await getGalleryItems()
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(getGalleryJsonLd()).replace(/</g, "\\u003c"),
+          __html: JSON.stringify(getGalleryJsonLd(items)).replace(/</g, "\\u003c"),
         }}
       />
       <SectionSeparator />
       <div className="relative z-1 -mt-px border-x border-t border-line bg-background max-md:border-x-0">
-        <div className="grid grid-cols-1 gap-px border-b border-line bg-line sm:grid-cols-2">
-          {GALLERY_ITEMS.map((item, index) => (
-            <GalleryCard key={item.src} item={item} eager={index < 2} />
-          ))}
-          {GALLERY_ITEMS.length % 2 === 1 && (
-            <div className="hidden min-h-62.5 flex-col items-center justify-center bg-background p-6 select-none sm:flex">
-              <span className="font-handwritten text-3xl font-medium tracking-wider text-muted-foreground">
-                Still cooking
-              </span>
-            </div>
-          )}
-        </div>
+        {items.length === 0 ? (
+          <div className="flex min-h-60 flex-col items-center justify-center p-12 text-center select-none">
+            <span className="font-handwritten text-3xl font-medium tracking-wider text-muted-foreground">
+              Still cooking
+            </span>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-px border-b border-line bg-line sm:grid-cols-2">
+            {items.map((item, index) => (
+              <GalleryCard key={item.id || item.src} item={item} eager={index < 2} />
+            ))}
+            {items.length % 2 === 1 && (
+              <div className="hidden min-h-62.5 flex-col items-center justify-center bg-background p-6 select-none sm:flex">
+                <span className="font-handwritten text-3xl font-medium tracking-wider text-muted-foreground">
+                  Still cooking
+                </span>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Butts straight against the last row's rule, with no gap - that rule
             becomes the band's top edge and closes the box, which is what the

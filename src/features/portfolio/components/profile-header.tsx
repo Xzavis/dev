@@ -19,21 +19,38 @@ export function ProfileHeader({
 }) {
   const { l } = useTranslation()
 
+  const bannerSrc = profile.banner || "/banner.webp"
+  const isVideoBanner = /\.(webm|mp4|ogg)(\?.*)?$/i.test(bannerSrc)
+  const isGifBanner = /\.gif(\?.*)?$/i.test(bannerSrc)
+
   return (
     <header
       id="about"
       className="relative z-1 border border-line bg-card max-md:border-x-0"
     >
       <div className="relative h-36 overflow-hidden border-b border-line sm:h-44">
-        <Image
-          src={profile.banner || "/banner.webp"}
-          alt={`${profile.displayName} Profile Banner`}
-          fill
-          loading="eager"
-          fetchPriority="high"
-          sizes="(min-width: 768px) 720px, 100vw"
-          className="object-cover object-center"
-        />
+        {isVideoBanner ? (
+          <video
+            src={bannerSrc}
+            autoPlay
+            loop
+            muted
+            playsInline
+            aria-hidden="true"
+            className="size-full object-cover object-center"
+          />
+        ) : (
+          <Image
+            src={bannerSrc}
+            alt={`${profile.displayName} Profile Banner`}
+            fill
+            loading="eager"
+            fetchPriority="high"
+            unoptimized={isGifBanner}
+            sizes="(min-width: 768px) 720px, 100vw"
+            className="object-cover object-center"
+          />
+        )}
       </div>
 
       <div className="relative px-5 pb-5 sm:px-6 sm:pb-6">

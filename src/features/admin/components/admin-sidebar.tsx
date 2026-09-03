@@ -7,8 +7,10 @@ import {
   CpuIcon,
   ExternalLinkIcon,
   FolderGit2Icon,
+  ImageIcon,
   LayoutDashboardIcon,
   LogOutIcon,
+  NewspaperIcon,
   SettingsIcon,
   Share2Icon,
   TrophyIcon,
@@ -21,18 +23,50 @@ import { cn } from "@/lib/utils"
 
 import { useAdminAuth } from "./admin-auth-guard"
 
-export const ADMIN_NAV_ITEMS = [
-  { label: "Overview", href: "/admin", icon: LayoutDashboardIcon },
-  { label: "Profile", href: "/admin/profile", icon: UserIcon },
-  { label: "Projects", href: "/admin/projects", icon: FolderGit2Icon },
-  { label: "Experience", href: "/admin/experience", icon: BriefcaseIcon },
-  { label: "Awards", href: "/admin/awards", icon: TrophyIcon },
-  { label: "Certifications", href: "/admin/certifications", icon: AwardIcon },
-  { label: "Publications", href: "/admin/publications", icon: BookOpenIcon },
-  { label: "Skills", href: "/admin/skills", icon: CpuIcon },
-  { label: "Social Links", href: "/admin/social-links", icon: Share2Icon },
-  { label: "Settings", href: "/admin/settings", icon: SettingsIcon },
+export type AdminNavGroup = "MANAGEMENT" | "CONTENT" | "SYSTEM"
+
+export interface AdminNavItem {
+  label: string
+  href: string
+  icon: typeof LayoutDashboardIcon
+}
+
+export const ADMIN_NAV_GROUPS: {
+  title: AdminNavGroup
+  items: AdminNavItem[]
+}[] = [
+  {
+    title: "MANAGEMENT",
+    items: [
+      { label: "Overview", href: "/admin", icon: LayoutDashboardIcon },
+      { label: "Profile", href: "/admin/profile", icon: UserIcon },
+      { label: "Projects", href: "/admin/projects", icon: FolderGit2Icon },
+      { label: "Experience", href: "/admin/experience", icon: BriefcaseIcon },
+    ],
+  },
+  {
+    title: "CONTENT",
+    items: [
+      { label: "Blog", href: "/admin/blog", icon: NewspaperIcon },
+      { label: "Gallery", href: "/admin/gallery", icon: ImageIcon },
+      { label: "Awards", href: "/admin/awards", icon: TrophyIcon },
+      { label: "Certifications", href: "/admin/certifications", icon: AwardIcon },
+      { label: "Publications", href: "/admin/publications", icon: BookOpenIcon },
+      { label: "Skills", href: "/admin/skills", icon: CpuIcon },
+      { label: "Social Links", href: "/admin/social-links", icon: Share2Icon },
+    ],
+  },
+  {
+    title: "SYSTEM",
+    items: [
+      { label: "Settings", href: "/admin/settings", icon: SettingsIcon },
+    ],
+  },
 ]
+
+export const ADMIN_NAV_ITEMS: AdminNavItem[] = ADMIN_NAV_GROUPS.flatMap(
+  (group) => group.items
+)
 
 export function AdminSidebar({ className, onItemClick }: { className?: string; onItemClick?: () => void }) {
   const pathname = usePathname()
@@ -54,33 +88,37 @@ export function AdminSidebar({ className, onItemClick }: { className?: string; o
       </div>
 
       {/* Nav List */}
-      <nav className="flex-1 space-y-1 p-3 overflow-y-auto">
-        <div className="px-2 py-1 text-[0.6875rem] font-mono text-muted-foreground uppercase tracking-wider">
-          Management
-        </div>
-        {ADMIN_NAV_ITEMS.map((item) => {
-          const isActive =
-            item.href === "/admin"
-              ? pathname === "/admin"
-              : pathname.startsWith(item.href)
-          const Icon = item.icon
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={onItemClick}
-              className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-xs font-medium transition-colors",
-                isActive
-                  ? "bg-primary text-primary-foreground shadow-xs font-semibold"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
-              )}
-            >
-              <Icon className="size-4 shrink-0" />
-              <span>{item.label}</span>
-            </Link>
-          )
-        })}
+      <nav className="flex-1 space-y-3.5 p-3 overflow-y-auto">
+        {ADMIN_NAV_GROUPS.map((group) => (
+          <div key={group.title} className="space-y-1">
+            <div className="px-2 py-1 text-[0.6875rem] font-mono text-muted-foreground uppercase tracking-wider select-none">
+              {group.title}
+            </div>
+            {group.items.map((item) => {
+              const isActive =
+                item.href === "/admin"
+                  ? pathname === "/admin"
+                  : pathname.startsWith(item.href)
+              const Icon = item.icon
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={onItemClick}
+                  className={cn(
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-xs font-medium transition-colors",
+                    isActive
+                      ? "bg-primary text-primary-foreground shadow-xs font-semibold"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  )}
+                >
+                  <Icon className="size-4 shrink-0" />
+                  <span>{item.label}</span>
+                </Link>
+              )
+            })}
+          </div>
+        ))}
       </nav>
 
       {/* Footer / Exit Links */}

@@ -68,3 +68,29 @@ export interface SiteSettings {
   favicon: string
   updatedAt?: string
 }
+
+export interface GalleryItem {
+  id: string
+  title: string
+  src: string
+  date: string
+  type?: "image" | "video"
+  aspect?: "square" | "wide"
+  description?: string
+  displayOrder?: number
+}
+
+export interface BlogPost {
+  id: string
+  title: string
+  slug: string
+  description: string
+  publishedAt: string
+  thumbnail?: string | null
+  categories: string[]
+  link?: string
+  content?: string
+  status?: "published" | "draft"
+  displayOrder?: number
+}
+

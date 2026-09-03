@@ -1,0 +1,54 @@
+[
+  {
+    "id": "claude-opus-4-8-vs-opus-4-7-same-price-better-economics-58ecec3955c2",
+    "title": "Claude Opus 4.8 vs Opus 4.7: Same Price, Better Economics?",
+    "slug": "claude-opus-4-8-vs-opus-4-7-same-price-better-economics-58ecec3955c2",
+    "description": "Opus 4.8 is not technically cheaper than Opus 4.7, but in real AI workflows, it might still cost less.",
+    "publishedAt": "2026-05-31",
+    "categories": [
+      "claude",
+      "llm",
+      "anthropic-claude",
+      "ai",
+      "artificial-intelligence"
+    ],
+    "status": "published",
+    "thumbnail": "https://cdn-images-1.medium.com/max/256/1*66226LPE5R-ZK0LCvkLyog.jpeg",
+    "link": "https://medium.com/@zickriann/claude-opus-4-8-vs-opus-4-7-same-price-better-economics-58ecec3955c2",
+    "displayOrder": 1
+  },
+  {
+    "id": "when-ai-can-find-zero-days-is-the-future-of-cybersecurity-still-in-human-hands-511beba7b2a5",
+    "title": "When AI Can Find Zero-Days: Is the Future of Cybersecurity Still in Human Hands?",
+    "slug": "when-ai-can-find-zero-days-is-the-future-of-cybersecurity-still-in-human-hands-511beba7b2a5",
+    "description": "AI Is No Longer Just Writing Code",
+    "publishedAt": "2026-05-11",
+    "categories": [
+      "artificial-intelligence",
+      "cybersecurity",
+      "technology"
+    ],
+    "status": "published",
+    "thumbnail": "https://cdn-images-1.medium.com/max/256/1*gSpR3f3jBpbX1_6lbbymmw.png",
+    "link": "https://medium.com/@zickriann/when-ai-can-find-zero-days-is-the-future-of-cybersecurity-still-in-human-hands-511beba7b2a5",
+    "displayOrder": 2
+  },
+  {
+    "id": "how-i-fine-tuned-indobert-for-indonesian-sentiment-analysis-using-tokopedia-reviews-e91711ba1418",
+    "title": "How I Fine-Tuned IndoBERT for Indonesian Sentiment Analysis Using Tokopedia Reviews",
+    "slug": "how-i-fine-tuned-indobert-for-indonesian-sentiment-analysis-using-tokopedia-reviews-e91711ba1418",
+    "description": "Why I Built This Project",
+    "publishedAt": "2026-05-28",
+    "categories": [
+      "machine-learning",
+      "artificial-intelligence",
+      "indobert",
+      "sentiment-analysis",
+      "deep-learning"
+    ],
+    "status": "published",
+    "thumbnail": "https://cdn-images-1.medium.com/max/256/1*n5sf6EfQrTPDITeCsosUBQ.png",
+    "link": "https://medium.com/@zickriann/how-i-fine-tuned-indobert-for-indonesian-sentiment-analysis-using-tokopedia-reviews-e91711ba1418",
+    "displayOrder": 3
+  }
+]

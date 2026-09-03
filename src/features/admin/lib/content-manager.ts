@@ -4,8 +4,10 @@ import { LocalContentRepository } from "@/lib/content/local-repo"
 
 import type {
   AdminAward,
+  AdminBlogPost,
   AdminCertification,
   AdminExperience,
+  AdminGalleryItem,
   AdminProfile,
   AdminProject,
   AdminPublication,
@@ -116,15 +118,31 @@ export async function getAdminPublications(): Promise<AdminPublication[]> {
 
 // Dashboard
 export async function getDashboardMetrics(): Promise<DashboardMetrics> {
-  const [projects, experiences, skills, awards, certifications, publications] = await Promise.all([
+  const [projects, experiences, skills, awards, certifications, publications, initialBlogPosts, galleryItems] = await Promise.all([
     LocalContentRepository.getAdminProjects(),
     LocalContentRepository.getAdminExperiences(),
     LocalContentRepository.getAdminSkills(),
     LocalContentRepository.getAwards(),
     LocalContentRepository.getCertifications(),
     LocalContentRepository.getPublications(),
+    LocalContentRepository.getBlogPosts(),
+    LocalContentRepository.getGalleryItems(),
   ])
-  const drafts = projects.filter((p: { status?: string }) => p.status === "draft").length
+
+  let blogPosts = initialBlogPosts
+  // ponytail: auto-import Medium articles when local storage is empty so dashboard metrics never desync
+  if (blogPosts.length === 0) {
+    try {
+      await importMediumPostsData()
+      blogPosts = await LocalContentRepository.getBlogPosts()
+    } catch {
+      // fallback silently
+    }
+  }
+
+  const drafts =
+    projects.filter((p: { status?: string }) => p.status === "draft").length +
+    blogPosts.filter((b) => b.status === "draft").length
 
   return {
     projectsCount: projects.length,
@@ -134,6 +152,8 @@ export async function getDashboardMetrics(): Promise<DashboardMetrics> {
     awardsCount: awards.length,
     certificationsCount: certifications.length,
     publicationsCount: publications.length,
+    blogCount: blogPosts.length,
+    galleryCount: galleryItems.length,
     recentActivity: _sessionActivity,
   }
 }
@@ -327,6 +347,121 @@ export async function reorderPublicationsData(pubs: AdminPublication[]): Promise
 export async function deletePublicationData(id: string): Promise<{ success: boolean; message: string }> {
   await LocalContentRepository.deletePublication(id)
   return { success: true, message: "Publication deleted successfully." }
+}
+
+// Gallery
+export async function getAdminGalleryItems(): Promise<AdminGalleryItem[]> {
+  const items = await LocalContentRepository.getGalleryItems()
+  return items.map((item, idx) => ({
+    ...item,
+    displayOrder: idx + 1,
+  }))
+}
+
+export async function saveGalleryData(item: AdminGalleryItem): Promise<{ success: boolean; message: string }> {
+  try {
+    const result = await LocalContentRepository.saveGalleryItem(item)
+    recordRecentActivity(result.id, item.title, "Gallery", "published", "/admin/gallery")
+    return { success: true, message: "Gallery item saved successfully." }
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : "Failed to save gallery item."
+    return { success: false, message: msg }
+  }
+}
+
+export async function reorderGalleryData(items: AdminGalleryItem[]): Promise<{ success: boolean; message: string; data?: AdminGalleryItem[] }> {
+  try {
+    const updated = await LocalContentRepository.reorderGalleryItems(items)
+    recordRecentActivity("gallery-reorder", "Reordered Gallery Items", "Gallery", "published", "/admin/gallery")
+    return { success: true, message: "Gallery items reordered successfully.", data: updated.map((i, idx) => ({ ...i, displayOrder: idx + 1 })) }
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : "Failed to reorder gallery items."
+    return { success: false, message: msg }
+  }
+}
+
+export async function deleteGalleryData(id: string): Promise<{ success: boolean; message: string }> {
+  await LocalContentRepository.deleteGalleryItem(id)
+  return { success: true, message: "Gallery item deleted successfully." }
+}
+
+// Blog
+export async function getAdminBlogPosts(): Promise<AdminBlogPost[]> {
+  let posts = await LocalContentRepository.getBlogPosts()
+  // ponytail: auto-import Medium articles when local storage is empty
+  if (posts.length === 0) {
+    try {
+      await importMediumPostsData()
+      posts = await LocalContentRepository.getBlogPosts()
+    } catch {
+      // fallback silently
+    }
+  }
+  return posts.map((post, idx) => ({
+    ...post,
+    displayOrder: idx + 1,
+  }))
+}
+
+export async function saveBlogData(post: AdminBlogPost): Promise<{ success: boolean; message: string }> {
+  try {
+    const result = await LocalContentRepository.saveBlogPost(post)
+    recordRecentActivity(result.id, post.title, "Blog", post.status || "published", "/admin/blog")
+    return { success: true, message: "Blog post saved successfully." }
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : "Failed to save blog post."
+    return { success: false, message: msg }
+  }
+}
+
+export async function reorderBlogData(posts: AdminBlogPost[]): Promise<{ success: boolean; message: string; data?: AdminBlogPost[] }> {
+  try {
+    const updated = await LocalContentRepository.reorderBlogPosts(posts)
+    recordRecentActivity("blog-reorder", "Reordered Blog Posts", "Blog", "published", "/admin/blog")
+    return { success: true, message: "Blog posts reordered successfully.", data: updated.map((p, idx) => ({ ...p, displayOrder: idx + 1 })) }
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : "Failed to reorder blog posts."
+    return { success: false, message: msg }
+  }
+}
+
+export async function deleteBlogData(id: string): Promise<{ success: boolean; message: string }> {
+  await LocalContentRepository.deleteBlogPost(id)
+  return { success: true, message: "Blog post deleted successfully." }
+}
+
+export async function importMediumPostsData(): Promise<{ success: boolean; message: string; count?: number }> {
+  try {
+    const { fetchMediumPosts } = await import("@/features/blog/lib/fetch-medium-posts")
+    const mediumPosts = await fetchMediumPosts()
+    if (!mediumPosts.length) {
+      return { success: false, message: "No Medium posts found or feed unavailable." }
+    }
+    const currentPosts = await LocalContentRepository.getBlogPosts()
+    let addedCount = 0
+    for (const mp of mediumPosts) {
+      const slug = mp.link.split("/").filter(Boolean).pop()?.split("?")[0] || mp.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")
+      const exists = currentPosts.some((p) => p.slug === slug || p.link === mp.link || p.title === mp.title)
+      if (!exists) {
+        await LocalContentRepository.saveBlogPost({
+          id: slug,
+          slug,
+          title: mp.title,
+          description: mp.description,
+          publishedAt: mp.pubDate ? new Date(mp.pubDate).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
+          thumbnail: mp.thumbnail,
+          categories: mp.categories || [],
+          link: mp.link,
+          status: "published",
+        })
+        addedCount++
+      }
+    }
+    return { success: true, message: `Successfully imported ${addedCount} articles from Medium.`, count: addedCount }
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : "Failed to import Medium posts."
+    return { success: false, message: msg }
+  }
 }
 
 // Git Sync Placeholder

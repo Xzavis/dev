@@ -1,0 +1,38 @@
+[
+  {
+    "id": "base-realms-hackathon-showcase",
+    "title": "Base Realms hackathon project showcase",
+    "src": "/image/basee.webp",
+    "date": "2025",
+    "type": "image",
+    "aspect": "square",
+    "displayOrder": 1
+  },
+  {
+    "id": "ai-software-development-journey",
+    "title": "AI and software development journey video",
+    "src": "https://res.cloudinary.com/dujp9ydkx/video/upload/WhatsApp_Video_2026-05-11_at_13.12.10_pmvmgx",
+    "date": "2026",
+    "type": "video",
+    "aspect": "square",
+    "displayOrder": 2
+  },
+  {
+    "id": "tech-event-collaboration-moment",
+    "title": "Technology event and project collaboration moment",
+    "src": "/image/picture1.webp",
+    "date": "2026",
+    "type": "image",
+    "aspect": "wide",
+    "displayOrder": 3
+  },
+  {
+    "id": "behind-the-scenes-project-work",
+    "title": "Behind-the-scenes software project work",
+    "src": "/image/btng.webp",
+    "date": "2026",
+    "type": "image",
+    "aspect": "wide",
+    "displayOrder": 4
+  }
+]

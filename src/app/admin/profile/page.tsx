@@ -18,7 +18,7 @@ import React, { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { fetchProfileAction, updateProfileAction } from "@/features/admin/actions/content-actions"
 import { AdminDialog } from "@/features/admin/components/admin-dialog"
-import { FormField, FormInput, FormTextarea } from "@/features/admin/components/admin-form-elements"
+import { FormField, FormInput, FormMediaUpload, FormTextarea } from "@/features/admin/components/admin-form-elements"
 import { AdminHeader } from "@/features/admin/components/admin-header"
 import { useToast } from "@/features/admin/components/admin-toast"
 import type { AdminProfile } from "@/features/admin/types/admin"
@@ -187,7 +187,7 @@ export default function AdminProfilePage() {
                       alt={profile.displayName}
                       className="size-full object-cover"
                       onError={(e) => {
-                        ;(e.currentTarget as HTMLElement).style.display = "none"
+                        ; (e.currentTarget as HTMLElement).style.display = "none"
                       }}
                     />
                   ) : (
@@ -197,14 +197,16 @@ export default function AdminProfilePage() {
                 <div className="flex-1 min-w-0">
                   <FormField
                     label="Avatar Path / URL"
-                    description="Path lokal (public/image/...) atau direct URL HTTPS"
+                    description="Unggah file foto lokal atau masukkan path / direct URL HTTPS"
                     error={errors.avatar}
                   >
-                    <FormInput
+                    <FormMediaUpload
                       value={profile.avatar}
-                      onChange={(e) => handleChange("avatar", e.target.value)}
+                      onChange={(val) => handleChange("avatar", val)}
                       placeholder="/image/profile.webp"
                       error={errors.avatar}
+                      accept="image/*"
+                      targetFolder="image"
                     />
                   </FormField>
                 </div>
@@ -218,25 +220,38 @@ export default function AdminProfilePage() {
               </label>
               <div className="space-y-3">
                 <div className="relative h-20 w-full overflow-hidden rounded-md border border-border bg-muted">
-                  <img
-                    src={profile.banner || "/banner.webp"}
-                    alt="Cover banner preview"
-                    className="size-full object-cover object-center"
-                    onError={(e) => {
-                      ;(e.currentTarget as HTMLElement).style.display = "none"
-                    }}
-                  />
+                  {/\.(webm|mp4|ogg)(\?.*)?$/i.test(profile.banner || "") ? (
+                    <video
+                      src={profile.banner || "/banner.webp"}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="size-full object-cover object-center"
+                    />
+                  ) : (
+                    <img
+                      src={profile.banner || "/banner.webp"}
+                      alt="Cover banner preview"
+                      className="size-full object-cover object-center"
+                      onError={(e) => {
+                        ;(e.currentTarget as HTMLElement).style.display = "none"
+                      }}
+                    />
+                  )}
                 </div>
                 <FormField
                   label="Banner Path / URL"
-                  description="Path lokal (public/banner.webp) atau direct URL HTTPS"
+                  description="Unggah file WebP, PNG, GIF, atau WebM/MP4, atau masukkan direct URL"
                   error={errors.banner}
                 >
-                  <FormInput
+                  <FormMediaUpload
                     value={profile.banner ?? "/banner.webp"}
-                    onChange={(e) => handleChange("banner", e.target.value)}
-                    placeholder="/banner.webp"
+                    onChange={(val) => handleChange("banner", val)}
+                    placeholder="/dithered-video.webm"
                     error={errors.banner}
+                    accept="image/*,video/webm,video/mp4"
+                    targetFolder="banner"
                   />
                 </FormField>
               </div>

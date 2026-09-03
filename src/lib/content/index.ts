@@ -3,8 +3,10 @@ import "server-only"
 import { LocalContentRepository } from "./local-repo"
 import type {
   Award,
+  BlogPost,
   Certification,
   Experience,
+  GalleryItem,
   Profile,
   Project,
   Publication,
@@ -59,3 +61,12 @@ export async function getCertifications(): Promise<Certification[]> {
 export async function getPublications(): Promise<Publication[]> {
   return LocalContentRepository.getPublications()
 }
+
+export async function getGalleryItems(): Promise<GalleryItem[]> {
+  return LocalContentRepository.getGalleryItems()
+}
+
+export async function getBlogPosts(): Promise<BlogPost[]> {
+  return LocalContentRepository.getBlogPosts()
+}
+

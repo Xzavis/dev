@@ -25,19 +25,38 @@ import { AdminAlertDialog, AdminDialog } from "@/features/admin/components/admin
 import {
   FormField,
   FormInput,
+  FormMediaUpload,
 } from "@/features/admin/components/admin-form-elements"
 import { AdminHeader } from "@/features/admin/components/admin-header"
 import { useToast } from "@/features/admin/components/admin-toast"
 import type { AdminCertification } from "@/features/admin/types/admin"
+import { cn } from "@/lib/utils"
+
+export const AVAILABLE_LOGOS = [
+  { name: "Dicoding", path: "/logos/dicoding.webp", defaultIssuer: "Dicoding Indonesia" },
+  { name: "IBM", path: "/logos/ibm.webp", defaultIssuer: "IBM" },
+  { name: "McKinsey", path: "/logos/mckinsey.webp", defaultIssuer: "McKinsey.org" },
+  { name: "Asah", path: "/logos/asah.webp", defaultIssuer: "Asah by Dicoding & Accenture" },
+  { name: "Pijak", path: "/logos/pijak.webp", defaultIssuer: "Pijak in collaboration with IBM SkillsBuild" },
+  { name: "Coursera", path: "/logos/coursera.webp", defaultIssuer: "Coursera" },
+  { name: "Anthropic", path: "/logos/anthropic.webp", defaultIssuer: "Anthropic" },
+  { name: "GDGOC", path: "/logos/gdgoc.webp", defaultIssuer: "Google Developer Groups on Campus" },
+  { name: "DNCC", path: "/logos/dncc.webp", defaultIssuer: "Dian Nuswantoro Computer Club" },
+  { name: "UDINUS", path: "/logos/udinus.webp", defaultIssuer: "Universitas Dian Nuswantoro" },
+  { name: "Custompedia", path: "/logos/custompedia.webp", defaultIssuer: "PT Custompedia Creative Group" },
+  { name: "Blockvizo", path: "/logos/blockvizo.svg", defaultIssuer: "Blockvizo" },
+]
 
 const PRESET_ISSUERS = [
   { label: "Dicoding Indonesia", logo: "/logos/dicoding.webp" },
   { label: "McKinsey.org", logo: "/logos/mckinsey.webp" },
-  { label: "Asah (Dicoding & Accenture)", logo: "/logos/asah.webp" },
+  { label: "Asah by Dicoding & Accenture", logo: "/logos/asah.webp" },
   { label: "IBM", logo: "/logos/ibm.webp" },
+  { label: "Pijak in collaboration with IBM SkillsBuild", logo: "/logos/pijak.webp" },
+  { label: "Coursera", logo: "/logos/coursera.webp" },
+  { label: "Anthropic", logo: "/logos/anthropic.webp" },
   { label: "Google", logo: "" },
   { label: "Microsoft", logo: "" },
-  { label: "Coursera", logo: "" },
 ]
 
 function emptyCert(): AdminCertification {
@@ -280,13 +299,92 @@ export default function AdminCertificationsPage() {
                 />
               </FormField>
             </div>
-            <FormField label="Issuer Logo URL" description="Path under /public or absolute URL">
-              <FormInput
-                id="cert-logo"
-                value={editing.issuerLogoURL || ""}
-                onChange={(e) => setEditing({ ...editing, issuerLogoURL: e.target.value })}
-                placeholder="/logos/dicoding.webp"
-              />
+            <FormField
+              label="Issuer Logo"
+              description="Pilih salah satu logo institusi dari /logos atau ketik path kustom"
+            >
+              <div className="space-y-3">
+                {/* Visual Logo Selection Grid */}
+                <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-6 max-h-48 overflow-y-auto p-1.5 border border-border/60 rounded-lg bg-muted/20 dark:border-line">
+                  {AVAILABLE_LOGOS.map((logo) => {
+                    const isSelected = editing.issuerLogoURL === logo.path
+                    return (
+                      <button
+                        key={logo.path}
+                        type="button"
+                        onClick={() => {
+                          setEditing({
+                            ...editing,
+                            issuerLogoURL: logo.path,
+                            issuer: editing.issuer ? editing.issuer : logo.defaultIssuer,
+                          })
+                        }}
+                        className={cn(
+                          "flex flex-col items-center justify-center gap-1.5 rounded-md border p-2 text-center transition-all hover:border-primary/60 hover:bg-muted/50 focus:outline-none focus:ring-2 focus:ring-primary/40",
+                          isSelected
+                            ? "border-primary bg-primary/10 shadow-xs ring-1 ring-primary"
+                            : "border-border/60 bg-card dark:border-line"
+                        )}
+                        title={logo.name}
+                      >
+                        <div className="relative flex size-7 items-center justify-center rounded bg-white p-0.5 shadow-2xs">
+                          <img
+                            src={logo.path}
+                            alt={logo.name}
+                            className="size-full object-contain"
+                          />
+                        </div>
+                        <span className="text-[0.625rem] font-medium text-foreground truncate max-w-full">
+                          {logo.name}
+                        </span>
+                      </button>
+                    )
+                  })}
+                </div>
+
+                {/* Input & Clear Button */}
+                <div className="flex items-center gap-2">
+                  <div className="relative flex-1">
+                    <FormMediaUpload
+                      value={editing.issuerLogoURL || ""}
+                      onChange={(val) => setEditing({ ...editing, issuerLogoURL: val })}
+                      placeholder="Pilih di atas atau unggah / ketik: /logos/dicoding.webp"
+                      accept="image/*"
+                      targetFolder="logos"
+                    />
+                  </div>
+                  {editing.issuerLogoURL && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setEditing({ ...editing, issuerLogoURL: "" })}
+                      className="text-xs shrink-0 text-muted-foreground hover:text-foreground"
+                    >
+                      Clear Logo
+                    </Button>
+                  )}
+                </div>
+
+                {/* Selected Preview */}
+                {editing.issuerLogoURL && (
+                  <div className="flex items-center gap-2.5 rounded-lg border border-border/60 bg-muted/30 px-3 py-2 dark:border-line">
+                    <div className="flex size-7 items-center justify-center rounded bg-white p-1 shadow-2xs">
+                      <img
+                        src={editing.issuerLogoURL}
+                        alt="Preview"
+                        className="size-full object-contain"
+                        onError={(e) => {
+                          ;(e.currentTarget as HTMLElement).style.display = "none"
+                        }}
+                      />
+                    </div>
+                    <span className="text-xs font-mono text-muted-foreground truncate">
+                      {editing.issuerLogoURL}
+                    </span>
+                  </div>
+                )}
+              </div>
             </FormField>
             <div className="grid grid-cols-2 gap-4">
               <FormField label="Credential ID" required>

@@ -7,6 +7,7 @@ import type { Experience } from "@/features/portfolio/types/experiences"
 import type { Project } from "@/features/portfolio/types/projects"
 import type { Publication } from "@/features/portfolio/types/publications"
 import type { User } from "@/features/portfolio/types/user"
+import type { BlogPost, GalleryItem } from "@/lib/content/types"
 
 export type ContentStatus = "draft" | "published" | "archived"
 
@@ -110,6 +111,18 @@ export interface AdminPublication extends Publication {
   displayOrder?: number
 }
 
+// ─── Gallery ─────────────────────────────────────────────────────────────────
+
+export interface AdminGalleryItem extends GalleryItem {
+  displayOrder?: number
+}
+
+// ─── Blog ────────────────────────────────────────────────────────────────────
+
+export interface AdminBlogPost extends BlogPost {
+  displayOrder?: number
+}
+
 // ─── Settings ────────────────────────────────────────────────────────────────
 
 export interface SiteSettings {
@@ -131,7 +144,18 @@ export interface SiteSettings {
 export interface RecentChange {
   id: string
   title: string
-  type: "Profile" | "Project" | "Experience" | "Skill" | "Social Link" | "Settings" | "Award" | "Certification" | "Publication"
+  type:
+    | "Profile"
+    | "Project"
+    | "Experience"
+    | "Skill"
+    | "Social Link"
+    | "Settings"
+    | "Award"
+    | "Certification"
+    | "Publication"
+    | "Blog"
+    | "Gallery"
   status: ContentStatus
   updatedAt: string
   editUrl: string
@@ -145,6 +169,8 @@ export interface DashboardMetrics {
   awardsCount: number
   certificationsCount: number
   publicationsCount: number
+  blogCount: number
+  galleryCount: number
   /**
    * Session-local recent activity.
    * NOT a durable audit log — resets on server restart.

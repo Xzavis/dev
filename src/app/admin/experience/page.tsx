@@ -29,6 +29,7 @@ import { AdminAlertDialog, AdminDialog } from "@/features/admin/components/admin
 import {
   FormField,
   FormInput,
+  FormMediaUpload,
   FormSelect,
   FormSwitch,
   FormTextarea,
@@ -561,12 +562,12 @@ export default function AdminExperiencePage() {
                 </div>
 
                 <div className="flex-1 w-full space-y-2">
-                  <FormInput
+                  <FormMediaUpload
                     value={editingExp.companyLogo || ""}
-                    onChange={(e) =>
-                      setEditingExp({ ...editingExp, companyLogo: e.target.value })
-                    }
+                    onChange={(val) => setEditingExp({ ...editingExp, companyLogo: val })}
                     placeholder="/logos/custompedia.webp or https://example.com/logo.png"
+                    accept="image/*"
+                    targetFolder="logos"
                   />
 
                   {/* Preset Quick Logos */}

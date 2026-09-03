@@ -14,7 +14,7 @@ import React, { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Tag } from "@/components/ui/tag"
 import { fetchSettingsAction, updateSettingsAction } from "@/features/admin/actions/content-actions"
-import { FormField, FormInput, FormSwitch, FormTextarea } from "@/features/admin/components/admin-form-elements"
+import { FormField, FormInput, FormMediaUpload, FormSwitch, FormTextarea } from "@/features/admin/components/admin-form-elements"
 import { AdminHeader } from "@/features/admin/components/admin-header"
 import { useToast } from "@/features/admin/components/admin-toast"
 import type { SiteSettings } from "@/features/admin/types/admin"
@@ -92,20 +92,22 @@ export default function AdminSettingsPage() {
               />
             </FormField>
 
-            <FormField label="Favicon Path">
-              <FormInput
+            <FormField label="Favicon Path" description="Unggah atau ketik path favicon (.ico, .png, .svg)">
+              <FormMediaUpload
                 value={settings.favicon}
-                onChange={(e) => handleChange("favicon", e.target.value)}
+                onChange={(val) => handleChange("favicon", val)}
                 placeholder="/favicon.ico"
+                accept="image/*"
               />
             </FormField>
           </div>
 
-          <FormField label="Default OG Image URL" description="Social card image for Twitter and Open Graph">
-            <FormInput
-              value={settings.defaultOgImage}
-              onChange={(e) => handleChange("defaultOgImage", e.target.value)}
+          <FormField label="Default OG Image URL" description="Unggah atau ketik gambar social card untuk Twitter dan Open Graph">
+            <FormMediaUpload
+              value={settings.defaultOgImage || ""}
+              onChange={(val) => handleChange("defaultOgImage", val)}
               placeholder="/image/og.png"
+              accept="image/*"
             />
           </FormField>
         </div>

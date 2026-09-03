@@ -6,6 +6,7 @@ import Image from "next/image"
 import { Reveal } from "@/components/core/reveal"
 import type { MediumPost } from "@/features/blog/lib/fetch-medium-posts"
 import { fetchMediumPosts } from "@/features/blog/lib/fetch-medium-posts"
+import { getBlogPosts } from "@/lib/content"
 
 import { BlogEmptyState } from "./blog-empty-state"
 
@@ -27,9 +28,9 @@ function BlogListItem({ post, eager }: { post: MediumPost; eager?: boolean }) {
       <div className="group border-b border-line bg-background transition-[background-color] ease-out hover:bg-accent-muted">
         <a
           href={post.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={`Read "${post.title}" on Medium`}
+          target={post.link.startsWith("http") ? "_blank" : undefined}
+          rel={post.link.startsWith("http") ? "noopener noreferrer" : undefined}
+          aria-label={`Read "${post.title}"`}
           className="flex items-start gap-4 px-4 py-5 transition-[background-color] ease-out hover:bg-accent-muted focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-inset sm:px-6"
         >
           {/* Left: text content */}
@@ -48,24 +49,41 @@ function BlogListItem({ post, eager }: { post: MediumPost; eager?: boolean }) {
               <span className="text-[13px] text-foreground/80">
                 Firdaus Khotibul Zickrian
               </span>
-              <span className="text-[13px] text-muted-foreground">·</span>
-              <span className="text-[13px] text-muted-foreground">
+              <span className="text-muted-foreground/60 select-none">·</span>
+              <time
+                dateTime={post.pubDate}
+                className="text-xs text-muted-foreground"
+              >
                 {formatDate(post.pubDate)}
-              </span>
+              </time>
             </div>
 
             {/* Title */}
-            <h2 className="mb-1.5 line-clamp-2 text-base leading-snug font-bold tracking-tight text-foreground sm:text-[1.1rem]">
+            <h2 className="mb-1.5 font-sans text-base font-medium tracking-tight text-foreground transition-colors duration-150 group-hover:text-primary sm:text-lg">
               {post.title}
             </h2>
 
-            {/* Description */}
-            <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+            {/* Excerpt - single line on mobile, 2 lines from sm */}
+            <p className="line-clamp-1 text-[13px] leading-relaxed text-muted-foreground sm:line-clamp-2 sm:text-sm">
               {post.description}
             </p>
+
+            {/* Category tag */}
+            {post.categories && post.categories.length > 0 && (
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                {post.categories.slice(0, 3).map((category) => (
+                  <span
+                    key={category}
+                    className="rounded-full bg-surface-primary px-2.5 py-0.5 text-xs text-muted-foreground"
+                  >
+                    {category}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* Right: landscape thumbnail - aligned with title */}
+          {/* Right: thumbnail image */}
           {post.thumbnail && (
             <div className="relative mt-7 h-17 w-26 shrink-0 overflow-hidden rounded-md border border-line bg-muted sm:mt-7.5 sm:h-21 sm:w-32">
               <Image
@@ -86,7 +104,35 @@ function BlogListItem({ post, eager }: { post: MediumPost; eager?: boolean }) {
 }
 
 export async function BlogPageContent() {
-  const posts = await fetchMediumPosts()
+  const [localPosts, mediumPosts] = await Promise.all([
+    getBlogPosts().catch(() => []),
+    fetchMediumPosts().catch(() => []),
+  ])
+
+  // Filter published local posts
+  const publishedLocal: MediumPost[] = localPosts
+    .filter((p) => p.status !== "draft")
+    .map((p) => ({
+      title: p.title,
+      link: p.link || `/blog#${p.slug}`,
+      pubDate: p.publishedAt,
+      description: p.description,
+      thumbnail: p.thumbnail || null,
+      categories: p.categories || [],
+      guid: p.id || p.slug,
+    }))
+
+  // If local posts exist, combine them with any non-duplicate Medium posts
+  let posts: MediumPost[] = []
+  if (publishedLocal.length > 0) {
+    const existingTitles = new Set(publishedLocal.map((p) => p.title.toLowerCase().trim()))
+    const nonDuplicateMedium = mediumPosts.filter(
+      (mp) => !existingTitles.has(mp.title.toLowerCase().trim())
+    )
+    posts = [...publishedLocal, ...nonDuplicateMedium]
+  } else {
+    posts = mediumPosts
+  }
 
   if (!posts.length) {
     return (

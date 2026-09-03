@@ -2,7 +2,8 @@
 
 // ponytail: progressive disclosure project editor with tabbed sections, live preview and delete confirmation
 import {
-  ArrowLeftIcon,
+  ArrowDownIcon,
+  ArrowUpIcon,
   BookOpenIcon,
   CodeIcon,
   EyeIcon,
@@ -10,24 +11,31 @@ import {
   LayersIcon,
   PlusIcon,
   SaveIcon,
+  SendIcon,
   SparklesIcon,
   Trash2Icon,
   XIcon,
 } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Tag } from "@/components/ui/tag"
 
-import { deleteProjectAction, saveProjectAction } from "../actions/content-actions"
+import {
+  deleteProjectAction,
+  ensureProjectFolderAction,
+  saveProjectAction,
+} from "../actions/content-actions"
 import type { AdminProject, ContentStatus } from "../types/admin"
 import { AdminAlertDialog, AdminDialog } from "./admin-dialog"
 import {
   FormField,
   FormInput,
+  FormMediaUpload,
   FormSelect,
+  FormSwitch,
   FormTextarea,
 } from "./admin-form-elements"
 import { AdminHeader } from "./admin-header"
@@ -77,6 +85,7 @@ export function ProjectForm({ initialData, isNew = false }: ProjectFormProps) {
     badge: initialData?.badge || "",
     gallery: initialData?.gallery || [],
     status: initialData?.status || "published",
+    featured: initialData?.featured ?? true,
     displayOrder: initialData?.displayOrder || 1,
   }
 
@@ -92,6 +101,14 @@ export function ProjectForm({ initialData, isNew = false }: ProjectFormProps) {
   const [newSkill, setNewSkill] = useState("")
   const [newFeature, setNewFeature] = useState("")
   const [newImpact, setNewImpact] = useState("")
+  const [newGalleryImage, setNewGalleryImage] = useState("")
+
+  // Automatically create dedicated project media folder (public/projects/[slug]/)
+  useEffect(() => {
+    if (project.id?.trim()) {
+      void ensureProjectFolderAction(project.id.trim())
+    }
+  }, [project.id])
 
   const handleChange = <K extends keyof AdminProject>(field: K, value: AdminProject[K]) => {
     setProject((prev) => ({ ...prev, [field]: value }))
@@ -165,8 +182,6 @@ export function ProjectForm({ initialData, isNew = false }: ProjectFormProps) {
       <AdminHeader
         title={isNew ? "Create New Project" : `Edit: ${project.title || "Project"}`}
         subtitle="Manage project case study, screenshots, technical stack, and publication status."
-        backHref="/admin/projects"
-        backLabel="Back to Projects"
         actions={
           <div className="flex items-center gap-2">
             <Button
@@ -209,11 +224,10 @@ export function ProjectForm({ initialData, isNew = false }: ProjectFormProps) {
               key={tab.key}
               type="button"
               onClick={() => setActiveTab(tab.key as TabKey)}
-              className={`flex items-center gap-2 px-3.5 py-2.5 text-xs font-medium border-b-2 transition-colors whitespace-nowrap ${
-                isActive
+              className={`flex items-center gap-2 px-3.5 py-2.5 text-xs font-medium border-b-2 transition-colors whitespace-nowrap ${isActive
                   ? "border-primary text-primary font-semibold"
                   : "border-transparent text-muted-foreground hover:text-foreground"
-              }`}
+                }`}
             >
               <Icon className="size-3.5" />
               <span>{tab.label}</span>
@@ -413,34 +427,178 @@ export function ProjectForm({ initialData, isNew = false }: ProjectFormProps) {
 
         {/* 3. MEDIA */}
         {activeTab === "media" && (
-          <div className="rounded-xl border border-border/80 bg-card p-5 dark:border-line space-y-4">
+          <div className="rounded-xl border border-border/80 bg-card p-5 dark:border-line space-y-6">
             <h2 className="text-sm font-semibold text-foreground">Media & Assets</h2>
 
-            <FormField label="Hero Image / Thumbnail Path" description="Image under /public (e.g. /image/projects/custora.webp) or HTTPS URL">
-              <FormInput
-                value={project.image}
-                onChange={(e) => handleChange("image", e.target.value)}
-                placeholder="/image/projects/narratio.webp"
-              />
-            </FormField>
-
-            {project.image && (
-              <div className="overflow-hidden rounded-lg border border-border max-w-md bg-muted/30 p-2">
-                <img
-                  src={project.image}
-                  alt="Thumbnail preview"
-                  className="aspect-video w-full rounded object-cover"
+            {/* Hero Image */}
+            <div className="space-y-3">
+              <FormField
+                label="Hero Image / Thumbnail Path"
+                description={`Unggah gambar atau pilih dari galeri folder proyek (public/projects/${project.id || "[slug]"}/)`}
+              >
+                <FormMediaUpload
+                  value={project.image}
+                  onChange={(val) => handleChange("image", val)}
+                  placeholder={`/projects/${project.id || "custora"}/1.webp`}
+                  accept="image/*"
+                  targetFolder="projects"
+                  projectSlug={project.id}
                 />
-              </div>
-            )}
+              </FormField>
 
-            <FormField label="Monochrome Logo Path (Optional)">
-              <FormInput
+              {project.image && (
+                <div className="overflow-hidden rounded-lg border border-border max-w-md bg-muted/30 p-2">
+                  <img
+                    src={project.image}
+                    alt="Thumbnail preview"
+                    className="aspect-video w-full rounded object-cover"
+                    onError={(e) => {
+                      ;(e.currentTarget as HTMLElement).style.display = "none"
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Monochrome Logo */}
+            <FormField label="Monochrome Logo Path (Optional)" description="Unggah logo proyek ke folder public/logos/ atau pilih dari katalog logo">
+              <FormMediaUpload
                 value={project.logo ?? ""}
-                onChange={(e) => handleChange("logo", e.target.value)}
-                placeholder="/logos/projects/custompedia.svg"
+                onChange={(val) => handleChange("logo", val)}
+                placeholder="/logos/custompedia.webp"
+                accept="image/*"
+                targetFolder="logos"
               />
             </FormField>
+
+            {/* Project Gallery Showcase */}
+            <div className="border-t border-border/60 pt-5 space-y-4 dark:border-line">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                <div>
+                  <h3 className="text-xs font-semibold text-foreground flex items-center gap-1.5">
+                    <ImageIcon className="size-3.5 text-primary" /> Project Gallery Showcase ({project.gallery?.length || 0})
+                  </h3>
+                  <p className="text-[11px] text-muted-foreground">
+                    Foto-foto galeri detail proyek (tersimpan di folder khusus <code className="text-primary font-mono text-[10px]">public/projects/{project.id || "[slug]"}/</code>)
+                  </p>
+                </div>
+              </div>
+
+              {/* Add to Gallery Section */}
+              <div className="rounded-lg border border-border/70 bg-muted/20 p-3 space-y-2 dark:border-input dark:bg-input/10">
+                <label className="text-xs font-medium text-foreground">Tambah Foto ke Galeri Proyek</label>
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                  <div className="flex-1">
+                    <FormMediaUpload
+                      value={newGalleryImage}
+                      onChange={(val) => setNewGalleryImage(val)}
+                      placeholder={`/projects/${project.id || "slug"}/1.webp`}
+                      accept="image/*"
+                      targetFolder="projects"
+                      projectSlug={project.id}
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    disabled={!newGalleryImage.trim()}
+                    onClick={() => {
+                      if (newGalleryImage.trim()) {
+                        handleChange("gallery", [...(project.gallery || []), newGalleryImage.trim()])
+                        setNewGalleryImage("")
+                      }
+                    }}
+                    className="shrink-0 text-xs gap-1"
+                  >
+                    <PlusIcon className="size-3.5" /> Tambah ke Galeri
+                  </Button>
+                </div>
+              </div>
+
+              {/* Gallery Items Grid */}
+              {(!project.gallery || project.gallery.length === 0) ? (
+                <div className="rounded-lg border border-dashed border-border p-6 text-center text-xs text-muted-foreground">
+                  Belum ada foto di galeri proyek ini. Unggah atau pilih foto di atas untuk mengisi galeri.
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 pt-1">
+                  {project.gallery.map((imgUrl, idx) => (
+                    <div
+                      key={idx}
+                      className="group relative flex flex-col overflow-hidden rounded-lg border border-border bg-card dark:border-input"
+                    >
+                      <div className="relative aspect-video w-full overflow-hidden bg-muted flex items-center justify-center">
+                        <img
+                          src={imgUrl}
+                          alt={`Gallery ${idx + 1}`}
+                          className="size-full object-cover"
+                          onError={(e) => {
+                            ;(e.currentTarget as HTMLElement).style.display = "none"
+                          }}
+                        />
+                        <span className="absolute bottom-1 left-1 rounded bg-black/70 px-1 py-0.5 text-[9px] text-white font-mono">
+                          #{idx + 1}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center justify-between p-1.5 bg-background/80 gap-1 border-t border-border/50">
+                        <span className="truncate text-[10px] text-muted-foreground font-mono flex-1" title={imgUrl}>
+                          {imgUrl.split("/").pop()}
+                        </span>
+                        <div className="flex items-center gap-0.5 shrink-0">
+                          {idx > 0 && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const next = [...(project.gallery || [])]
+                                const temp = next[idx]
+                                next[idx] = next[idx - 1]
+                                next[idx - 1] = temp
+                                handleChange("gallery", next)
+                              }}
+                              className="rounded p-0.5 text-muted-foreground hover:text-foreground"
+                              title="Pindah ke kiri/atas"
+                            >
+                              <ArrowUpIcon className="size-3" />
+                            </button>
+                          )}
+                          {idx < (project.gallery?.length || 0) - 1 && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const next = [...(project.gallery || [])]
+                                const temp = next[idx]
+                                next[idx] = next[idx + 1]
+                                next[idx + 1] = temp
+                                handleChange("gallery", next)
+                              }}
+                              className="rounded p-0.5 text-muted-foreground hover:text-foreground"
+                              title="Pindah ke kanan/bawah"
+                            >
+                              <ArrowDownIcon className="size-3" />
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              handleChange(
+                                "gallery",
+                                project.gallery?.filter((_, i) => i !== idx) || []
+                              )
+                            }}
+                            className="rounded p-0.5 text-muted-foreground hover:text-destructive transition-colors ml-0.5"
+                            title="Hapus dari galeri proyek"
+                          >
+                            <Trash2Icon className="size-3" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         )}
 
@@ -530,36 +688,37 @@ export function ProjectForm({ initialData, isNew = false }: ProjectFormProps) {
         {/* 5. PUBLISHING */}
         {activeTab === "publishing" && (
           <div className="rounded-xl border border-border/80 bg-card p-5 dark:border-line space-y-4">
-            <div className="flex items-center justify-between gap-2 flex-wrap">
-              <h2 className="text-sm font-semibold text-foreground">Publishing & Visibility</h2>
-              <span
-                className={`rounded px-2 py-0.5 text-xs font-medium uppercase ${
-                  project.status === "draft"
-                    ? "bg-amber-500/10 text-amber-600 dark:text-amber-400"
-                    : project.status === "archived"
-                    ? "bg-zinc-500/10 text-zinc-500"
-                    : "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                }`}
-              >
-                Status: {project.status ?? "published"}
-              </span>
-            </div>
+            <h2 className="text-sm font-semibold text-foreground">Publishing & Visibility</h2>
 
-            <div>
-              <FormField
-                label="Publication Status"
-                description="Tentukan visibilitas proyek ini. Proyek dengan status Published akan ditampilkan di portfolio publik."
-              >
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <FormField label="Publication Status">
                 <FormSelect
                   value={project.status ?? "published"}
                   onChange={(e) => handleChange("status", e.target.value as ContentStatus)}
                   options={[
                     { label: "Published (Visible on Portfolio)", value: "published" },
-                    { label: "Draft (Saved privately, hidden from public)", value: "draft" },
-                    { label: "Archived (Hidden from main portfolio list)", value: "archived" },
+                    { label: "Draft (Saved privately)", value: "draft" },
+                    { label: "Archived (Hidden from main list)", value: "archived" },
                   ]}
                 />
               </FormField>
+
+              <FormField label="Display Order (Sort weight)">
+                <FormInput
+                  type="number"
+                  value={project.displayOrder ?? 1}
+                  onChange={(e) => handleChange("displayOrder", parseInt(e.target.value, 10) || 1)}
+                />
+              </FormField>
+            </div>
+
+            <div className="border-t border-border/60 pt-4 dark:border-line">
+              <FormSwitch
+                checked={project.featured ?? false}
+                onChange={(checked) => handleChange("featured", checked)}
+                label="Featured Project"
+                description="Highlight this project at the top of your portfolio homepage."
+              />
             </div>
           </div>
         )}
@@ -568,29 +727,30 @@ export function ProjectForm({ initialData, isNew = false }: ProjectFormProps) {
       {/* Actions Bottom Bar */}
       <div className="sticky bottom-4 z-20 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card/90 p-4 shadow-xl backdrop-blur-md dark:border-line">
         <Link href="/admin/projects">
-          <Button variant="outline" size="sm" className="gap-1.5">
-            <ArrowLeftIcon className="size-3.5" /> Back to Projects
+          <Button variant="ghost" size="sm">
+            Cancel
           </Button>
         </Link>
 
         <div className="flex flex-wrap items-center gap-2.5">
           <Button
             type="button"
+            variant="outline"
             size="sm"
-            onClick={() => handleSubmit()}
+            onClick={() => handleSubmit("draft")}
             disabled={isSaving}
-            className="gap-1.5 min-w-[130px]"
+            className="gap-1.5"
           >
-            <SaveIcon className="size-3.5" />
-            {isSaving
-              ? "Saving..."
-              : isNew
-              ? "Create Project"
-              : project.status === "draft"
-              ? "Save Draft"
-              : project.status === "archived"
-              ? "Save (Archived)"
-              : "Save Changes"}
+            <SaveIcon className="size-3.5" /> Save Draft
+          </Button>
+          <Button
+            type="button"
+            size="sm"
+            onClick={() => handleSubmit("published")}
+            disabled={isSaving}
+            className="gap-1.5"
+          >
+            <SendIcon className="size-3.5" /> {isSaving ? "Saving..." : "Publish & Save"}
           </Button>
         </div>
       </div>

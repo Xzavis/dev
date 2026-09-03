@@ -16,8 +16,10 @@ import { validateImageUrl } from "@/lib/media/image-url"
 
 import type {
   Award,
+  BlogPost,
   Certification,
   Experience,
+  GalleryItem,
   Profile,
   Project,
   Publication,
@@ -882,6 +884,144 @@ export const localRepo = {
     const slug = normalizeSlug(id)
     const filtered = pubs.filter((p) => p.id !== slug && normalizeSlug(p.id) !== slug)
     await writeJsonFile(path.join(CONTENT_DIR, "publications.json"), filtered)
+  },
+
+  // ─── Gallery ───────────────────────────────────────────────────────────────
+
+  async getGalleryItems(): Promise<GalleryItem[]> {
+    try {
+      return await readJsonFile<GalleryItem[]>(path.join(CONTENT_DIR, "gallery.json"))
+    } catch {
+      return []
+    }
+  },
+
+  async saveGalleryItem(item: GalleryItem): Promise<{ id: string }> {
+    const items = await this.getGalleryItems()
+    const slug = normalizeSlug(item.id || item.title)
+    if (!slug) throw new Error("Gallery item id or title is required.")
+
+    if (item.src && item.type !== "video") {
+      const imgCheck = validateImageUrl(item.src)
+      if (!imgCheck.isValid) {
+        throw new Error(`Gallery media error: ${imgCheck.error}`)
+      }
+    }
+
+    const cleanItem: GalleryItem = {
+      id: slug,
+      title: item.title,
+      src: item.src,
+      date: item.date || String(new Date().getFullYear()),
+      type: item.type || "image",
+      aspect: item.aspect || "square",
+      ...(item.description ? { description: item.description } : {}),
+      ...(item.displayOrder !== undefined ? { displayOrder: item.displayOrder } : {}),
+    }
+
+    const idx = items.findIndex((i) => i.id === slug)
+    if (idx >= 0) {
+      items[idx] = cleanItem
+    } else {
+      items.unshift(cleanItem)
+    }
+
+    await writeJsonFile(path.join(CONTENT_DIR, "gallery.json"), items)
+    return { id: slug }
+  },
+
+  async reorderGalleryItems(items: GalleryItem[]): Promise<GalleryItem[]> {
+    const cleanItems: GalleryItem[] = items.map((i, idx) => ({
+      id: normalizeSlug(i.id || i.title),
+      title: i.title,
+      src: i.src,
+      date: i.date || String(new Date().getFullYear()),
+      type: i.type || "image",
+      aspect: i.aspect || "square",
+      ...(i.description ? { description: i.description } : {}),
+      displayOrder: idx + 1,
+    }))
+    await writeJsonFile(path.join(CONTENT_DIR, "gallery.json"), cleanItems)
+    return cleanItems
+  },
+
+  async deleteGalleryItem(id: string): Promise<void> {
+    const items = await this.getGalleryItems()
+    const slug = normalizeSlug(id)
+    const filtered = items.filter((i) => normalizeSlug(i.id) !== slug)
+    await writeJsonFile(path.join(CONTENT_DIR, "gallery.json"), filtered)
+  },
+
+  // ─── Blog ──────────────────────────────────────────────────────────────────
+
+  async getBlogPosts(): Promise<BlogPost[]> {
+    try {
+      return await readJsonFile<BlogPost[]>(path.join(CONTENT_DIR, "blog.json"))
+    } catch {
+      return []
+    }
+  },
+
+  async saveBlogPost(post: BlogPost): Promise<{ id: string }> {
+    const posts = await this.getBlogPosts()
+    const slug = normalizeSlug(post.slug || post.id || post.title)
+    if (!slug) throw new Error("Blog post slug or title is required.")
+
+    if (post.thumbnail) {
+      const imgCheck = validateImageUrl(post.thumbnail)
+      if (!imgCheck.isValid) {
+        throw new Error(`Blog thumbnail error: ${imgCheck.error}`)
+      }
+    }
+
+    const cleanPost: BlogPost = {
+      id: slug,
+      title: post.title,
+      slug,
+      description: post.description,
+      publishedAt: post.publishedAt || new Date().toISOString().slice(0, 10),
+      categories: Array.isArray(post.categories) ? post.categories : [],
+      status: post.status || "published",
+      ...(post.thumbnail ? { thumbnail: post.thumbnail } : {}),
+      ...(post.link ? { link: post.link } : {}),
+      ...(post.content ? { content: post.content } : {}),
+      ...(post.displayOrder !== undefined ? { displayOrder: post.displayOrder } : {}),
+    }
+
+    const idx = posts.findIndex((p) => p.id === slug || p.slug === slug)
+    if (idx >= 0) {
+      posts[idx] = cleanPost
+    } else {
+      posts.unshift(cleanPost)
+    }
+
+    await writeJsonFile(path.join(CONTENT_DIR, "blog.json"), posts)
+    return { id: slug }
+  },
+
+  async reorderBlogPosts(posts: BlogPost[]): Promise<BlogPost[]> {
+    const cleanPosts: BlogPost[] = posts.map((p, idx) => ({
+      id: normalizeSlug(p.slug || p.id || p.title),
+      title: p.title,
+      slug: normalizeSlug(p.slug || p.id || p.title),
+      description: p.description,
+      publishedAt: p.publishedAt,
+      categories: Array.isArray(p.categories) ? p.categories : [],
+      status: p.status || "published",
+      ...(p.thumbnail ? { thumbnail: p.thumbnail } : {}),
+      ...(p.link ? { link: p.link } : {}),
+      ...(p.content ? { content: p.content } : {}),
+      displayOrder: idx + 1,
+    }))
+    await writeJsonFile(path.join(CONTENT_DIR, "blog.json"), cleanPosts)
+    return cleanPosts
+  },
+
+  async deleteBlogPost(id: string): Promise<void> {
+    const posts = await this.getBlogPosts()
+    const slug = normalizeSlug(id)
+    const filtered = posts.filter((p) => normalizeSlug(p.id) !== slug && normalizeSlug(p.slug) !== slug)
+    await writeJsonFile(path.join(CONTENT_DIR, "blog.json"), filtered)
   },
 }
 
